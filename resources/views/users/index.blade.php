@@ -19,7 +19,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Nombre</th>
+                        <th>Nombre y Apellidos</th>
                         <th>Email</th>
                         <th>Rol</th>
                         <th>Acciones</th>

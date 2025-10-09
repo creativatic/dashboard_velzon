@@ -19,7 +19,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
+                        <th>Nombres</th>
                         <th>Permisos</th>
                         <th>Acciones</th>
                     </tr>
