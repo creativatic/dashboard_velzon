@@ -357,37 +357,16 @@
                     </div>
                     <ul class="navbar-nav" id="navbar-nav">
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
-                                <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarDashboards">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="dashboard-analytics.html" class="nav-link" data-key="t-analytics"> Analytics </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="dashboard-crm.html" class="nav-link" data-key="t-crm"> CRM </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="index.html" class="nav-link" data-key="t-ecommerce"> Ecommerce </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="dashboard-crypto.html" class="nav-link" data-key="t-crypto"> Crypto </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="dashboard-projects.html" class="nav-link" data-key="t-projects"> Projects </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="dashboard-nft.html" class="nav-link" data-key="t-nft"> NFT <span class="badge badge-pill bg-danger" data-key="t-new">New</span></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li> <!-- end Dashboard Menu -->
 
+                        @can('ver dashboard')
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->is('dashboard*') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+                                <i class="ri-dashboard-2-line"></i> <span>Dashboard</span>
+                            </a>
+                        </li>
+                        @endcan
 
                         <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Components</span></li>
-
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUI">
                                 <i class="ri-pencil-ruler-2-line"></i> <span data-key="t-base-ui">Base UI</span>
@@ -410,6 +389,35 @@
                                 </div>
                             </div>
                         </li>
+
+                        @role('Administrador')
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarUsuarios" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUsuarios">
+                                <i class="ri-group-line"></i> 
+                                <span data-key="t-usuarios">Usuarios</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarUsuarios">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{{ route('users.index') }}" class="nav-link" data-key="t-listado">
+                                            Listado
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('roles.index') }}" class="nav-link" data-key="t-roles">
+                                            Roles
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('permissions.index') }}" class="nav-link" data-key="t-permisos">
+                                            Permisos
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        @endrole
+                        
                     </ul>
                 </div>
                 <!-- Sidebar -->
