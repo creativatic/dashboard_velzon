@@ -30,13 +30,15 @@ class RoleController extends Controller
         ]);
 
         $role = Role::create(['name' => $request->name]);
+
         if ($request->has('permissions')) {
-            $role->syncPermissions($request->permissions);
+            // 🔹 Convertir los IDs a nombres antes de sincronizar
+            $permissions = Permission::whereIn('id', $request->permissions)->pluck('name')->toArray();
+            $role->syncPermissions($permissions);
         }
 
         return redirect()->route('roles.index')->with('success', 'Rol creado correctamente.');
     }
-
     /**
      * Editar un rol existente (no se usa vista directa, el modal carga los datos)
      */
