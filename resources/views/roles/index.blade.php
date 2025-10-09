@@ -8,13 +8,14 @@
 @include('roles.edit')
 
 <div class="container-fluid">
+    <h4 class="mb-3">Gestión de Roles</h4>
+    {{-- Botón para abrir modal crear rol--}}
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createRoleModal">
+        <i class="ri-add-circle-line"></i> Nuevo Rol
+    </button>
     <div class="card">
-        <h4 class="mb-3">Gestión de Roles</h4>
         <div class="card-body table-responsive">
-            {{-- Botón para abrir modal crear rol--}}
-            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createRoleModal">
-                <i class="ri-add-circle-line"></i> Nuevo Rol
-            </button>
+
             <table class="table">
                 <thead>
                     <tr>

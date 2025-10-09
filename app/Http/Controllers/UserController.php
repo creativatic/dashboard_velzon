@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
+
 
 class UserController extends Controller
 {
@@ -53,7 +55,11 @@ class UserController extends Controller
                 : $user->password,
         ]);
 
+        // ✅ Sincronizar roles
         $user->syncRoles([$validated['role']]);
+
+        // ✅ Limpiar la caché de permisos
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         return redirect()->back()->with('success', 'Usuario actualizado correctamente.');
     }
