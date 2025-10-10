@@ -363,6 +363,13 @@
                                 </ul>
                             </div>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->is('programacions*') ? 'active' : '' }}" 
+                            href="{{ route('programacions.index') }}">
+                                <i class="ri-calendar-check-line"></i>
+                                <span data-key="t-programacion">Programación</span>
+                            </a>
+                        </li>
                         @endrole
                         
                     </ul>
