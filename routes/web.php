@@ -11,6 +11,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProgramacionController;
+use App\Http\Controllers\AdelantoController;
+use App\Http\Controllers\QrTisurController;
+use App\Http\Controllers\DetalleProgramacionController;
 
 Route::middleware(['auth'])->group(function () {
 
@@ -30,7 +33,12 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('roles', RoleController::class)->except(['show']);
         Route::resource('permissions', PermissionController::class)->except(['show']);
         Route::resource('programacions', ProgramacionController::class)->except(['show']);
-
+        // Adelantos
+        Route::resource('adelantos', AdelantoController::class)->except(['show']);
+        // QR Tisur
+        Route::resource('qr_tisurs', QrTisurController::class)->except(['show']);
+        // Detalles
+        Route::resource('detalleprogramacion', DetalleProgramacionController::class)->except(['show']);
     });
 });
 

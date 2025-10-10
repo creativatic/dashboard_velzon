@@ -338,7 +338,8 @@
 
                         @role('Administrador')
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarUsuarios" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUsuarios">
+                            <a class="nav-link menu-link" href="#sidebarUsuarios" data-bs-toggle="collapse" role="button" 
+                                aria-expanded="false" aria-controls="sidebarUsuarios">
                                 <i class="ri-group-line"></i> 
                                 <span data-key="t-usuarios">Usuarios</span>
                             </a>
@@ -364,10 +365,40 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link menu-link {{ request()->is('programacions*') ? 'active' : '' }}" 
-                            href="{{ route('programacions.index') }}">
+                            href="#sidebarProgramacion" 
+                            data-bs-toggle="collapse" 
+                            role="button" 
+                            aria-expanded="false" 
+                            aria-controls="sidebarProgramacion">
                                 <i class="ri-calendar-check-line"></i>
                                 <span data-key="t-programacion">Programación</span>
                             </a>
+                            <div class="collapse menu-dropdown" id="sidebarProgramacion">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{{ route('programacions.index') }}" class="nav-link {{ request()->is('programacions*') ? 'active' : '' }}" data-key="t-programacion">
+                                            Programación Principal
+                                        </a>
+                                    </li>
+                                     <li class="nav-item">
+                                        <a href="{{ route('detalleprogramacion.index') }}" 
+                                        class="nav-link {{ request()->is('detalleprogramacion*') ? 'active' : '' }}" 
+                                        data-key="t-precios">
+                                            Gestionar Precios
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('adelantos.index') }}" class="nav-link {{ request()->is('adelantos*') ? 'active' : '' }}" data-key="t-listado">
+                                            Adelantos
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('qr_tisurs.index') }}" class="nav-link {{ request()->is('qr_tisurs*') ? 'active' : '' }}" data-key="t-roles">
+                                            Qr Tisur
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                         @endrole
                         
