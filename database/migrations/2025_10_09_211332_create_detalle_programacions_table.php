@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('detalle_programacions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('programacion_id')->nullable()->constrained()->nullOnDelete();
+
             $table->string('frente');
             $table->decimal('precio_frente', 10, 2);
             $table->decimal('precio_tn', 10, 2);
@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('descripcion')->nullable();
             $table->timestamps();
             
-            $table->unique(['programacion_id', 'frente']);
         });
     }
 

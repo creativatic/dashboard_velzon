@@ -43,10 +43,17 @@ class Programacion extends Model
         return $this->hasMany(QrTisur::class);
     }
 
-    public function detalles(): HasMany
+    // ✅ Cada programación pertenece a un detalle
+    public function detalleProgramacion()
     {
-        return $this->hasMany(DetalleProgramacion::class);
+        return $this->belongsTo(DetalleProgramacion::class, 'detalle_programacion_id');
     }
+
+    public function seguimiento()
+    {
+        return $this->hasOne(Seguimiento::class);
+    }
+
 
     public function obtenerPrecioFrente($frente)
     {

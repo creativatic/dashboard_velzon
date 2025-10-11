@@ -11,7 +11,7 @@ class DetalleProgramacionController extends Controller
 {
     public function index()
     {
-        $detalles = DetalleProgramacion::with('programacion')->latest()->paginate(10);
+        $detalles = DetalleProgramacion::with('programaciones')->latest()->paginate(10);
         $programaciones = Programacion::orderBy('id', 'desc')->get();
         
         return view('detalleprogramacion.index', compact('detalles', 'programaciones'));

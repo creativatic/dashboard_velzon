@@ -1,0 +1,36 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\DetalleProgramacion;
+
+class DetalleProgramacionSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $detalles = [
+            [
+                'frente' => 'Huanaco',
+                'precio_frente' => 4500,
+                'precio_tn' => 0.124,
+                'activo' => true,
+                'descripcion' => 'Frente Huanaco: zona con mayor carga y mejor acceso, precio estándar establecido según contrato 2025.'
+            ],
+            [
+                'frente' => 'Intikal',
+                'precio_frente' => 3500,
+                'precio_tn' => 0.122,
+                'activo' => true,
+                'descripcion' => 'Frente Intikal: área de menor tonelaje, precio ajustado para rutas de menor productividad.'
+            ],
+        ];
+
+        foreach ($detalles as $detalle) {
+            DetalleProgramacion::create($detalle);
+        }
+    }
+}

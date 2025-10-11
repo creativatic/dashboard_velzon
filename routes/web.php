@@ -14,6 +14,9 @@ use App\Http\Controllers\ProgramacionController;
 use App\Http\Controllers\AdelantoController;
 use App\Http\Controllers\QrTisurController;
 use App\Http\Controllers\DetalleProgramacionController;
+use App\Http\Controllers\TisurController;
+use App\Http\Controllers\ExpedienteController;
+use App\Http\Controllers\SeguimientoController;
 
 Route::middleware(['auth'])->group(function () {
 
@@ -39,6 +42,13 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('qr_tisurs', QrTisurController::class)->except(['show']);
         // Detalles
         Route::resource('detalleprogramacion', DetalleProgramacionController::class)->except(['show']);
+        // Tisur
+        Route::resource('tisur', TisurController::class)->except(['show']);
+        // Expediente
+        Route::resource('expediente', ExpedienteController::class)->except(['show']);
+        //  Seguimiento
+        Route::resource('seguimientos', SeguimientoController::class)->except(['show']);
+
     });
 });
 

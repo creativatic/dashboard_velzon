@@ -31,10 +31,12 @@ class DetalleProgramacion extends Model
     /**
      * Relación con Programacion
      */
-    public function programacion(): BelongsTo
+    // ✅ Un detalle puede tener muchas programaciones
+    public function programaciones()
     {
-        return $this->belongsTo(Programacion::class);
+        return $this->hasMany(Programacion::class, 'detalle_programacion_id');
     }
+
 
     /**
      * Scope para detalles activos

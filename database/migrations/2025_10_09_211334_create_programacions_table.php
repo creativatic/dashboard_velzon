@@ -34,7 +34,12 @@ return new class extends Migration
             $table->string('conformidad_adelanto', 50)->nullable();
             $table->string('guia_transportista', 50)->nullable();
             $table->string('logistica', 100)->nullable();
+            $table->foreignId('detalle_programacion_id')
+                    ->nullable()
+                    ->constrained('detalle_programacions')
+                    ->nullOnDelete();
             $table->timestamps();
+
         });
     }
 

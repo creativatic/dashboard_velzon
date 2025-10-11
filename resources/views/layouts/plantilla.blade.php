@@ -312,30 +312,7 @@
                         </li>
                         @endcan
 
-                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Components</span></li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUI">
-                                <i class="ri-pencil-ruler-2-line"></i> <span data-key="t-base-ui">Base UI</span>
-                            </a>
-                            <div class="collapse menu-dropdown mega-dropdown-menu" id="sidebarUI">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <ul class="nav nav-sm flex-column">
-                                            <li class="nav-item">
-                                                <a href="ui-alerts.html" class="nav-link" data-key="t-alerts">Alerts</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="ui-badges.html" class="nav-link" data-key="t-badges">Badges</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="ui-buttons.html" class="nav-link" data-key="t-buttons">Buttons</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-
+                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Ventas Seven</span></li>
                         @role('Administrador')
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarUsuarios" data-bs-toggle="collapse" role="button" 
@@ -373,25 +350,35 @@
                                 <i class="ri-calendar-check-line"></i>
                                 <span data-key="t-programacion">Programación</span>
                             </a>
-                            <div class="collapse menu-dropdown" id="sidebarProgramacion">
+                           <div class="collapse menu-dropdown" id="sidebarProgramacion">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
                                         <a href="{{ route('programacions.index') }}" class="nav-link {{ request()->is('programacions*') ? 'active' : '' }}" data-key="t-programacion">
                                             Programación Principal
                                         </a>
                                     </li>
-                                     <li class="nav-item">
+
+                                    <li class="nav-item">
                                         <a href="{{ route('detalleprogramacion.index') }}" 
                                         class="nav-link {{ request()->is('detalleprogramacion*') ? 'active' : '' }}" 
                                         data-key="t-precios">
                                             Gestionar Precios
                                         </a>
                                     </li>
+
                                     <li class="nav-item">
                                         <a href="{{ route('adelantos.index') }}" class="nav-link {{ request()->is('adelantos*') ? 'active' : '' }}" data-key="t-listado">
                                             Adelantos
                                         </a>
                                     </li>
+
+                                    {{-- ✅ Nueva opción añadida --}}
+                                    <li class="nav-item">
+                                        <a href="{{ route('seguimientos.index') }}" class="nav-link {{ request()->is('seguimientos*') ? 'active' : '' }}" data-key="t-seguimiento">
+                                            Seguimiento
+                                        </a>
+                                    </li>
+
                                     <li class="nav-item">
                                         <a href="{{ route('qr_tisurs.index') }}" class="nav-link {{ request()->is('qr_tisurs*') ? 'active' : '' }}" data-key="t-roles">
                                             Qr Tisur
@@ -399,6 +386,18 @@
                                     </li>
                                 </ul>
                             </div>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu-link {{ request()->is('expediente*') ? 'active' : '' }}" href="{{ route('expediente.index') }}">
+                                    <i class="ri-file-list-line"></i> <span>Expediente</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu-link {{ request()->is('tisur*') ? 'active' : '' }}" href="{{ route('tisur.index') }}">
+                                    <i class="ri-building-line"></i> <span>TISUR</span>
+                                </a>
+                            </li>
                         </li>
                         @endrole
                         
