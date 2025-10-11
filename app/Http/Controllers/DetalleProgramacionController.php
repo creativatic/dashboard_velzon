@@ -5,28 +5,38 @@ namespace App\Http\Controllers;
 use App\Models\DetalleProgramacion;
 use App\Models\Programacion;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class DetalleProgramacionController extends Controller
 {
+    /**
+     * Mostrar lista de frentes (detalles)
+     */
     public function index()
     {
-        $detalles = DetalleProgramacion::with('programaciones')->latest()->paginate(10);
-        $programaciones = Programacion::orderBy('id', 'desc')->get();
-        
+        $detalles = DetalleProgramacion::with('programaciones')
+            ->latest()
+            ->paginate(10);
+
+        // Agregamos las programaciones disponibles
+        $programaciones = Programacion::select('id', 'guia_remision', 'fecha')->get();
+
         return view('detalleprogramacion.index', compact('detalles', 'programaciones'));
     }
 
     public function create()
     {
-        $programaciones = Programacion::orderBy('id', 'desc')->get();
+        // Agregamos las programaciones disponibles
+        $programaciones = Programacion::select('id', 'guia_remision', 'fecha')->get();
+
         return view('detalleprogramacion.create', compact('programaciones'));
     }
 
+    /**
+     * Guardar un nuevo frente (detalle)
+     */
     public function store(Request $request)
     {
         $request->validate([
-            'programacion_id' => 'required|exists:programacions,id',
             'frente' => 'required|string|max:255',
             'precio_frente' => 'required|numeric|min:0',
             'precio_tn' => 'required|numeric|min:0',
@@ -34,28 +44,31 @@ class DetalleProgramacionController extends Controller
         ]);
 
         DetalleProgramacion::create([
-            'programacion_id' => $request->programacion_id,
             'frente' => $request->frente,
             'precio_frente' => $request->precio_frente,
             'precio_tn' => $request->precio_tn,
             'descripcion' => $request->descripcion,
-            // Sin created_by ni updated_by
+            'activo' => true,
         ]);
 
         return redirect()->route('detalleprogramacion.index')
             ->with('success', 'Frente creado correctamente.');
     }
 
+    /**
+     * Editar un frente (detalle)
+     */
     public function edit(DetalleProgramacion $detalleprogramacion)
     {
-        $programaciones = Programacion::orderBy('id', 'desc')->get();
-        return view('detalleprogramacion.edit', compact('detalleprogramacion', 'programaciones'));
+        return view('detalleprogramacion.edit', compact('detalleprogramacion'));
     }
 
+    /**
+     * Actualizar los datos del frente
+     */
     public function update(Request $request, DetalleProgramacion $detalleprogramacion)
     {
         $request->validate([
-            'programacion_id' => 'required|exists:programacions,id',
             'frente' => 'required|string|max:255',
             'precio_frente' => 'required|numeric|min:0',
             'precio_tn' => 'required|numeric|min:0',
@@ -64,22 +77,30 @@ class DetalleProgramacionController extends Controller
         ]);
 
         $detalleprogramacion->update([
-            'programacion_id' => $request->programacion_id,
             'frente' => $request->frente,
             'precio_frente' => $request->precio_frente,
             'precio_tn' => $request->precio_tn,
             'descripcion' => $request->descripcion,
             'activo' => $request->boolean('activo'),
-            // Sin updated_by
         ]);
 
         return redirect()->route('detalleprogramacion.index')
             ->with('success', 'Frente actualizado correctamente.');
     }
 
+    /**
+     * Eliminar un frente (detalle)
+     */
     public function destroy(DetalleProgramacion $detalleprogramacion)
     {
+        // Antes de eliminar, verificar si tiene programaciones asociadas
+        if ($detalleprogramacion->programaciones()->count() > 0) {
+            return redirect()->route('detalleprogramacion.index')
+                ->with('error', 'No se puede eliminar el frente porque tiene programaciones asociadas.');
+        }
+
         $detalleprogramacion->delete();
+
         return redirect()->route('detalleprogramacion.index')
             ->with('success', 'Frente eliminado correctamente.');
     }

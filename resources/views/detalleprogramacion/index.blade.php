@@ -41,7 +41,7 @@
                                         Fecha: {{ \Carbon\Carbon::parse($detalle->programacion->fecha)->format('d/m/Y') }}
                                     </small>
                                 @else
-                                    <span class="text-muted">Programación eliminada</span>
+                                    <span class="text-muted">Sin programación asociada</span>
                                 @endif
                             </td>
                             <td>{{ $detalle->frente }}</td>
