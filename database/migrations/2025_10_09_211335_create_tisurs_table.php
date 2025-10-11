@@ -37,6 +37,7 @@ return new class extends Migration
             $table->string('orden')->nullable();
             $table->timestamps();
         });
+
     }
 
     /**

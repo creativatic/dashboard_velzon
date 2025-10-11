@@ -33,4 +33,8 @@ class Tisur extends Model
         'fecha_pago',
         'orden',
     ];
+    public function expedientes()
+    {
+        return $this->hasMany(Expediente::class);
+    }
 }

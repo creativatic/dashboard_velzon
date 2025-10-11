@@ -49,6 +49,11 @@ class Programacion extends Model
         return $this->belongsTo(DetalleProgramacion::class, 'detalle_programacion_id');
     }
 
+    public function expedientes()
+    {
+        return $this->hasMany(Expediente::class);
+    }
+
     public function seguimiento()
     {
         return $this->hasOne(Seguimiento::class);

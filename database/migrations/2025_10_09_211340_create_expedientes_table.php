@@ -9,6 +9,17 @@ return new class extends Migration {
     {
         Schema::create('expedientes', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('tisur_id')
+                ->nullable()
+                ->constrained('tisurs')
+                ->nullOnDelete();
+
+            $table->foreignId('programacion_id')
+                ->nullable()
+                ->constrained('programacions')
+                ->nullOnDelete();
+
             $table->date('fecha_carga')->nullable();
             $table->string('guia_remitente')->nullable();
             $table->string('placa_tracto')->nullable();
@@ -45,6 +56,7 @@ return new class extends Migration {
             $table->text('comentarios')->nullable();
             $table->timestamps();
         });
+
     }
 
     public function down(): void

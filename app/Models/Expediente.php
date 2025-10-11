@@ -45,4 +45,13 @@ class Expediente extends Model
         'glosa_bancos',
         'comentarios',
     ];
+    public function tisur()
+    {
+        return $this->belongsTo(Tisur::class);
+    }
+
+    public function programacion()
+    {
+        return $this->belongsTo(Programacion::class);
+    }
 }
