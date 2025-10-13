@@ -14,7 +14,7 @@ class ProgramacionController extends Controller
      */
     public function index()
     {
-        $programaciones = Programacion::with('detalleProgramacion')->get();
+        $programaciones = Programacion::with('detalleProgramacion')->latest()->get();
         $detalles = DetalleProgramacion::where('activo', true)->get();
 
         return view('programacions.index', compact('programaciones', 'detalles'));

@@ -9,18 +9,7 @@
             </div>
 
             <div class="modal-body">
-                {{-- Programación --}}
-                <div class="mb-3">
-                    <label for="programacion_id" class="form-label">Programación</label>
-                    <select name="programacion_id" id="programacion_id" class="form-select" required>
-                        <option value="">Seleccionar Programación</option>
-                        @foreach($programaciones as $programacion)
-                            <option value="{{ $programacion->id }}">
-                                {{ $programacion->guia_remision }} - {{ \Carbon\Carbon::parse($programacion->fecha)->format('d/m/Y') }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+              
 
                 {{-- Frente --}}
                 <div class="mb-3">

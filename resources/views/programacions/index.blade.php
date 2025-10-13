@@ -79,10 +79,9 @@
                             <td>{{ $programacion->detalle_programacion_id ?? '-' }}</td>
                             <td>
                                 {{-- Botón Editar --}}
-                                <button 
-                                    type="button" 
+                                <button type="button"
                                     class="btn btn-sm btn-warning"
-                                    onclick='openEditProgramacionModal(@json($programacion))'>
+                                    onclick='openEditProgramacionModal(@json($programacion->toArray()))'>
                                     <i class="ri-edit-line"></i>
                                 </button>
 

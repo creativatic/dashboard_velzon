@@ -20,7 +20,6 @@
                 <thead class="table-light">
                     <tr>
                         <th>#</th>
-                        <th>Programación</th>
                         <th>Frente</th>
                         <th>Precio Frente (S/)</th>
                         <th>Precio TN (S/)</th>
@@ -33,17 +32,6 @@
                     @forelse ($detalles as $detalle)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>
-                                @if($detalle->programacion)
-                                    <strong>Guía: {{ $detalle->programacion->guia_remision ?? 'N/A' }}</strong>
-                                    <br>
-                                    <small class="text-muted">
-                                        Fecha: {{ \Carbon\Carbon::parse($detalle->programacion->fecha)->format('d/m/Y') }}
-                                    </small>
-                                @else
-                                    <span class="text-muted">Sin programación asociada</span>
-                                @endif
-                            </td>
                             <td>{{ $detalle->frente }}</td>
                             <td>S/ {{ number_format($detalle->precio_frente, 2) }}</td>
                             <td>S/ {{ number_format($detalle->precio_tn, 2) }}</td>
@@ -95,7 +83,6 @@
 function openEditFrenteModal(detalle) {
     // Llenar el formulario de edición con los datos del frente
     document.getElementById('edit_frente_id').value = detalle.id;
-    document.getElementById('edit_programacion_id').value = detalle.programacion_id;
     document.getElementById('edit_frente').value = detalle.frente;
     document.getElementById('edit_precio_frente').value = detalle.precio_frente;
     document.getElementById('edit_precio_tn').value = detalle.precio_tn;

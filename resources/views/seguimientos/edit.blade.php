@@ -1,7 +1,8 @@
 <div class="modal fade" id="modalEditSeguimiento{{ $seguimiento->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <form action="{{ route('seguimiento.update', $seguimiento) }}" method="POST" class="modal-content">
-            @csrf @method('PUT')
+        <form action="{{ route('seguimientos.update', $seguimiento->id) }}" method="POST" class="modal-content">
+            @csrf
+            @method('PUT')
             <div class="modal-header bg-warning">
                 <h5 class="modal-title">Editar Seguimiento</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>

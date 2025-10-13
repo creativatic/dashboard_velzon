@@ -1,93 +1,104 @@
-<!-- Modal Editar Frente -->
-<div class="modal fade" id="editFrenteModal" tabindex="-1" aria-labelledby="editFrenteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <form id="editFrenteForm" method="POST" class="modal-content">
+<!-- Modal Editar Programación -->
+<div class="modal fade" id="editProgramacionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <form id="editProgramacionForm" method="POST" class="modal-content">
             @csrf
             @method('PUT')
-            <input type="hidden" id="edit_frente_id" name="id">
-            
+
             <div class="modal-header">
-                <h5 class="modal-title" id="editFrenteModalLabel">Editar Frente</h5>
+                <h5 class="modal-title">Editar Programación</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
 
             <div class="modal-body">
-                {{-- Programación --}}
-                <div class="mb-3">
-                    <label for="edit_programacion_id" class="form-label">Programación</label>
-                    <select name="programacion_id" id="edit_programacion_id" class="form-select" required>
-                        <option value="">Seleccionar Programación</option>
-                        @foreach($programaciones as $programacion)
-                            <option value="{{ $programacion->id }}">
-                                {{ $programacion->guia_remision }} - {{ \Carbon\Carbon::parse($programacion->fecha)->format('d/m/Y') }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                <input type="hidden" id="edit-id" name="id">
 
-                {{-- Frente --}}
-                <div class="mb-3">
-                    <label for="edit_frente" class="form-label">Frente</label>
-                    <input 
-                        type="text" 
-                        name="frente" 
-                        id="edit_frente" 
-                        class="form-control" 
-                        placeholder="Ejemplo: Huanaco, Intikal, Mina Central" 
-                        required>
-                </div>
+                <div class="row g-3">
 
-                <div class="row">
-                    {{-- Precio Frente --}}
-                    <div class="col-md-6 mb-3">
-                        <label for="edit_precio_frente" class="form-label">Precio Frente (S/)</label>
-                        <input 
-                            type="number" 
-                            step="0.01" 
-                            name="precio_frente" 
-                            id="edit_precio_frente" 
-                            class="form-control" 
-                            placeholder="0.00" 
-                            required>
+                    {{-- Fecha de Programación --}}
+                    <div class="col-md-4">
+                        <label for="edit-fecha_progracion" class="form-label">Fecha Programación</label>
+                        <input type="date" name="fecha_progracion" id="edit-fecha_progracion" class="form-control" required>
                     </div>
 
-                    {{-- Precio TN --}}
-                    <div class="col-md-6 mb-3">
-                        <label for="edit_precio_tn" class="form-label">Precio TN (S/)</label>
-                        <input 
-                            type="number" 
-                            step="0.01" 
-                            name="precio_tn" 
-                            id="edit_precio_tn" 
-                            class="form-control" 
-                            placeholder="0.00" 
-                            required>
+                    {{-- Frente (relación con detalle_programacion) --}}
+                    <div class="col-md-4">
+                        <label for="edit-detalle_programacion_id" class="form-label">Frente</label>
+                        <select name="detalle_programacion_id" id="edit-detalle_programacion_id" class="form-select" required>
+                            <option value="">Seleccione un frente...</option>
+                            @foreach($detalles as $detalle)
+                                <option value="{{ $detalle->id }}"
+                                    {{ isset($programacion) && $programacion->detalle_programacion_id == $detalle->id ? 'selected' : '' }}>
+                                    {{ $detalle->frente }} — S/.{{ number_format($detalle->precio_frente, 2) }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
-                </div>
 
-                {{-- Descripción --}}
-                <div class="mb-3">
-                    <label for="edit_descripcion" class="form-label">Descripción</label>
-                    <textarea 
-                        name="descripcion" 
-                        id="edit_descripcion" 
-                        class="form-control" 
-                        rows="3" 
-                        placeholder="Descripción opcional del frente"></textarea>
-                </div>
-
-                {{-- Estado --}}
-                <div class="mb-3">
-                    <div class="form-check form-switch">
-                        <input 
-                            type="checkbox" 
-                            name="activo" 
-                            id="edit_activo" 
-                            class="form-check-input" 
-                            value="1" 
-                            checked>
-                        <label for="edit_activo" class="form-check-label">Activo</label>
+                    {{-- DNI --}}
+                    <div class="col-md-4">
+                        <label for="edit-dni" class="form-label">DNI</label>
+                        <input type="text" name="dni" id="edit-dni" maxlength="8" class="form-control">
                     </div>
+
+                    {{-- Guía Remisión --}}
+                    <div class="col-md-4">
+                        <label for="edit-guia_remision" class="form-label">Guía Remisión</label>
+                        <input type="text" name="guia_remision" id="edit-guia_remision" class="form-control">
+                    </div>
+
+                    {{-- Placa Tracto --}}
+                    <div class="col-md-4">
+                        <label for="edit-placa_tracto" class="form-label">Placa Tracto</label>
+                        <input type="text" name="placa_tracto" id="edit-placa_tracto" class="form-control">
+                    </div>
+
+                    {{-- Placa Carreta --}}
+                    <div class="col-md-4">
+                        <label for="edit-placa_carreta" class="form-label">Placa Carreta</label>
+                        <input type="text" name="placa_carreta" id="edit-placa_carreta" class="form-control">
+                    </div>
+
+                    {{-- RUC Transporte --}}
+                    <div class="col-md-4">
+                        <label for="edit-ruc_transporte" class="form-label">RUC Transporte</label>
+                        <input type="text" name="ruc_transporte" id="edit-ruc_transporte" maxlength="11" class="form-control">
+                    </div>
+
+                    {{-- Razón Social Transporte --}}
+                    <div class="col-md-4">
+                        <label for="edit-razon_social_transporte" class="form-label">Razón Social Transporte</label>
+                        <input type="text" name="razon_social_transporte" id="edit-razon_social_transporte" class="form-control">
+                    </div>
+
+                    {{-- Nombres Conductor --}}
+                    <div class="col-md-4">
+                        <label for="edit-nombres_conductor" class="form-label">Nombres Conductor</label>
+                        <input type="text" name="nombres_conductor" id="edit-nombres_conductor" class="form-control">
+                    </div>
+
+                    {{-- Apellidos Conductor --}}
+                    <div class="col-md-4">
+                        <label for="edit-apellidos_conductor" class="form-label">Apellidos Conductor</label>
+                        <input type="text" name="apellidos_conductor" id="edit-apellidos_conductor" class="form-control">
+                    </div>
+
+                    {{-- Licencia --}}
+                    <div class="col-md-4">
+                        <label for="edit-licencia" class="form-label">Licencia</label>
+                        <input type="text" name="licencia" id="edit-licencia" class="form-control">
+                    </div>
+
+                    {{-- Tipo Operación --}}
+                    <div class="col-md-4">
+                        <label for="edit-tipo_operacion" class="form-label">Tipo Operación</label>
+                        <select name="tipo_operacion" id="edit-tipo_operacion" class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="nacional">Nacional</option>
+                            <option value="internacional">Internacional</option>
+                        </select>
+                    </div>
+
                 </div>
             </div>
 
@@ -96,7 +107,7 @@
                     <i class="ri-close-circle-line"></i> Cancelar
                 </button>
                 <button type="submit" class="btn btn-primary">
-                    <i class="ri-save-3-line"></i> Actualizar Frente
+                    <i class="ri-save-3-line"></i> Actualizar
                 </button>
             </div>
         </form>
@@ -104,12 +115,21 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Configurar el formulario de edición
-    const editForm = document.getElementById('editFrenteForm');
-    editForm.addEventListener('submit', function(e) {
-        const frenteId = document.getElementById('edit_frente_id').value;
-        this.action = '/detalleprogramacion/' + frenteId;
-    });
-});
+function openEditProgramacionModal(programacion) {
+    const form = document.getElementById('editProgramacionForm');
+    form.action = `/programacions/${programacion.id}`;
+
+    for (const [key, value] of Object.entries(programacion)) {
+        const input = document.getElementById(`edit-${key}`);
+        if (input) {
+            if (input.tagName === 'SELECT') {
+                input.value = value ?? '';
+            } else {
+                input.value = value ?? '';
+            }
+        }
+    }
+
+    new bootstrap.Modal(document.getElementById('editProgramacionModal')).show();
+}
 </script>
