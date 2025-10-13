@@ -17,6 +17,8 @@ use App\Http\Controllers\DetalleProgramacionController;
 use App\Http\Controllers\TisurController;
 use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\SeguimientoController;
+use App\Http\Controllers\ReporteController;
+
 
 Route::middleware(['auth'])->group(function () {
 
@@ -39,7 +41,8 @@ Route::middleware(['auth'])->group(function () {
         // Adelantos
         Route::resource('adelantos', AdelantoController::class)->except(['show']);
         // QR Tisur
-        Route::resource('qr_tisurs', QrTisurController::class)->except(['show']);
+        Route::get('/reportes/reporte-qr', [ReporteController::class, 'reporteQr'])->name('reportes.reporte_qr');
+        //Route::get('/programacions/reporte-qr', [ProgramacionController::class, 'reporteQr'])->name('programacions.reporte_qr');
         // Detalles
         Route::resource('detalleprogramacion', DetalleProgramacionController::class)->except(['show']);
         // Tisur

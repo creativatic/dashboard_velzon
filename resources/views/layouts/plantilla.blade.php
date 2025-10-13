@@ -18,15 +18,27 @@
     <link href="libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Layout config Js -->
-    <script src="js/layout.js"></script>
+    
     <!-- Bootstrap Css -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    
     <!-- Icons Css -->
-    <link href="css/icons.min.css" rel="stylesheet" type="text/css" />
+    
     <!-- App Css-->
+    
+    <!-- custom Css 
+      <script src="js/layout.js"></script>
+     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+     <link href="css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="css/app.min.css" rel="stylesheet" type="text/css" />
-    <!-- custom Css-->
-    <link href="css/custom.min.css" rel="stylesheet" type="text/css" />
+     <link href="css/custom.min.css" rel="stylesheet" type="text/css" />
+    -->
+   
+
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/app.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/custom.min.css') }}" rel="stylesheet" type="text/css" />
+
 
 </head>
 
@@ -353,7 +365,8 @@
                            <div class="collapse menu-dropdown" id="sidebarProgramacion">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{ route('programacions.index') }}" class="nav-link {{ request()->is('programacions*') ? 'active' : '' }}" data-key="t-programacion">
+                                        <a href="{{ route('programacions.index') }}" 
+                                        class="nav-link {{ request()->is('programacions*') ? 'active' : '' }}" data-key="t-programacion">
                                             Programación Principal
                                         </a>
                                     </li>
@@ -367,23 +380,36 @@
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="{{ route('adelantos.index') }}" class="nav-link {{ request()->is('adelantos*') ? 'active' : '' }}" data-key="t-listado">
+                                        <a href="{{ route('adelantos.index') }}" 
+                                        class="nav-link {{ request()->is('adelantos*') ? 'active' : '' }}" data-key="t-listado">
                                             Adelantos
                                         </a>
                                     </li>
 
                                     {{-- ✅ Nueva opción añadida --}}
                                     <li class="nav-item">
-                                        <a href="{{ route('seguimientos.index') }}" class="nav-link {{ request()->is('seguimientos*') ? 'active' : '' }}" data-key="t-seguimiento">
+                                        <a href="{{ route('seguimientos.index') }}" 
+                                        class="nav-link {{ request()->is('seguimientos*') ? 'active' : '' }}" data-key="t-seguimiento">
                                             Seguimiento
                                         </a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="{{ route('qr_tisurs.index') }}" class="nav-link {{ request()->is('qr_tisurs*') ? 'active' : '' }}" data-key="t-roles">
-                                            Qr Tisur
+                                        <a href="{{ route('reportes.reporte_qr') }}" 
+                                        class="nav-link {{ request()->is('reportes/reporte-qr*') ? 'active' : '' }}" 
+                                        data-key="t-reporte-qr">
+                                            Reporte QR
                                         </a>
                                     </li>
+
+
+                                  
+                               
+
+                                        
+
+
+
                                 </ul>
                             </div>
 
@@ -1058,10 +1084,7 @@
     </div>
 
     <!-- JAVASCRIPT -->
-    <script src="libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="libs/simplebar/simplebar.min.js"></script>
-    <script src="libs/node-waves/waves.min.js"></script>
-    <script src="libs/feather-icons/feather.min.js"></script>
+    
     <script src="js/pages/plugins/lord-icon-2.1.0.js"></script>
     <script src="js/plugins.js"></script>
 
@@ -1078,8 +1101,23 @@
     <!-- Dashboard init -->
     <script src="js/pages/dashboard-ecommerce.init.js"></script>
 
-    <!-- App js -->
+    <!-- App js 
+
+     <script src="libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="libs/simplebar/simplebar.min.js"></script>
+    <script src="libs/node-waves/waves.min.js"></script>
+    <script src="libs/feather-icons/feather.min.js"></script>
     <script src="js/app.js"></script>
+    -->
+    
+    
+    <script src="{{ asset('js/layout.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('libs/simplebar/simplebar.min.js') }}"></script>
+    <script src="{{ asset('libs/node-waves/waves.min.js') }}"></script>
+    <script src="{{ asset('libs/feather-icons/feather.min.js') }}"></script>
+
 </body>
 
 </html>

@@ -10,13 +10,7 @@ return new class extends Migration {
         Schema::create('seguimientos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('programacion_id')->constrained()->onDelete('cascade');
-            $table->string('carguio')->nullable();
-            $table->string('material')->nullable();
-            $table->string('frente')->nullable();
             $table->string('estado')->nullable();
-            $table->string('placa')->nullable();
-            $table->string('conductor')->nullable();
-            $table->string('telefono')->nullable();
             $table->text('notas')->nullable();
             $table->timestamps();
         });

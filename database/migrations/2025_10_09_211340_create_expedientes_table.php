@@ -20,39 +20,18 @@ return new class extends Migration {
                 ->constrained('programacions')
                 ->nullOnDelete();
 
-            $table->date('fecha_carga')->nullable();
-            $table->string('guia_remitente')->nullable();
-            $table->string('placa_tracto')->nullable();
-            $table->string('placa_carreta')->nullable();
-            $table->string('razon_social_empresa')->nullable();
-            $table->string('ruc')->nullable();
-            $table->string('conductor')->nullable();
-            $table->string('licencia')->nullable();
-            $table->string('telefono')->nullable();
-            $table->string('cuenta_banco')->nullable();
-            $table->string('cci_banco')->nullable();
-            $table->string('banco')->nullable();
-            $table->string('guia_transportista')->nullable();
-            $table->string('material')->nullable();
+            // Campos propios del expediente
             $table->string('numero_ticket')->nullable();
-            $table->string('guia_remision')->nullable();
             $table->string('numero_factura')->nullable();
-            $table->date('fecha_ingreso')->nullable();
-            $table->decimal('peso_entrada', 10, 2)->nullable();
-            $table->decimal('segundo_pesaje', 10, 2)->nullable();
-            $table->decimal('peso_neto', 10, 2)->nullable();
-            $table->decimal('costo_tn', 10, 2)->nullable();
             $table->decimal('total', 10, 2)->nullable();
             $table->decimal('detraccion', 10, 2)->nullable();
-            $table->string('estado_pago_detraccion')->nullable();
+            $table->string('estado_pago_detraccion', 50)->nullable();
             $table->decimal('total_con_detraccion', 10, 2)->nullable();
-            $table->decimal('deposito_a_proveer', 10, 2)->nullable();
             $table->date('fecha_pago')->nullable();
-            $table->string('conformidad')->nullable();
-            $table->string('grupo_carguio')->nullable();
+            $table->string('conformidad', 100)->nullable();
             $table->string('archivo')->nullable();
-            $table->string('frente')->nullable();
-            $table->string('glosa_bancos')->nullable();
+
+            // Campos opcionales adicionales de control
             $table->text('comentarios')->nullable();
             $table->timestamps();
         });

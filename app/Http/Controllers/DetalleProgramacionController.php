@@ -18,7 +18,7 @@ class DetalleProgramacionController extends Controller
             ->paginate(10);
 
         // Agregamos las programaciones disponibles
-        $programaciones = Programacion::select('id', 'guia_remision', 'fecha')->get();
+        $programaciones = Programacion::select('id', 'guia_remision', 'fecha_progracion')->get();
 
         return view('detalleprogramacion.index', compact('detalles', 'programaciones'));
     }
@@ -26,7 +26,7 @@ class DetalleProgramacionController extends Controller
     public function create()
     {
         // Agregamos las programaciones disponibles
-        $programaciones = Programacion::select('id', 'guia_remision', 'fecha')->get();
+        $programaciones = Programacion::select('id', 'guia_remision', 'fecha_progracion')->get();
 
         return view('detalleprogramacion.create', compact('programaciones'));
     }

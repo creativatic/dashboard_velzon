@@ -12,15 +12,28 @@
 
             <div class="modal-body">
                 <div class="row g-3">
-                    {{-- Fecha --}}
+
+                    {{-- Frente / Detalle Programación --}}
+                    <div class="col-md-4">
+                        <label class="form-label">Frente</label>
+                        <select name="detalle_programacion_id" class="form-select">
+                            <option value="">-- Seleccionar Frente --</option>
+                            @foreach($detalles as $detalle)
+                                <option value="{{ $detalle->id }}">{{ $detalle->frente }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    {{-- Fecha Programación --}}
                     <div class="col-md-3">
-                        <label class="form-label">Fecha</label>
-                            <input 
-                                type="date" 
-                                name="fecha" 
-                                class="form-control" 
-                                value="{{ now()->format('Y-m-d') }}" 
-                                required>
+                        <label class="form-label">Fecha Programación</label>
+                        <input type="date" name="fecha_progracion" class="form-control" value="{{ now()->format('Y-m-d') }}" required>
+                    </div>
+
+                    {{-- DNI --}}
+                    <div class="col-md-3">
+                        <label class="form-label">DNI</label>
+                        <input type="text" name="dni" class="form-control" maxlength="8" placeholder="DNI del conductor">
                     </div>
 
                     {{-- Guía Remisión --}}
@@ -52,8 +65,8 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Constancia MTC</label>
-                        <input type="text" name="constancia_mtc" class="form-control" placeholder="N° constancia MTC">
+                        <label class="form-label">Constancia MTC Tracto</label>
+                        <input type="text" name="constancia_mtc_tracto" class="form-control" placeholder="N° constancia">
                     </div>
 
                     <div class="col-md-4">
@@ -74,8 +87,13 @@
 
                     {{-- Datos del Conductor --}}
                     <div class="col-md-4">
-                        <label class="form-label">Conductor</label>
-                        <input type="text" name="conductor" class="form-control" placeholder="Nombre completo">
+                        <label class="form-label">Nombres Conductor</label>
+                        <input type="text" name="nombres_conductor" class="form-control" placeholder="Nombres">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Apellidos Conductor</label>
+                        <input type="text" name="apellidos_conductor" class="form-control" placeholder="Apellidos">
                     </div>
 
                     <div class="col-md-4">
@@ -84,19 +102,19 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Teléfono del Conductor</label>
+                        <label class="form-label">Teléfono Conductor</label>
                         <input type="text" name="telefono_conductor" class="form-control" placeholder="Ej: 987654321">
                     </div>
 
                     {{-- Cuenta bancaria --}}
                     <div class="col-md-4">
-                        <label class="form-label">Cuenta</label>
-                        <input type="text" name="cuenta" class="form-control" placeholder="Cuenta bancaria">
+                        <label class="form-label">Cuenta Banco</label>
+                        <input type="text" name="cuenta_banco" class="form-control" placeholder="Cuenta bancaria">
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">CCI</label>
-                        <input type="text" name="cci" class="form-control" placeholder="Código CCI">
+                        <label class="form-label">CCI Banco</label>
+                        <input type="text" name="cci_banco" class="form-control" placeholder="Código CCI">
                     </div>
 
                     <div class="col-md-4">
@@ -104,15 +122,19 @@
                         <input type="text" name="banco" class="form-control" placeholder="Ej: BCP, BBVA, Interbank">
                     </div>
 
-                    {{-- Datos del envío --}}
+                    {{-- Tipo y operación --}}
                     <div class="col-md-4">
-                        <label class="form-label">Tipo de Mineral</label>
+                        <label class="form-label">Tipo Mineral</label>
                         <input type="text" name="tipo_mineral" class="form-control" placeholder="Ej: Hierro, Cobre">
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Número de Guía</label>
-                        <input type="text" name="numero_guia" class="form-control" placeholder="Ej: 001-000456">
+                        <label class="form-label">Tipo Operación</label>
+                        <select name="tipo_operacion" class="form-select">
+                            <option value="">Seleccionar...</option>
+                            <option value="nacional">Nacional</option>
+                            <option value="internacional">Internacional</option>
+                        </select>
                     </div>
 
                     <div class="col-md-4">
@@ -126,9 +148,10 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Área Logística</label>
-                        <input type="text" name="logistica" class="form-control" placeholder="Responsable o área logística">
+                        <label class="form-label">Grupo Carguío</label>
+                        <input type="text" name="grupo_cargio" class="form-control" placeholder="Ej: Grupo 1, Grupo 2">
                     </div>
+
                 </div>
             </div>
 

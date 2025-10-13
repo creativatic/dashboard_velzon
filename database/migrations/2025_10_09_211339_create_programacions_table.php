@@ -13,28 +13,30 @@ return new class extends Migration
     {
         Schema::create('programacions', function (Blueprint $table) {
             $table->id();
-            $table->date('fecha');
-            $table->string('guia_remision', 50)->nullable();
+            $table->date('fecha_progracion');
+            $table->string('dni', 8)->nullable();
+            $table->string('guia_remision', 100)->nullable();
             $table->string('placa_tracto', 20)->nullable();
             $table->string('placa_carreta', 20)->nullable();
             $table->string('marca_vehiculo', 50)->nullable();
             $table->string('tipo_plataforma', 50)->nullable();
-            $table->string('constancia_mtc', 100)->nullable();
+            $table->string('constancia_mtc_tracto', 100)->nullable();
             $table->string('constancia_mtc_carreta', 100)->nullable();
             $table->string('razon_social_transporte', 100)->nullable();
             $table->string('ruc_transporte', 11)->nullable();
-            $table->string('conductor', 100)->nullable();
+            //$table->string('conductor_nombres_apell', 100)->nullable();
+            $table->string('nombres_conductor', 100)->nullable();
+            $table->string('apellidos_conductor', 100)->nullable();
             $table->string('licencia', 20)->nullable();
             $table->string('telefono_conductor', 20)->nullable();
-            $table->string('cuenta', 50)->nullable();
-            $table->string('cci', 50)->nullable();
+            $table->string('cuenta_banco', 50)->nullable();
+            $table->string('cci_banco', 50)->nullable();
             $table->string('banco', 50)->nullable();
             $table->string('tipo_mineral', 50)->nullable();
-            $table->string('numero_guia', 50)->nullable();
+            $table->enum('tipo_operacion', ['nacional', 'internacional'])->nullable(); // ← Cambiado
             $table->string('conformidad_adelanto', 50)->nullable();
             $table->string('guia_transportista', 50)->nullable();
-            $table->string('logistica', 100)->nullable();
-
+            $table->string('grupo_cargio', 100)->nullable();
             $table->foreignId('detalle_programacion_id')
                 ->nullable()
                 ->constrained('detalle_programacions')
