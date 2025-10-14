@@ -1,113 +1,53 @@
-<!-- Modal Editar Programación -->
-<div class="modal fade" id="editProgramacionModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-        <form id="editProgramacionForm" method="POST" class="modal-content">
+<!-- Modal Editar Frente -->
+<div class="modal fade" id="editFrenteModal" tabindex="-1" aria-labelledby="editFrenteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="editFrenteForm" method="POST" class="modal-content">
             @csrf
             @method('PUT')
 
             <div class="modal-header">
-                <h5 class="modal-title">Editar Programación</h5>
+                <h5 class="modal-title" id="editFrenteModalLabel">Editar Frente</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
 
             <div class="modal-body">
-                <input type="hidden" id="edit-id" name="id">
+                <input type="hidden" id="edit_frente_id" name="id">
 
-                <div class="row g-3">
-
-                    {{-- Fecha de Programación --}}
-                    <div class="col-md-4">
-                        <label for="edit-fecha_progracion" class="form-label">Fecha Programación</label>
-                        <input type="date" name="fecha_progracion" id="edit-fecha_progracion" class="form-control" required>
-                    </div>
-
-                    {{-- Frente (relación con detalle_programacion) --}}
-                    <div class="col-md-4">
-                        <label for="edit-detalle_programacion_id" class="form-label">Frente</label>
-                        <select name="detalle_programacion_id" id="edit-detalle_programacion_id" class="form-select" required>
-                            <option value="">Seleccione un frente...</option>
-                            @foreach($detalles as $detalle)
-                                <option value="{{ $detalle->id }}"
-                                    {{ isset($programacion) && $programacion->detalle_programacion_id == $detalle->id ? 'selected' : '' }}>
-                                    {{ $detalle->frente }} — S/.{{ number_format($detalle->precio_frente, 2) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    {{-- DNI --}}
-                    <div class="col-md-4">
-                        <label for="edit-dni" class="form-label">DNI</label>
-                        <input type="text" name="dni" id="edit-dni" maxlength="8" class="form-control">
-                    </div>
-
-                    {{-- Guía Remisión --}}
-                    <div class="col-md-4">
-                        <label for="edit-guia_remision" class="form-label">Guía Remisión</label>
-                        <input type="text" name="guia_remision" id="edit-guia_remision" class="form-control">
-                    </div>
-
-                    {{-- Placa Tracto --}}
-                    <div class="col-md-4">
-                        <label for="edit-placa_tracto" class="form-label">Placa Tracto</label>
-                        <input type="text" name="placa_tracto" id="edit-placa_tracto" class="form-control">
-                    </div>
-
-                    {{-- Placa Carreta --}}
-                    <div class="col-md-4">
-                        <label for="edit-placa_carreta" class="form-label">Placa Carreta</label>
-                        <input type="text" name="placa_carreta" id="edit-placa_carreta" class="form-control">
-                    </div>
-
-                    {{-- RUC Transporte --}}
-                    <div class="col-md-4">
-                        <label for="edit-ruc_transporte" class="form-label">RUC Transporte</label>
-                        <input type="text" name="ruc_transporte" id="edit-ruc_transporte" maxlength="11" class="form-control">
-                    </div>
-
-                    {{-- Razón Social Transporte --}}
-                    <div class="col-md-4">
-                        <label for="edit-razon_social_transporte" class="form-label">Razón Social Transporte</label>
-                        <input type="text" name="razon_social_transporte" id="edit-razon_social_transporte" class="form-control">
-                    </div>
-
-                    {{-- Nombres Conductor --}}
-                    <div class="col-md-4">
-                        <label for="edit-nombres_conductor" class="form-label">Nombres Conductor</label>
-                        <input type="text" name="nombres_conductor" id="edit-nombres_conductor" class="form-control">
-                    </div>
-
-                    {{-- Apellidos Conductor --}}
-                    <div class="col-md-4">
-                        <label for="edit-apellidos_conductor" class="form-label">Apellidos Conductor</label>
-                        <input type="text" name="apellidos_conductor" id="edit-apellidos_conductor" class="form-control">
-                    </div>
-
-                    {{-- Licencia --}}
-                    <div class="col-md-4">
-                        <label for="edit-licencia" class="form-label">Licencia</label>
-                        <input type="text" name="licencia" id="edit-licencia" class="form-control">
-                    </div>
-
-                    {{-- Tipo Operación --}}
-                    <div class="col-md-4">
-                        <label for="edit-tipo_operacion" class="form-label">Tipo Operación</label>
-                        <select name="tipo_operacion" id="edit-tipo_operacion" class="form-select">
-                            <option value="">Seleccione...</option>
-                            <option value="nacional">Nacional</option>
-                            <option value="internacional">Internacional</option>
-                        </select>
-                    </div>
-
+                {{-- Frente --}}
+                <div class="mb-3">
+                    <label for="edit_frente" class="form-label">Frente</label>
+                    <input type="text" name="frente" id="edit_frente" class="form-control" required>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="edit_precio_frente" class="form-label">Precio Frente (S/)</label>
+                        <input type="number" step="0.01" name="precio_frente" id="edit_precio_frente" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="edit_precio_tn" class="form-label">Precio TN (S/)</label>
+                        <input type="number" step="0.01" name="precio_tn" id="edit_precio_tn" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="edit_descripcion" class="form-label">Descripción</label>
+                    <textarea name="descripcion" id="edit_descripcion" class="form-control" rows="3"></textarea>
+                </div>
+
+               <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="edit_activo" name="activo" value="1" {{ old('activo', isset($detalle) ? $detalle->activo : true) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="edit_activo">Activo</label>
+                </div>
+
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="ri-close-circle-line"></i> Cancelar
                 </button>
-                <button type="submit" class="btn btn-primary">
-                    <i class="ri-save-3-line"></i> Actualizar
+                <button type="submit" class="btn btn-success">
+                    <i class="ri-check-line"></i> Actualizar
                 </button>
             </div>
         </form>
@@ -115,21 +55,21 @@
 </div>
 
 <script>
-function openEditProgramacionModal(programacion) {
-    const form = document.getElementById('editProgramacionForm');
-    form.action = `/programacions/${programacion.id}`;
+function openEditFrenteModal(detalle) {
+    const form = document.getElementById('editFrenteForm');
 
-    for (const [key, value] of Object.entries(programacion)) {
-        const input = document.getElementById(`edit-${key}`);
-        if (input) {
-            if (input.tagName === 'SELECT') {
-                input.value = value ?? '';
-            } else {
-                input.value = value ?? '';
-            }
-        }
-    }
+    // 🔧 Forzar el action exacto con el ID
+    form.action = "{{ url('detalleprogramacion') }}/" + detalle.id;
 
-    new bootstrap.Modal(document.getElementById('editProgramacionModal')).show();
+    // Llenar datos
+    document.getElementById('edit_frente_id').value = detalle.id;
+    document.getElementById('edit_frente').value = detalle.frente;
+    document.getElementById('edit_precio_frente').value = detalle.precio_frente;
+    document.getElementById('edit_precio_tn').value = detalle.precio_tn;
+    document.getElementById('edit_descripcion').value = detalle.descripcion || '';
+    document.getElementById('edit_activo').checked = !!detalle.activo;
+
+    // Mostrar modal
+    new bootstrap.Modal(document.getElementById('editFrenteModal')).show();
 }
 </script>

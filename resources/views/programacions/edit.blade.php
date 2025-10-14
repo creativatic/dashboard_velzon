@@ -186,7 +186,7 @@ function openEditProgramacionModal(programacion) {
 
     // Rellenar inputs y selects
     const fields = [
-        'fecha_progracion','detalle_programacion_id','dni','guia_remision','placa_tracto',
+        'fecha_programacion','detalle_programacion_id','dni','guia_remision','placa_tracto',
         'placa_carreta','marca_vehiculo','tipo_plataforma','constancia_mtc_tracto',
         'constancia_mtc_carreta','ruc_transporte','razon_social_transporte',
         'nombres_conductor','apellidos_conductor','licencia','tipo_operacion',

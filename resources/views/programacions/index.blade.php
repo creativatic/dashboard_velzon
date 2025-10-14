@@ -21,6 +21,7 @@
                     <tr>
                         <th>#</th>
                         <th>Fecha Programación</th>
+                        <th>Licencia</th>
                         <th>DNI</th>
                         <th>Frente</th>
                         <th>Guía Remisión</th>
@@ -34,7 +35,6 @@
                         <th>RUC Transporte</th>
                         <th>Nombres Conductor</th>
                         <th>Apellidos Conductor</th>
-                        <th>Licencia</th>
                         <th>Teléfono</th>
                         <th>Cuenta Banco</th>
                         <th>CCI Banco</th>
@@ -52,7 +52,8 @@
                     @forelse($programaciones as $programacion)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $programacion->fecha_progracion ?? '-' }}</td>
+                            <td>{{ \Carbon\Carbon::parse($programacion->fecha_programacion)->format('d/m/Y') }}</td>
+                            <td>{{ $programacion->licencia ?? '-' }}</td>
                             <td>{{ $programacion->dni ?? '-' }}</td>
                             <td>{{ $programacion->detalleProgramacion?->frente ?? '—' }}</td>
                             <td>{{ $programacion->guia_remision ?? '-' }}</td>
@@ -66,7 +67,6 @@
                             <td>{{ $programacion->ruc_transporte ?? '-' }}</td>
                             <td>{{ $programacion->nombres_conductor ?? '-' }}</td>
                             <td>{{ $programacion->apellidos_conductor ?? '-' }}</td>
-                            <td>{{ $programacion->licencia ?? '-' }}</td>
                             <td>{{ $programacion->telefono_conductor ?? '-' }}</td>
                             <td>{{ $programacion->cuenta_banco ?? '-' }}</td>
                             <td>{{ $programacion->cci_banco ?? '-' }}</td>

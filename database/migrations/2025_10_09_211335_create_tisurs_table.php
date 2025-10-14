@@ -21,13 +21,13 @@ return new class extends Migration
             $table->decimal('segundo_peso', 10, 2)->nullable();
             $table->string('razon_social')->nullable();
             $table->string('transportista')->nullable();
-            $table->string('carga')->nullable();
+            $table->string('carga_tisur')->nullable();
             $table->integer('numero_bultos')->nullable();
             $table->decimal('peso_neto', 10, 2)->nullable();
-            $table->string('tipo')->nullable();
+            $table->string('tipo_plataforma')->nullable();
             $table->string('documento_origen')->nullable();
-            $table->decimal('precio', 10, 2)->nullable();
-            $table->decimal('total', 10, 2)->nullable();
+            $table->decimal('precio_tisur', 10, 2)->nullable();
+            $table->decimal('total_tisur', 10, 2)->nullable();
             $table->decimal('retencion', 10, 2)->nullable();
             $table->decimal('pago', 10, 2)->nullable();
             $table->string('factura')->nullable();

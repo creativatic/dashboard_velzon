@@ -44,7 +44,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reportes/reporte-qr', [ReporteController::class, 'reporteQr'])->name('reportes.reporte_qr');
         //Route::get('/programacions/reporte-qr', [ProgramacionController::class, 'reporteQr'])->name('programacions.reporte_qr');
         // Detalles
-        Route::resource('detalleprogramacion', DetalleProgramacionController::class)->except(['show']);
+        //Route::resource('detalleprogramacion', DetalleProgramacionController::class)->except(['show']);
+        Route::resource('detalleprogramacion', DetalleProgramacionController::class);
         // Tisur
         Route::resource('tisur', TisurController::class)->except(['show']);
         // Expediente

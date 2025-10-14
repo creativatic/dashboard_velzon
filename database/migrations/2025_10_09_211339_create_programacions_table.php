@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('programacions', function (Blueprint $table) {
             $table->id();
-            $table->date('fecha_progracion');
+            $table->dateTime('fecha_programacion');
             $table->string('dni', 8)->nullable();
             $table->string('guia_remision', 100)->nullable();
             $table->string('placa_tracto', 20)->nullable();
@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string('banco', 50)->nullable();
             $table->string('tipo_mineral', 50)->nullable();
             $table->enum('tipo_operacion', ['nacional', 'internacional'])->nullable(); // ← Cambiado
-            $table->string('conformidad_adelanto', 50)->nullable();
+            $table->enum('conformidad_adelanto', ['Ok', 'Pendiente'])->nullable(); // ← Cambiado
             $table->string('guia_transportista', 50)->nullable();
             $table->string('grupo_cargio', 100)->nullable();
             $table->foreignId('detalle_programacion_id')

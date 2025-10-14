@@ -12,7 +12,7 @@ class Programacion extends Model
     protected $table = 'programacions';
 
     protected $fillable = [
-        'fecha_progracion',
+        'fecha_programacion',
         'dni',
         'guia_remision',
         'placa_tracto',

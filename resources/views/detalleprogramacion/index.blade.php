@@ -81,6 +81,10 @@
 
 <script>
 function openEditFrenteModal(detalle) {
+    // CORREGIDO: Usar ruta con nombre
+    const url = "{{ route('detalleprogramacion.update', ':id') }}".replace(':id', detalle.id);
+    document.getElementById('editFrenteForm').action = url;
+    
     // Llenar el formulario de edición con los datos del frente
     document.getElementById('edit_frente_id').value = detalle.id;
     document.getElementById('edit_frente').value = detalle.frente;

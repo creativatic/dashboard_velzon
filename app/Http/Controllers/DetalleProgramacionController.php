@@ -17,18 +17,7 @@ class DetalleProgramacionController extends Controller
             ->latest()
             ->paginate(10);
 
-        // Agregamos las programaciones disponibles
-        $programaciones = Programacion::select('id', 'guia_remision', 'fecha_progracion')->get();
-
-        return view('detalleprogramacion.index', compact('detalles', 'programaciones'));
-    }
-
-    public function create()
-    {
-        // Agregamos las programaciones disponibles
-        $programaciones = Programacion::select('id', 'guia_remision', 'fecha_progracion')->get();
-
-        return view('detalleprogramacion.create', compact('programaciones'));
+        return view('detalleprogramacion.index', compact('detalles'));
     }
 
     /**
@@ -56,14 +45,6 @@ class DetalleProgramacionController extends Controller
     }
 
     /**
-     * Editar un frente (detalle)
-     */
-    public function edit(DetalleProgramacion $detalleprogramacion)
-    {
-        return view('detalleprogramacion.edit', compact('detalleprogramacion'));
-    }
-
-    /**
      * Actualizar los datos del frente
      */
     public function update(Request $request, DetalleProgramacion $detalleprogramacion)
@@ -73,15 +54,17 @@ class DetalleProgramacionController extends Controller
             'precio_frente' => 'required|numeric|min:0',
             'precio_tn' => 'required|numeric|min:0',
             'descripcion' => 'nullable|string',
-            'activo' => 'sometimes|boolean'
         ]);
+
+        // Si el checkbox está marcado, usa valor 1, sino 0
+        $activo = $request->input('activo', 0);
 
         $detalleprogramacion->update([
             'frente' => $request->frente,
             'precio_frente' => $request->precio_frente,
             'precio_tn' => $request->precio_tn,
             'descripcion' => $request->descripcion,
-            'activo' => $request->boolean('activo'),
+            'activo' => $activo,
         ]);
 
         return redirect()->route('detalleprogramacion.index')

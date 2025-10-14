@@ -17,6 +17,8 @@
                     <th>Guía Remitente</th>
                     <th>Material</th>
                     <th>Total</th>
+                    <th>Fecha de pago</th>
+                    <th>Comentarios</th>
                     <th>Acciones</th>
                 </tr>
             </thead>

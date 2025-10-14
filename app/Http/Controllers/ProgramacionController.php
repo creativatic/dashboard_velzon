@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Programacion;
 use Illuminate\Http\Request;
 use App\Models\DetalleProgramacion;
-
+use Carbon\Carbon;
 
 class ProgramacionController extends Controller
 {
@@ -30,24 +30,43 @@ class ProgramacionController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'fecha_progracion' => 'required|date',
-            'dni' => 'nullable|string|max:8',
-            'placa_tracto' => 'nullable|string|max:20',
-            'placa_carreta' => 'nullable|string|max:20',
-            'ruc_transporte' => 'nullable|string|max:11',
-            'razon_social_transporte' => 'nullable|string|max:100',
-            'nombres_conductor' => 'nullable|string|max:100',
-            'apellidos_conductor' => 'nullable|string|max:100',
-            'licencia' => 'nullable|string|max:20',
-            'tipo_operacion' => 'nullable|in:nacional,internacional',
-            'detalle_programacion_id' => 'nullable|exists:detalle_programacions,id',
-            
-        ]);
+{
+    $validated = $request->validate([
+        'fecha_programacion' => 'required|string',
+        'dni' => 'nullable|string|max:8',
+        'guia_remision' => 'nullable|string|max:100',
+        'placa_tracto' => 'nullable|string|max:20',
+        'placa_carreta' => 'nullable|string|max:20',
+        'marca_vehiculo' => 'nullable|string|max:50',
+        'tipo_plataforma' => 'nullable|string|max:50',
+        'constancia_mtc_tracto' => 'nullable|string|max:100',
+        'constancia_mtc_carreta' => 'nullable|string|max:100',
+        'razon_social_transporte' => 'nullable|string|max:100',
+        'ruc_transporte' => 'nullable|string|max:11',
+        'nombres_conductor' => 'nullable|string|max:100',
+        'apellidos_conductor' => 'nullable|string|max:100',
+        'licencia' => 'nullable|string|max:20',
+        'telefono_conductor' => 'nullable|string|max:20',
+        'cuenta_banco' => 'nullable|string|max:50',
+        'cci_banco' => 'nullable|string|max:50',
+        'banco' => 'nullable|string|max:50',
+        'tipo_mineral' => 'nullable|string|max:50',
+        'tipo_operacion' => 'nullable|in:nacional,internacional',
+        'conformidad_adelanto' => 'nullable|in:Ok,Pendiente',
+        'guia_transportista' => 'nullable|string|max:50',
+        'grupo_cargio' => 'nullable|string|max:100',
+        'detalle_programacion_id' => 'nullable|exists:detalle_programacions,id',
+    ]);
+
+    try {
+            // Convertir correctamente a formato MySQL
+            $fecha = Carbon::parse($request->fecha_programacion)->format('Y-m-d H:i:s');
+            $validated['fecha_programacion'] = $fecha;
+        } catch (\Exception $e) {
+            return back()->withInput()->withErrors(['fecha_programacion' => 'Formato de fecha inválido']);
+        }
 
         Programacion::create($validated);
-
         return redirect()->route('programacions.index')->with('success', 'Programación creada correctamente.');
     }
 
@@ -65,7 +84,7 @@ class ProgramacionController extends Controller
     public function update(Request $request, Programacion $programacion)
     {
         $validated = $request->validate([
-            'fecha_progracion' => 'required|date',
+            'fecha_programacion' => 'required|date',
             'dni' => 'nullable|string|max:8',
             'placa_tracto' => 'nullable|string|max:20',
             'placa_carreta' => 'nullable|string|max:20',

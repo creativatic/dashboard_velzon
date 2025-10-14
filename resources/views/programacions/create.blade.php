@@ -13,6 +13,19 @@
             <div class="modal-body">
                 <div class="row g-3">
 
+                    {{-- Fecha Programación --}}
+    
+                    <div class="col-md-4">
+                        <label class="form-label">Fecha Programación</label>
+                        <input 
+                            type="datetime-local" 
+                            name="fecha_programacion" 
+                            class="form-control" 
+                            value="{{ now()->format('Y-m-d\TH:i') }}" 
+                            required
+                        >
+                    </div>
+
                     {{-- Frente / Detalle Programación --}}
                     <div class="col-md-4">
                         <label class="form-label">Frente</label>
@@ -23,11 +36,10 @@
                             @endforeach
                         </select>
                     </div>
-                    
-                    {{-- Fecha Programación --}}
-                    <div class="col-md-3">
-                        <label class="form-label">Fecha Programación</label>
-                        <input type="date" name="fecha_progracion" class="form-control" value="{{ now()->format('Y-m-d') }}" required>
+                                
+                    <div class="col-md-4">
+                        <label class="form-label">Licencia</label>
+                        <input type="text" name="licencia" class="form-control" placeholder="N° Licencia">
                     </div>
 
                     {{-- DNI --}}
@@ -82,7 +94,7 @@
 
                     <div class="col-md-4">
                         <label class="form-label">RUC Transporte</label>
-                        <input type="text" name="ruc_transporte" class="form-control" maxlength="11">
+                        <input type="text" name="ruc_transporte" class="form-control" placeholder="20714859632">
                     </div>
 
                     {{-- Datos del Conductor --}}
@@ -96,10 +108,7 @@
                         <input type="text" name="apellidos_conductor" class="form-control" placeholder="Apellidos">
                     </div>
 
-                    <div class="col-md-4">
-                        <label class="form-label">Licencia</label>
-                        <input type="text" name="licencia" class="form-control" placeholder="N° Licencia">
-                    </div>
+          
 
                     <div class="col-md-4">
                         <label class="form-label">Teléfono Conductor</label>
@@ -132,14 +141,18 @@
                         <label class="form-label">Tipo Operación</label>
                         <select name="tipo_operacion" class="form-select">
                             <option value="">Seleccionar...</option>
-                            <option value="nacional">Nacional</option>
+                            <option value="nacional" selected>Nacional</option>
                             <option value="internacional">Internacional</option>
                         </select>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Conformidad Adelanto</label>
-                        <input type="text" name="conformidad_adelanto" class="form-control" placeholder="Ej: Sí / No / Pendiente">
+                        <select name="conformidad_adelanto" class="form-select">
+                            <option value="">Seleccionar...</option>
+                            <option value="Ok">Ok</option>
+                            <option value="Pendiente" selected>Pendiente</option>
+                        </select>
                     </div>
 
                     <div class="col-md-6">
