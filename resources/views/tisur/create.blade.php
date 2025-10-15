@@ -35,17 +35,22 @@
                         {{-- Pesos --}}
                         <div class="col-md-3">
                             <label class="form-label">Primer Peso (kg)</label>
-                            <input type="number" step="0.01" name="primer_peso" class="form-control">
+                            <input type="number" step="0.00001" name="primer_peso" class="form-control">
                         </div>
 
                         <div class="col-md-3">
                             <label class="form-label">Segundo Peso (kg)</label>
-                            <input type="number" step="0.01" name="segundo_peso" class="form-control">
+                            <input type="number" step="0.00001" name="segundo_peso" class="form-control">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">N° Bultos</label>
+                            <input type="number" step="0.00001" name="numero_bultos" class="form-control">
                         </div>
 
                         <div class="col-md-3">
                             <label class="form-label">Peso Neto (kg)</label>
-                            <input type="number" step="0.01" name="peso_neto" class="form-control">
+                            <input type="number" step="0.00001" name="peso_neto" class="form-control">
                         </div>
 
                         {{-- Empresa --}}

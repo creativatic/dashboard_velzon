@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('razon_social')->nullable();
             $table->string('transportista')->nullable();
             $table->string('tipo_carga_tisur')->nullable();
-            $table->integer('numero_bultos')->nullable();
+            $table->decimal('numero_bultos')->nullable();
             $table->decimal('peso_neto', 20, 5)->nullable();
             $table->string('tipo_plataforma')->nullable();
             $table->string('documento_origen')->nullable();

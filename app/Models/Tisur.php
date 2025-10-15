@@ -30,7 +30,6 @@ class Tisur extends Model
         'pago_tisur',         // antes 'pago'
         'factura_tisur',      // antes 'factura'
         'estado',
-        //'guia_remision',     // comentado en migración, si lo vuelves a activar inclúyelo
         'fecha_pago',
         'orden_tisur',        // antes 'orden'
     ];
@@ -41,6 +40,7 @@ class Tisur extends Model
         'fecha_pago'          => 'date:Y-m-d',
         'primer_peso'         => 'decimal:5',
         'segundo_peso'        => 'decimal:5',
+        'numero_bultos'       => 'decimal:5',
         'peso_neto'           => 'decimal:5',
         'precio_tisur'        => 'decimal:5',
         'total_tisur'         => 'decimal:5',

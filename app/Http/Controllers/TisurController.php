@@ -13,7 +13,7 @@ class TisurController extends Controller
      */
     public function index()
     {
-        $tisurs = Tisur::latest()->paginate(10);
+        $tisurs = Tisur::with('expedientes')->latest()->paginate(10);
         return view('tisur.index', compact('tisurs'));
     }
 
@@ -38,7 +38,7 @@ class TisurController extends Controller
             'razon_social' => 'nullable|string|max:255',
             'transportista' => 'nullable|string|max:255',
             'tipo_carga_tisur' => 'nullable|string|max:255',
-            'numero_bultos' => 'nullable|integer',
+            'numero_bultos' => ['nullable', 'regex:/^\d+(\.\d{1,5})?$/'],
             'primer_peso' => ['nullable', 'regex:/^\d+(\.\d{1,5})?$/'],
             'segundo_peso' => ['nullable', 'regex:/^\d+(\.\d{1,5})?$/'],
             'peso_neto' => ['nullable', 'regex:/^\d+(\.\d{1,5})?$/'],

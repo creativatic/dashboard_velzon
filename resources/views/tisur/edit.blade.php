@@ -62,7 +62,7 @@
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Tipo</label>
-                            <input type="text" name="tipo" class="form-control" value="{{ $tisur->tipo }}">
+                            <input type="text" name="tipo_plataforma" class="form-control" value="{{ $tisur->tipo_plataforma }}">
                         </div>
 
                         <div class="col-md-3">
@@ -71,24 +71,24 @@
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Precio</label>
-                            <input type="number" step="0.01" name="precio" class="form-control" value="{{ $tisur->precio }}">
+                            <input type="number" step="0.01" name="precio_tisur" class="form-control" value="{{ $tisur->precio_tisur }}">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Total</label>
-                            <input type="number" step="0.01" name="total" class="form-control" value="{{ $tisur->total }}">
+                            <input type="number" step="0.01" name="total_tisur" class="form-control" value="{{ $tisur->total_tisur }}">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Retención</label>
-                            <input type="number" step="0.01" name="retencion" class="form-control" value="{{ $tisur->retencion }}">
+                            <input type="number" step="0.01" name="retencion_tisur" class="form-control" value="{{ $tisur->retencion_tisur }}">
                         </div>
 
                         <div class="col-md-3">
                             <label class="form-label">Pago</label>
-                            <input type="number" step="0.01" name="pago" class="form-control" value="{{ $tisur->pago }}">
+                            <input type="number" step="0.01" name="pago_tisur" class="form-control" value="{{ $tisur->pago_tisur }}">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Factura</label>
-                            <input type="text" name="factura" class="form-control" value="{{ $tisur->factura }}">
+                            <input type="text" name="factura_tisur" class="form-control" value="{{ $tisur->factura_tisur }}">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Estado</label>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Orden</label>
-                            <input type="text" name="orden" class="form-control" value="{{ $tisur->orden }}">
+                            <input type="text" name="orden_tisur" class="form-control" value="{{ $tisur->orden_tisur }}">
                         </div>
                     </div>
                 </div>
