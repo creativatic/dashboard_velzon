@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
 
         // User::factory()->create([
         //     'name' => 'Test User',
+        
         //     'email' => 'test@example.com',
         // ]);
 
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             DetalleProgramacionSeeder::class,
             TisurSeeder::class,
+            ProgramacionSeeder::class,
         ]);
         
     }

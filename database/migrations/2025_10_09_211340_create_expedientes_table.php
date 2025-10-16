@@ -21,8 +21,8 @@ return new class extends Migration {
                 ->nullOnDelete();
 
             // Campos propios del expediente
-            $table->string('numero_ticket')->nullable();
-            $table->string('numero_factura')->nullable();
+            $table->string('numero_factura_exped')->nullable();
+            $table->string('numero_factura_exped')->nullable();
             $table->decimal('total', 10, 2)->nullable();
             $table->decimal('detraccion', 10, 2)->nullable();
             $table->string('estado_pago_detraccion', 50)->nullable();

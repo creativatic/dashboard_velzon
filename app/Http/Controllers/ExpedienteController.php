@@ -16,7 +16,7 @@ class ExpedienteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'numero_ticket' => 'required',
+            'numero_ticket_exped' => 'required',
             'razon_social_empresa' => 'required',
         ]);
 
