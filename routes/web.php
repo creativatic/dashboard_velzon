@@ -52,6 +52,9 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('expediente', ExpedienteController::class)->except(['show']);
         // 🔹 Ruta AJAX para obtener datos de Programación por ID
         Route::get('/expediente/programacion/{id}', [ExpedienteController::class, 'getProgramacion'])->name('expediente.getProgramacion');
+        Route::get('/expediente/tisur/{id}', [ExpedienteController::class, 'getTisur']);
+        Route::get('/expediente/detalle/{id}', [ExpedienteController::class, 'getDetalle']);
+
 
         //  Seguimiento
         Route::resource('seguimientos', SeguimientoController::class)->except(['show']);

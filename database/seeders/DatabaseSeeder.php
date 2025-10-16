@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             DetalleProgramacionSeeder::class,
             TisurSeeder::class,
             ProgramacionSeeder::class,
+            ExpedientesSeeder::class,
         ]);
         
     }
