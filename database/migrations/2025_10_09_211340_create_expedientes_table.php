@@ -21,14 +21,14 @@ return new class extends Migration {
                 ->nullOnDelete();
 
             // Campos propios del expediente
-            $table->string('numero_factura_exped')->nullable();
+            $table->string('numero_ticke_exped')->nullable();
             $table->string('numero_factura_exped')->nullable();
             $table->decimal('total', 10, 2)->nullable();
             $table->decimal('detraccion', 10, 2)->nullable();
             $table->string('estado_pago_detraccion', 50)->nullable();
             $table->decimal('total_con_detraccion', 10, 2)->nullable();
             $table->date('fecha_pago')->nullable();
-            $table->string('conformidad', 100)->nullable();
+            $table->string('conformidad_exped', 100)->nullable();
             $table->string('archivo')->nullable();
 
             // Campos opcionales adicionales de control

@@ -38,12 +38,13 @@ class Expediente extends Model
         'total_con_detraccion',
         'deposito_a_proveer',
         'fecha_pago',
-        'conformidad',
+        'conformidad_exped',
         'grupo_carguio',
         'archivo',
         'frente',
         'glosa_bancos',
         'comentarios',
+        
     ];
     public function tisur()
     {
