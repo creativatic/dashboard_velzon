@@ -36,7 +36,7 @@ class ProgramacionSeeder extends Seeder
                 'banco' => 'BCP',
                 'tipo_mineral' => 'HIERRO GRANULADO',
                 'tipo_operacion' => 'nacional',
-                'conformidad_adelanto' => 'Pendiente',
+                'conformidad_adelanto' => 'ok',
                 'guia_transportista' => 'EG03 - 00000170',
                 'grupo_cargio' => 'Carguio 13,09',
                 'detalle_programacion_id' => 1,

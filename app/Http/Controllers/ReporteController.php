@@ -9,7 +9,11 @@ class ReporteController extends Controller
 {
     public function reporteQr()
     {
-        $programaciones = Programacion::all();
+        $programaciones = Programacion::where('conformidad_adelanto', 'Ok')
+            ->orderBy('fecha_programacion', 'desc')
+            ->get();
+
         return view('reportes.reporte_qr', compact('programaciones'));
     }
+
 }

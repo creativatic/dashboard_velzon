@@ -56,9 +56,9 @@ class ExpedienteController extends Controller
             'tisur:id,numero_ticket,fecha_hora_ingreso,peso_neto'  // <-- eliminar archivo
         ])->paginate(10);
 
-        $programacions = \App\Models\Programacion::select('id', 'guia_remision')->get();
-        $tisurs = \App\Models\Tisur::select('id', 'numero_ticket')->get();
-        $detalles = \App\Models\DetalleProgramacion::select('id', 'frente')->get();
+        $programacions = Programacion::select('id', 'guia_remision')->get();
+        $tisurs = Tisur::select('id', 'numero_ticket')->get();
+        $detalles = DetalleProgramacion::select('id', 'frente')->get();
 
         return view('expediente.index', compact('expedientes', 'programacions', 'tisurs', 'detalles'));
     }

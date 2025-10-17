@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const archivoElement = document.getElementById('show_archivo');
                     if (data.archivo) {
                         const archivoUrl = `/storage/${data.archivo}`;
-                        archivoElement.innerHTML = `<a href="${archivoUrl}" target="_blank" class="btn btn-outline-primary btn-sm">📎 Ver Archivo</a>`;
+                        archivoElement.innerHTML = `<a href="${archivoUrl}" target="_blank" class="btn btn-outline-success btn-sm">📎 Ver Archivo</a>`;
                     } else {
                         archivoElement.innerHTML = '<span class="badge bg-secondary">Sin archivo</span>';
                     }
