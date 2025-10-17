@@ -18,7 +18,7 @@
                     <th>#</th>
                     <th>Carguio</th>
                     <th>Conductor</th>
-                    <th>Placa</th>
+                    <th>Placa Vehiculo</th>
                     <th>Fecha</th>
                     <th>Código QR</th>
                 </tr>
@@ -27,9 +27,9 @@
                 @forelse($programaciones as $programacion)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $programacion->carguio }}</td>
-                        <td>{{ $programacion->conductor }}</td>
-                        <td>{{ $programacion->placa }}</td>
+                        <td>{{ $programacion->grupo_cargio }}</td>
+                        <td>{{ $programacion->nombres_conductor }}</td>
+                        <td>{{ $programacion->placa_tracto }}</td>
                         <td>{{ $programacion->fecha_programacion ?? 'Sin fecha' }}</td>
                         <td>
                             @if(!empty($programacion->qr_codigo))

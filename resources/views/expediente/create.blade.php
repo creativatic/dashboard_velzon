@@ -1,6 +1,6 @@
 <div class="modal fade" id="modalCreateExpediente" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
-        <form action="{{ route('expediente.store') }}" method="POST" class="modal-content">
+        <form action="{{ route('expediente.store') }}" method="POST" class="modal-content" enctype="multipart/form-data">
             @csrf
 
             <div class="modal-header bg-primary text-white">
@@ -110,6 +110,11 @@
                 <div class="col-md-4">
                     <label class="form-label">Fecha de Pago</label>
                     <input type="date" name="fecha_pago" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Archivo (PDF, JPG, DOCX...)</label>
+                    <input type="file" name="archivo" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                 </div>
 
                 <div class="col-md-12">

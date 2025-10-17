@@ -5,6 +5,7 @@
 @section('content')
 @include('expediente.create')
 @include('expediente.edit')
+@include('expediente.show') {{-- ✅ Modal show incluido correctamente --}}
 
 <div class="card mt-3">
     <div class="card-body">
@@ -35,13 +36,19 @@
                         <tr>
                             <td>{{ $expediente->id }}</td>
                             <td>{{ $expediente->programacion->razon_social_transporte ?? '-' }}</td>
-                            <td>{{ $expediente->programacion->ruc_transporte }}</td>
-                            <td>{{ $expediente->programacion->placa_tracto }}</td>
-                            <td>{{ $expediente->programacion->placa_carreta }}</td>
-                            <td>{{ $expediente->programacion->guia_transportista }}</td>
-                            <td>{{ $expediente->tisur->numero_ticket }}</td>
-                            <td>{{ $expediente->numero_factura_exped }}</td>
+                            <td>{{ $expediente->programacion->ruc_transporte ?? '-' }}</td>
+                            <td>{{ $expediente->programacion->placa_tracto ?? '-' }}</td>
+                            <td>{{ $expediente->programacion->placa_carreta ?? '-' }}</td>
+                            <td>{{ $expediente->programacion->guia_transportista ?? '-' }}</td>
+                            <td>{{ $expediente->tisur->numero_ticket ?? '-' }}</td>
+                            <td>{{ $expediente->numero_factura_exped ?? '-' }}</td>
                             <td>
+                                <!-- ✅ CORREGIDO: Solo un método para Ver -->
+                                <button type="button" class="btn btn-info btn-sm" 
+                                        onclick="mostrarExpediente({{ $expediente->id }})">
+                                    <i class="fas fa-eye"></i> Ver
+                                </button>
+
                                 <!-- Botón para editar -->
                                 <button class="btn btn-warning btn-sm btn-edit-expediente"
                                         data-bs-toggle="modal"
@@ -59,8 +66,6 @@
                                 </form>
                             </td>
                         </tr>
-
-                        {{-- Modal Editar Expediente --}}
                     @endforeach
                 </tbody>
             </table>
@@ -74,6 +79,9 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // ✅ CORREGIDO: Solo un DOMContentLoaded
+
+    // Botones Editar
     document.querySelectorAll('.btn-edit-expediente').forEach(button => {
         button.addEventListener('click', () => {
             const expediente = JSON.parse(button.getAttribute('data-expediente'));
@@ -101,8 +109,10 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.show();
         });
     });
+
+    // ✅ ELIMINADO: El código duplicado del modal show
+    // La función mostrarExpediente() está definida en show.blade.php
 });
 </script>
-
 
 @endsection

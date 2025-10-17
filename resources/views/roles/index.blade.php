@@ -1,7 +1,6 @@
 @extends('layouts.plantilla')
 
-@section('title','Roles')
-
+@section('title', 'Roles')
 
 @section('content')
 @include('roles.create')
@@ -51,5 +50,4 @@
 
     </div>
 </div>
-
-
+@endsection

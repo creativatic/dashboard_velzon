@@ -10,12 +10,52 @@ use App\Models\DetalleProgramacion;
 
 class ExpedienteController extends Controller
 {
+    public function show($id)
+    {
+        $expediente = Expediente::findOrFail($id);
+        
+        // Cargar datos relacionados manualmente
+        $data = [
+            'id' => $expediente->id,
+            'numero_factura_exped' => $expediente->numero_factura_exped,
+            'total' => $expediente->total,
+            'detraccion' => $expediente->detraccion,
+            'fecha_pago' => $expediente->fecha_pago,
+            'archivo' => $expediente->archivo,
+            'comentarios' => $expediente->comentarios,
+            'fecha_carga' => $expediente->fecha_carga,
+            // Datos de programación
+            'programacion' => $expediente->programacion ? [
+                'guia_remision' => $expediente->programacion->guia_remision,
+                'placa_tracto' => $expediente->programacion->placa_tracto,
+                'placa_carreta' => $expediente->programacion->placa_carreta,
+                'razon_social_transporte' => $expediente->programacion->razon_social_transporte,
+                'ruc_transporte' => $expediente->programacion->ruc_transporte,
+                'guia_transportista' => $expediente->programacion->guia_transportista,
+                'detalle_programacion' => $expediente->programacion->detalleProgramacion ? [
+                    'frente' => $expediente->programacion->detalleProgramacion->frente,
+                    'precio_frente' => $expediente->programacion->detalleProgramacion->precio_frente,
+                    'precio_tn' => $expediente->programacion->detalleProgramacion->precio_tn,
+                ] : null
+            ] : null,
+            // Datos de tisur
+            'tisur' => $expediente->tisur ? [
+                'numero_ticket' => $expediente->tisur->numero_ticket,
+                'fecha_hora_ingreso' => $expediente->tisur->fecha_hora_ingreso,
+                'peso_neto' => $expediente->tisur->peso_neto,
+            ] : null,
+        ];
+
+        return response()->json($data);
+    }
+    
     public function index()
     {
-        $expedientes = Expediente::with([
-            'programacion:id,guia_remision,razon_social_transporte,ruc_transporte,placa_tracto,placa_carreta,guia_transportista',
-            'tisur:id,numero_ticket'
+       $expedientes = Expediente::with([
+            'programacion:id,guia_remision,razon_social_transporte,ruc_transporte,placa_tracto,placa_carreta,guia_transportista,nombres_conductor,apellidos_conductor',
+            'tisur:id,numero_ticket,fecha_hora_ingreso,peso_neto'  // <-- eliminar archivo
         ])->paginate(10);
+
         $programacions = \App\Models\Programacion::select('id', 'guia_remision')->get();
         $tisurs = \App\Models\Tisur::select('id', 'numero_ticket')->get();
         $detalles = \App\Models\DetalleProgramacion::select('id', 'frente')->get();
@@ -41,6 +81,8 @@ class ExpedienteController extends Controller
             'programacion_id' => 'required|exists:programacions,id',
             'tisur_id' => 'required|exists:tisurs,id',
             'detalle_programacion_id' => 'required|exists:detalle_programacions,id',
+            'archivo' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:2048', // hasta 2MB
+
         ]);
 
         // Buscar los modelos asociados
@@ -59,6 +101,14 @@ class ExpedienteController extends Controller
         $expediente->detraccion = $request->detraccion ?? 0;
         $expediente->fecha_pago = $request->fecha_pago ?? null;
         $expediente->comentarios = $request->comentarios ?? null;
+
+        // === GUARDAR ARCHIVO ===
+        if ($request->hasFile('archivo')) {
+            $file = $request->file('archivo');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('expedientes', $filename, 'public');
+            $expediente->archivo = $path; // se guarda la ruta relativa
+        }
 
         $expediente->save();
 
