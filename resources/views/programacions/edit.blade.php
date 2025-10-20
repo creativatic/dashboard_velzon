@@ -17,8 +17,8 @@
 
                     <!-- Fecha de Programación -->
                     <div class="col-md-4">
-                        <label for="edit-fecha_progracion" class="form-label">Fecha Programación</label>
-                        <input type="date" name="fecha_progracion" id="edit-fecha_progracion" class="form-control" required>
+                        <label for="edit-fecha_programacion" class="form-label">Fecha Programación</label>
+                        <input type="date" name="fecha_programacion" id="edit-fecha_programacion" class="form-control" required>
                     </div>
 
                     <!-- Frente (select) -->
@@ -148,12 +148,21 @@
                         <label for="edit-tipo_mineral" class="form-label">Tipo Mineral</label>
                         <input type="text" name="tipo_mineral" id="edit-tipo_mineral" class="form-control">
                     </div>
+                    <!--
+                    <div class="col-md-4">
+                        <label for="edit-conformidad_adelanto" class="form-label">Conformidad Adelantdasdasdaso</label>
+                        <input type="text" name="conformidad_adelanto" id="edit-conformidad_adelanto" class="form-control">
+                    </div> -->
 
                     <div class="col-md-4">
                         <label for="edit-conformidad_adelanto" class="form-label">Conformidad Adelanto</label>
-                        <input type="text" name="conformidad_adelanto" id="edit-conformidad_adelanto" class="form-control">
+                        <select name="conformidad_adelanto" id="edit-conformidad_adelanto" class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="Ok" style="color: #198754; font-weight: bold;">Ok</option>
+                            <option value="Pendiente" style="color: #dc3545; font-weight: bold;">Pendiente</option>
+                        </select>
                     </div>
-
+                    
                     <div class="col-md-4">
                         <label for="edit-guia_transportista" class="form-label">Guía Transportista</label>
                         <input type="text" name="guia_transportista" id="edit-guia_transportista" class="form-control">
@@ -203,7 +212,7 @@ function openEditProgramacionModal(programacion) {
                 el.value = programacion[key] ?? '';
             } else {
                 // si es fecha, asegúrate del formato YYYY-MM-DD
-                if (key === 'fecha_progracion' && programacion[key]) {
+                if (key === 'fecha_programacion' && programacion[key]) {
                     // si viene con timestamp, intentar parse simple
                     const d = new Date(programacion[key]);
                     if (!isNaN(d)) {

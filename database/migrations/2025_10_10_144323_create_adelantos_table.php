@@ -16,9 +16,9 @@ return new class extends Migration
                 ->constrained('programacions')
                 ->cascadeOnDelete();
             // Datos principales
-            $table->string('nro_guia_remitente', 50);
+            //$table->string('nro_guia_remitente', 50);
             $table->decimal('monto_adelanto', 10, 2)->default(0);
-            $table->date('fecha_pago')->nullable();
+            $table->date('fecha_pago_adelantos')->nullable();
             $table->text('glosa_banco')->nullable();
             $table->text('notas')->nullable();
             $table->timestamps();

@@ -37,7 +37,7 @@ class Programacion extends Model
         'grupo_cargio',
         'detalle_programacion_id',
     ];
-
+    
     // Una programación puede tener muchos adelantos
     public function adelantos()
     {

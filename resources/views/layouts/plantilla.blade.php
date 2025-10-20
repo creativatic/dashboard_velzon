@@ -372,14 +372,6 @@
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="{{ route('detalleprogramacion.index') }}" 
-                                        class="nav-link {{ request()->is('detalleprogramacion*') ? 'active' : '' }}" 
-                                        data-key="t-precios">
-                                            Gestionar Precios
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
                                         <a href="{{ route('adelantos.index') }}" 
                                         class="nav-link {{ request()->is('adelantos*') ? 'active' : '' }}" data-key="t-listado">
                                             Adelantos
@@ -402,14 +394,6 @@
                                         </a>
                                     </li>
 
-
-                                  
-                               
-
-                                        
-
-
-
                                 </ul>
                             </div>
 
@@ -424,6 +408,13 @@
                                     <i class="ri-building-line"></i> <span>TISUR</span>
                                 </a>
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('detalleprogramacion*') ? 'active' : '' }}" data-key="t-precios" href="{{ route('detalleprogramacion.index') }}">
+                                    <i class="ri-coins-line"></i> <span>Gestionar Precios</span>
+                                </a>
+                            </li>
+                            
                         </li>
                         @endrole
                         

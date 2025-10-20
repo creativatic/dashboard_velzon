@@ -4,8 +4,8 @@
 
 @section('content')
 @include('programacions.create')
-@include('programacions.edit')
 @include('programacions.show')
+@include('programacions.edit')
 
 
 <div class="container-fluid">
@@ -77,10 +77,9 @@
                                     <i class="ri-eye-line"></i>
                                 </button>
                                 {{-- Botón Editar --}}
-                                <button type="button"
-                                    class="btn btn-sm btn-warning"
-                                    onclick='openEditProgramacionModal(@json($programacion->toArray()))'>
-                                    <i class="ri-edit-line"></i>
+                                <button type="button" class="btn btn-sm btn-warning"
+                                        onclick='openEditProgramacionModal(@json($programacion))'>
+                                    <i class="ri-edit-line"></i> Editar
                                 </button>
 
                                 {{-- Botón Eliminar --}}
@@ -93,6 +92,7 @@
                                         <i class="ri-delete-bin-line"></i>
                                     </button>
                                 </form>
+
                             </td>
                         </tr>
                     @empty

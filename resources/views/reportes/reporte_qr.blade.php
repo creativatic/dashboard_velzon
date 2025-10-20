@@ -20,7 +20,7 @@
                     <th>Conductor</th>
                     <th>Placa Vehiculo</th>
                     <th>Fecha</th>
-                    <th>Código QR</th>
+                    <th>Conformidad Adelanto</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,13 +31,16 @@
                         <td>{{ $programacion->nombres_conductor }}</td>
                         <td>{{ $programacion->placa_tracto }}</td>
                         <td>{{ $programacion->fecha_programacion ?? 'Sin fecha' }}</td>
+ 
+
                         <td>
-                            @if(!empty($programacion->qr_codigo))
-                                <img src="data:image/png;base64, {!! base64_encode(QrCode::size(80)->generate($programacion->qr_codigo)) !!}" alt="QR">
+                            @if($programacion->conformidad_adelanto === 'Ok')
+                                <span class="badge bg-success">{{ $programacion->conformidad_adelanto }}</span>
                             @else
-                                <span class="text-muted">No generado</span>
+                                <span class="badge bg-danger">{{ $programacion->conformidad_adelanto }}</span>
                             @endif
                         </td>
+
                     </tr>
                 @empty
                     <tr>

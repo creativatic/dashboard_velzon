@@ -16,7 +16,7 @@ class AdelantoController extends Controller
     public function index()
     {
         $adelantos = Adelanto::with('programacion')->latest()->paginate(10);
-        return view('.adelantos.index', compact('adelantos'));
+        return view('adelantos.index', compact('adelantos'));
     }
 
     /**
@@ -25,7 +25,7 @@ class AdelantoController extends Controller
     public function create()
     {
         $programaciones = Programacion::orderBy('id', 'desc')->get();
-        return view('.adelantos.create', compact('programaciones'));
+        return view('adelantos.create', compact('programaciones'));
     }
 
     /**
@@ -35,7 +35,6 @@ class AdelantoController extends Controller
     {
         $request->validate([
             'programacion_id' => 'required|exists:programacions,id',
-            'nro_guia_remitente' => 'required|string|max:50',
             'monto_adelanto' => 'required|numeric|min:0',
         ]);
 
@@ -53,7 +52,7 @@ class AdelantoController extends Controller
     public function edit(Adelanto $adelanto)
     {
         $programaciones = Programacion::orderBy('id', 'desc')->get();
-        return view('.adelantos.edit', compact('adelanto', 'programaciones'));
+        return view('adelantos.edit', compact('adelanto', 'programaciones'));
     }
 
     /**
@@ -63,7 +62,6 @@ class AdelantoController extends Controller
     {
         $request->validate([
             'programacion_id' => 'required|exists:programacions,id',
-            'nro_guia_remitente' => 'required|string|max:50',
             'monto_adelanto' => 'required|numeric|min:0',
         ]);
 

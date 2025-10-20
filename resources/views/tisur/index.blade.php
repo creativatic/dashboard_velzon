@@ -32,7 +32,10 @@
                 <th>Razón Social</th>
                 <th>Tipo Carga</th>
                 <th>Peso Neto (kg)</th>
+                <th>Precio (S/)</th>
                 <th>Total (S/)</th>
+                <th>Retencion (S/)</th>
+                <th>Pago (S/)</th>
                 <th>Estado</th>
                 <th width="120">Acciones</th>
             </tr>
@@ -46,7 +49,10 @@
                 <td>{{ $t->razon_social }}</td>
                 <td>{{ $t->tipo_carga_tisur }}</td>
                 <td class="text-end">{{ number_format($t->peso_neto, 2) }}</td>
+                <td class="text-end">{{ number_format($t->precio_tisur, 2) }}</td>
                 <td class="text-end">{{ number_format($t->total_tisur, 2) }}</td>
+                <td class="text-end">{{ number_format($t->retencion_tisur, 2) }}</td>
+                <td class="text-end">{{ number_format($t->pago_tisur, 2) }}</td>
                 <td>
                     @if($t->estado === 'Pendiente')
                         <span class="badge bg-warning text-dark">Pendiente</span>

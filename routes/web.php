@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('users', UserController::class)->except(['show']);
         Route::resource('roles', RoleController::class)->except(['show']);
         Route::resource('permissions', PermissionController::class)->except(['show']);
-        Route::resource('programacions', ProgramacionController::class)->except(['show']);
+        Route::resource('programacions', ProgramacionController::class);
         // Adelantos
         Route::resource('adelantos', AdelantoController::class)->except(['show']);
         // QR Tisur
