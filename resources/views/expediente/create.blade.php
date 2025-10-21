@@ -10,15 +10,12 @@
 
             <div class="modal-body row g-3">
 
-                {{-- === SELECT DE GUIA REMISION (PROGRAMACIÓN) === --}}
-                <div class="col-md-6">
+                {{-- === AUTOCOMPLET DE GUIA REMISION (PROGRAMACIÓN) === --}}
+                <div class="col-md-6 position-relative">
                     <label class="form-label">Guía de Remisión</label>
-                    <select name="programacion_id" id="programacion_id" class="form-select" required>
-                        <option value="">-- Seleccione una guía --</option>
-                        @foreach ($programacions as $programacion)
-                            <option value="{{ $programacion->id }}">{{ $programacion->guia_remision }}</option>
-                        @endforeach
-                    </select>
+                    <input type="text" id="programacion_search" class="form-control" placeholder="Buscar guía..." autocomplete="off">
+                    <input type="hidden" name="programacion_id" id="programacion_id">
+                    <div id="programacion_suggestions" class="list-group position-absolute w-100" style="z-index:1055; display:none;"></div>
                 </div>
 
                 {{-- === DATOS AUTOMÁTICOS DE PROGRAMACIÓN === --}}
@@ -145,6 +142,7 @@
 </div>
 
 <script>
+
 document.addEventListener('DOMContentLoaded', function() {
 
     let valorAdelanto = 500; // 🔹 Simulado (BUSCARV de hoja Adelantos)
@@ -219,6 +217,66 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('precio_tn').value = d.precio_tn ?? '';
                     recalcular();
                 });
+        }
+    });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('programacion_search');
+    const hidden = document.getElementById('programacion_id');
+    const suggestions = document.getElementById('programacion_suggestions');
+
+    let timeout = null;
+
+    input.addEventListener('input', function() {
+        const query = this.value.trim();
+        hidden.value = ''; // limpiamos el ID
+
+        if (query.length < 2) {
+            suggestions.style.display = 'none';
+            return;
+        }
+
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            fetch(`/programaciones/search?q=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => {
+                    suggestions.innerHTML = '';
+                    if (data.length === 0) {
+                        suggestions.style.display = 'none';
+                        return;
+                    }
+
+                    data.forEach(item => {
+                        const div = document.createElement('div');
+                        div.classList.add('list-group-item', 'list-group-item-action');
+                        div.textContent = item.guia_remision;
+                        div.addEventListener('click', () => {
+                            input.value = item.guia_remision;
+                            hidden.value = item.id;
+                            suggestions.style.display = 'none';
+                            // autollenar los campos relacionados
+                            document.getElementById('placa_tracto').value = item.placa_tracto || '';
+                            document.getElementById('placa_carreta').value = item.placa_carreta || '';
+                            document.getElementById('razon_social_empresa').value = item.razon_social_transporte || '';
+                            document.getElementById('ruc').value = item.ruc_transporte || '';
+                            document.getElementById('guia_transportista').value = item.guia_transportista || '';
+                        });
+                        suggestions.appendChild(div);
+                    });
+
+                    suggestions.style.display = 'block';
+                });
+        }, 300); // retraso de 300 ms para evitar exceso de peticiones
+    });
+
+    // Ocultar sugerencias si se hace clic fuera
+    document.addEventListener('click', function(e) {
+        if (!suggestions.contains(e.target) && e.target !== input) {
+            suggestions.style.display = 'none';
         }
     });
 });

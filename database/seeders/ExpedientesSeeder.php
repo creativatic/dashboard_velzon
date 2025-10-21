@@ -15,7 +15,7 @@ class ExpedientesSeeder extends Seeder
         DB::table('expedientes')->insert([
             [
                 'id' => 1,
-                'tisur_id' => 1,
+                'tisur_id' => 2,
                 'programacion_id' => 1,
                 'numero_factura_exped' => 'E001-181',
                 'total' => 4526.23,
@@ -31,6 +31,7 @@ class ExpedientesSeeder extends Seeder
                 'created_at' => '2025-10-16 21:05:16',
                 'updated_at' => '2025-10-16 21:05:16',
             ],
+            
         ]);
     }
 }

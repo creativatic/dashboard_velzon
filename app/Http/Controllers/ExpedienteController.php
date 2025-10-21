@@ -137,7 +137,7 @@ class ExpedienteController extends Controller
         'detraccion',
         'deposito_a_proveer',
         'fecha_pago',
-        'numero_factura_exped', // ✅ este campo se actualiza aquí
+        'numero_factura_exped',
         'comentarios'
     ]));
         return redirect()->route('expediente.index')->with('success', 'Registro actualizado correctamente.');
@@ -182,5 +182,16 @@ class ExpedienteController extends Controller
         return response()->json($detalle);
     }
 
+    public function buscarProgramacion(Request $request)
+    {
+        $query = $request->get('q');
+
+        $programaciones = Programacion::where('guia_remision', 'like', "%{$query}%")
+            ->select('id', 'guia_remision', 'placa_tracto', 'placa_carreta', 'razon_social_transporte', 'ruc_transporte', 'guia_transportista')
+            ->limit(10)
+            ->get();
+
+        return response()->json($programaciones);
+    }
 
 }

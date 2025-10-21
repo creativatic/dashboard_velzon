@@ -54,7 +54,7 @@ class ProgramacionSeeder extends Seeder
                 'id' => 2,
                 'fecha_programacion' => '2025-10-16 13:13:00',
                 'dni' => '40286831',
-                'guia_remision' => 'EG09 - 00003332',
+                'guia_remision' => 'FG09 - 00006662',
                 'placa_tracto' => 'GCJ-722',
                 'placa_carreta' => 'CBI-997',
                 'marca_vehiculo' => 'SCANIA',

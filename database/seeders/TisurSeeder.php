@@ -12,7 +12,7 @@ class TisurSeeder extends Seeder
         DB::table('tisurs')->insert([
             [
                 'id' => 1,
-                'numero_ticket'     => 'MB01883888',
+                'numero_ticket'     => 'MB01883333',
                 'fecha_hora_ingreso'=> '2025-10-16 16:36:00',
                 'placa_tracto'      => 'V9C-705',
                 'fecha_hora_salida' => '2025-10-17 16:36:00',
@@ -36,7 +36,7 @@ class TisurSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'numero_ticket'     => 'MB01902255',
+                'numero_ticket'     => 'MB00002222',
                 'fecha_hora_ingreso'=> '2025-10-16 16:36:00',
                 'placa_tracto'      => 'BVN-781',
                 'fecha_hora_salida' => '2025-10-16 08:14:00',

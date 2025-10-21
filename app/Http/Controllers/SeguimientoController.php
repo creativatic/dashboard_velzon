@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Seguimiento;
 use App\Models\Programacion;
+use App\Models\Tisur;
 use Illuminate\Http\Request;
 
 class SeguimientoController extends Controller
 {
     public function index()
     {
-        // Traer todas las programaciones con su seguimiento (relación 1:1)
-        $programaciones = Programacion::with('seguimiento')->latest()->paginate(10);
+        $programaciones = Programacion::with([
+            'seguimiento',
+            'detalleProgramacion',
+            'expedientes.tisur',
+        ])->latest()->paginate(10);
 
         return view('seguimientos.index', compact('programaciones'));
     }

@@ -38,6 +38,13 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('roles', RoleController::class)->except(['show']);
         Route::resource('permissions', PermissionController::class)->except(['show']);
         Route::resource('programacions', ProgramacionController::class);
+
+        // Buscadores
+        Route::get('/programaciones/search', [ExpedienteController::class, 'buscarProgramacion'])->name('programaciones.search');
+        //Route::get('/tisurs/search', [ExpedienteController::class, 'buscarTisur'])->name('tisurs.search');
+        //Route::get('/detalles/search', [ExpedienteController::class, 'buscarDetalle'])->name('detalles.search');
+
+
         // Adelantos
         Route::resource('adelantos', AdelantoController::class)->only(['index', 'edit', 'update']);
 
