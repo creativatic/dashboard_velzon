@@ -370,7 +370,7 @@
                                             Programación Principal
                                         </a>
                                     </li>
-
+                                    <!-- Link Adelantos -->
                                     <li class="nav-item">
                                         <a href="{{ route('adelantos.index') }}" 
                                         class="nav-link {{ request()->is('adelantos*') ? 'active' : '' }}" data-key="t-listado">
@@ -411,7 +411,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->is('detalleprogramacion*') ? 'active' : '' }}" data-key="t-precios" href="{{ route('detalleprogramacion.index') }}">
-                                    <i class="ri-coins-line"></i> <span>Gestionar Precios</span>
+                                    <i class="ri-coins-line"></i> <span>Gestionar Frente</span>
                                 </a>
                             </li>
                             

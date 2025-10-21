@@ -37,6 +37,12 @@ return new class extends Migration
             $table->enum('conformidad_adelanto', ['Ok', 'Pendiente'])->nullable(); // ← Cambiado
             $table->string('guia_transportista', 50)->nullable();
             $table->string('grupo_cargio', 100)->nullable();
+            // Datos de adelanto            
+            $table->decimal('monto_adelanto', 10, 2)->default(0);
+            $table->date('fecha_pago_adelantos')->nullable();
+            $table->text('glosa_banco')->nullable();
+            $table->text('notas')->nullable();
+
             $table->foreignId('detalle_programacion_id')
                 ->nullable()
                 ->constrained('detalle_programacions')

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Adelanto;
 use App\Models\Programacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,74 +9,45 @@ use Illuminate\Support\Facades\Auth;
 class AdelantoController extends Controller
 {
     /**
-     * Mostrar listado general de adelantos
+     * Mostrar listado general de adelantos (basado en Programacion)
      */
     public function index()
     {
-        $adelantos = Adelanto::with('programacion')->latest()->paginate(10);
-        return view('adelantos.index', compact('adelantos'));
+        $programaciones = Programacion::whereNotNull('monto_adelanto')
+            ->orderByDesc('id')
+            ->paginate(10);
+
+        return view('adelantos.index', compact('programaciones'));
     }
 
     /**
-     * Mostrar formulario de creación
+     * Mostrar formulario de edición de adelanto
      */
-    public function create()
+    public function edit($id)
     {
-        $programaciones = Programacion::orderBy('id', 'desc')->get();
-        return view('adelantos.create', compact('programaciones'));
+        $programacion = Programacion::findOrFail($id);
+        return view('adelantos.edit', compact('programacion'));
     }
 
     /**
-     * Guardar nuevo registro
+     * Actualizar fecha de pago y notas del adelanto
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'programacion_id' => 'required|exists:programacions,id',
-            'monto_adelanto' => 'required|numeric|min:0',
-        ]);
-
-        Adelanto::create([
-            ...$request->all(),
-            'created_by' => Auth::id(),
-        ]);
-
-        return redirect()->route('adelantos.index')->with('success', 'Adelanto registrado correctamente.');
-    }
-
-    /**
-     * Editar registro
-     */
-    public function edit(Adelanto $adelanto)
-    {
-        $programaciones = Programacion::orderBy('id', 'desc')->get();
-        return view('adelantos.edit', compact('adelanto', 'programaciones'));
-    }
-
-    /**
-     * Actualizar registro
-     */
-    public function update(Request $request, Adelanto $adelanto)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'programacion_id' => 'required|exists:programacions,id',
-            'monto_adelanto' => 'required|numeric|min:0',
+            'fecha_pago_adelantos' => 'nullable|date',
+            'notas' => 'nullable|string|max:2000',
         ]);
 
-        $adelanto->update([
-            ...$request->all(),
+        $programacion = Programacion::findOrFail($id);
+
+        $programacion->update([
+            'fecha_pago_adelantos' => $request->fecha_pago_adelantos,
+            'notas' => $request->notas,
             'updated_by' => Auth::id(),
         ]);
 
-        return redirect()->route('adelantos.index')->with('success', 'Adelanto actualizado correctamente.');
-    }
-
-    /**
-     * Eliminar registro
-     */
-    public function destroy(Adelanto $adelanto)
-    {
-        $adelanto->delete();
-        return redirect()->route('adelantos.index')->with('success', 'Adelanto eliminado correctamente.');
+        return redirect()->route('adelantos.index')
+            ->with('success', 'Datos de adelanto actualizados correctamente.');
     }
 }

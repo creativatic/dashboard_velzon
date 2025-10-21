@@ -141,6 +141,14 @@ function openShowProgramacionModal(programacion) {
 
     document.getElementById('show_guia_transportista').textContent = programacion.guia_transportista || '--';
     document.getElementById('show_grupo_cargio').textContent = programacion.grupo_cargio || '--';
+    // 🟩 Campos nuevos: información de adelantos
+    document.getElementById('show_monto_adelanto').textContent = programacion.monto_adelanto 
+        ? `S/ ${parseFloat(programacion.monto_adelanto).toFixed(2)}` 
+        : '--';
+    document.getElementById('show_fecha_pago_adelantos').textContent = programacion.fecha_pago_adelantos || '--';
+    document.getElementById('show_banco').textContent = programacion.banco || '--';
+    document.getElementById('show_glosa_banco').textContent = programacion.glosa_banco || '--';
+    document.getElementById('show_notas').textContent = programacion.notas || '--';
 
     const modal = new bootstrap.Modal(document.getElementById('showProgramacionModal'));
     modal.show();

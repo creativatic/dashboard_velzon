@@ -94,6 +94,36 @@
                     </div>
                 </div>
             </div>
+            <hr class="my-4">
+
+            <h5 class="fw-bold text-primary">Información de Adelantos</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Monto Adelanto (S/):</label>
+                    <p id="show_monto_adelanto" class="form-control-plaintext border rounded p-2 bg-light">--</p>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Fecha de Pago:</label>
+                    <p id="show_fecha_pago_adelantos" class="form-control-plaintext border rounded p-2 bg-light">--</p>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Banco:</label>
+                    <p id="show_banco" class="form-control-plaintext border rounded p-2 bg-light">--</p>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Glosa Banco:</label>
+                    <p id="show_glosa_banco" class="form-control-plaintext border rounded p-2 bg-light">--</p>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Notas:</label>
+                    <p id="show_notas" class="form-control-plaintext border rounded p-2 bg-light">--</p>
+                </div>
+            </div>
+
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

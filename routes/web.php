@@ -39,7 +39,9 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('permissions', PermissionController::class)->except(['show']);
         Route::resource('programacions', ProgramacionController::class);
         // Adelantos
-        Route::resource('adelantos', AdelantoController::class)->except(['show']);
+        Route::resource('adelantos', AdelantoController::class)->only(['index', 'edit', 'update']);
+
+        // Route::resource('adelantos', AdelantoController::class)->except(['show']);
         // QR Tisur
         Route::get('/reportes/reporte-qr', [ReporteController::class, 'reporteQr'])->name('reportes.reporte_qr');
         //Route::get('/programacions/reporte-qr', [ProgramacionController::class, 'reporteQr'])->name('programacions.reporte_qr');

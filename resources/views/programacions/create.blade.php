@@ -168,6 +168,43 @@
                 </div>
             </div>
 
+            {{-- Datos de Adelanto --}}
+            <hr class="mt-4 mb-3">
+            <h5 class="text-primary"><i class="ri-bank-line me-1"></i> Datos de Adelanto</h5>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Monto de Adelanto (S/)</label>
+                    <input 
+                        type="number" 
+                        name="monto_adelanto" 
+                        step="0.01" 
+                        class="form-control" 
+                        placeholder="Ej: 500.00"
+                    >
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Fecha de Pago Adelanto</label>
+                    <input 
+                        type="date" 
+                        name="fecha_pago_adelantos" 
+                        class="form-control"
+                    >
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label">Notas</label>
+                    <textarea 
+                        name="notas" 
+                        class="form-control" 
+                        rows="2" 
+                        placeholder="Comentarios adicionales..."
+                    ></textarea>
+                </div>
+            </div>
+
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="ri-close-circle-line"></i> Cancelar

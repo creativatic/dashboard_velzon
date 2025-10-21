@@ -15,7 +15,7 @@ class Programacion extends Model
         'fecha_programacion',
         'dni',
         'guia_remision',
-        'placa_tracto',
+        'placa_tracto', 
         'placa_carreta',
         'marca_vehiculo',
         'tipo_plataforma',
@@ -24,7 +24,7 @@ class Programacion extends Model
         'razon_social_transporte',
         'ruc_transporte',
         'nombres_conductor',
-        'apellidos_conductor',
+        'apellidos_conductor', 
         'licencia',
         'telefono_conductor',
         'cuenta_banco',
@@ -35,9 +35,13 @@ class Programacion extends Model
         'conformidad_adelanto',
         'guia_transportista',
         'grupo_cargio',
-        'detalle_programacion_id',
+        'monto_adelanto',
+        'fecha_pago_adelantos',
+        'glosa_banco',
+        'notas',
+        'detalle_programacion_id'
     ];
-    
+        
     // Una programación puede tener muchos adelantos
     public function adelantos()
     {
