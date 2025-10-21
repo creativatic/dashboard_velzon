@@ -20,6 +20,7 @@ class ExpedienteController extends Controller
             'numero_factura_exped' => $expediente->numero_factura_exped,
             'total' => $expediente->total,
             'detraccion' => $expediente->detraccion,
+            'deposito_a_proveer' => $expediente->deposito_a_proveer,
             'fecha_pago' => $expediente->fecha_pago,
             'archivo' => $expediente->archivo,
             'comentarios' => $expediente->comentarios,
@@ -52,7 +53,7 @@ class ExpedienteController extends Controller
     public function index()
     {
        $expedientes = Expediente::with([
-            'programacion:id,guia_remision,razon_social_transporte,ruc_transporte,placa_tracto,placa_carreta,guia_transportista,nombres_conductor,apellidos_conductor',
+            'programacion:id,guia_remision,razon_social_transporte,ruc_transporte,placa_tracto,placa_carreta,guia_transportista,nombres_conductor,apellidos_conductor,tipo_mineral',
             'tisur:id,numero_ticket,fecha_hora_ingreso,peso_neto'  // <-- eliminar archivo
         ])->paginate(10);
 
@@ -99,6 +100,7 @@ class ExpedienteController extends Controller
         $expediente->numero_factura_exped = $request->numero_factura_exped;
         $expediente->total = $request->total ?? 0;
         $expediente->detraccion = $request->detraccion ?? 0;
+        $expediente->deposito_a_proveer = $request->deposito_a_proveer ?? 0;        
         $expediente->fecha_pago = $request->fecha_pago ?? null;
         $expediente->comentarios = $request->comentarios ?? null;
 
@@ -129,7 +131,15 @@ class ExpedienteController extends Controller
 
     public function update(Request $request, Expediente $expediente)
     {
-        $expediente->update($request->all());
+        $expediente->update($request->only([
+        'fecha_carga',
+        'total',
+        'detraccion',
+        'deposito_a_proveer',
+        'fecha_pago',
+        'numero_factura_exped', // ✅ este campo se actualiza aquí
+        'comentarios'
+    ]));
         return redirect()->route('expediente.index')->with('success', 'Registro actualizado correctamente.');
     }
 

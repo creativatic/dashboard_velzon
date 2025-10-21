@@ -34,7 +34,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $detalle->frente }}</td>
                             <td>S/ {{ number_format($detalle->precio_frente, 2) }}</td>
-                            <td>S/ {{ number_format($detalle->precio_tn, 2) }}</td>
+                            <td>S/ {{ number_format($detalle->precio_tn, 4) }}</td>
                             <td>{{ $detalle->descripcion ?? 'Sin descripción' }}</td>
                             <td>
                                 <span class="badge bg-{{ $detalle->activo ? 'success' : 'danger' }}">

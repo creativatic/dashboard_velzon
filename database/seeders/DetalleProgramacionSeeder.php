@@ -16,14 +16,21 @@ class DetalleProgramacionSeeder extends Seeder
             [
                 'frente' => 'Huanaco',
                 'precio_frente' => 4500,
-                'precio_tn' => 0.124,
+                'precio_tn' => 0.1240,
                 'activo' => true,
                 'descripcion' => 'Frente Huanaco: zona con mayor carga y mejor acceso, precio estándar establecido según contrato 2025.'
             ],
             [
                 'frente' => 'Intikal',
                 'precio_frente' => 3500,
-                'precio_tn' => 0.122,
+                'precio_tn' => 0.1220,
+                'activo' => true,
+                'descripcion' => 'Frente Intikal: área de menor tonelaje, precio ajustado para rutas de menor productividad.'
+            ],
+            [
+                'frente' => 'Intikal 0.095',
+                'precio_frente' => 3500,
+                'precio_tn' => 0.0950,
                 'activo' => true,
                 'descripcion' => 'Frente Intikal: área de menor tonelaje, precio ajustado para rutas de menor productividad.'
             ],

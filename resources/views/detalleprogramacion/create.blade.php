@@ -42,11 +42,11 @@
                         <label for="precio_tn" class="form-label">Precio TN (S/)</label>
                         <input 
                             type="number" 
-                            step="0.01" 
+                            step="any" 
                             name="precio_tn" 
                             id="precio_tn" 
                             class="form-control" 
-                            placeholder="0.00" 
+                            placeholder="0.0000" 
                             required>
                     </div>
                 </div>

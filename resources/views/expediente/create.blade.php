@@ -62,8 +62,8 @@
                     <input type="text" id="fecha_hora_ingreso" class="form-control" readonly>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Peso Neto</label>
-                    <input type="text" id="peso_neto" class="form-control" readonly>
+                    <label class="form-label">Peso Neto (U)</label>
+                    <input type="number" id="peso_neto" class="form-control" readonly>
                 </div>
 
                 <hr class="mt-3 mb-3">
@@ -85,26 +85,39 @@
                     <input type="text" id="precio_frente" class="form-control" readonly>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Precio TN</label>
-                    <input type="text" id="precio_tn" class="form-control" readonly>
+                    <label class="form-label">Precio TN (V)</label>
+                    <input type="number" id="precio_tn" class="form-control" readonly>
                 </div>
 
                 <hr class="mt-3 mb-3">
 
-                {{-- === CAMPOS DEL EXPEDIENTE === --}}
-                <div class="col-md-4">
-                    <label class="form-label">N° Factura Expediente</label>
-                    <input type="text" name="numero_factura_exped" class="form-control">
+                {{-- === CAMPOS CALCULADOS === --}}
+                <div class="col-md-3">
+                    <label class="form-label">Estado Pago Detracción (Y)</label>
+                    <select id="estado_pago_detraccion" class="form-select">
+                        <option value="Pagado">Pagado</option>
+                        <option value="No Pagado">No Pagado</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Total (W)</label>
+                    <input type="number" step="0.01" name="total" id="total" class="form-control" readonly>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Detracción (X)</label>
+                    <input type="number" step="0.01" name="detraccion" id="detraccion" class="form-control" readonly>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Total + Detracción (Z)</label>
+                    <input type="number" step="0.01" id="total_con_detraccion" class="form-control" readonly>
                 </div>
 
                 <div class="col-md-4">
-                    <label class="form-label">Total (S/)</label>
-                    <input type="number" step="0.01" name="total" class="form-control">
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Detracción (S/)</label>
-                    <input type="number" step="0.01" name="detraccion" class="form-control">
+                    <label class="form-label">Depósito a Proveer (AA)</label>
+                    <input type="number" step="0.01" name="deposito_a_proveer" id="deposito_a_proveer" class="form-control" readonly>
                 </div>
 
                 <div class="col-md-4">
@@ -112,7 +125,7 @@
                     <input type="date" name="fecha_pago" class="form-control">
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label class="form-label">Archivo (PDF, JPG, DOCX...)</label>
                     <input type="file" name="archivo" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                 </div>
@@ -131,51 +144,82 @@
     </div>
 </div>
 
-{{-- === SCRIPTS PARA CARGAR DATOS DINÁMICOS === --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-    // === Cargar datos de PROGRAMACIÓN ===
+    let valorAdelanto = 500; // 🔹 Simulado (BUSCARV de hoja Adelantos)
+
+    const pesoNeto = document.getElementById('peso_neto');
+    const precioTN = document.getElementById('precio_tn');
+    const estadoPago = document.getElementById('estado_pago_detraccion');
+    const total = document.getElementById('total');
+    const detraccion = document.getElementById('detraccion');
+    const totalConDetraccion = document.getElementById('total_con_detraccion');
+    const deposito = document.getElementById('deposito_a_proveer');
+
+    function recalcular() {
+        const peso = parseFloat(pesoNeto.value) || 0;
+        const precio = parseFloat(precioTN.value) || 0;
+        const estado = estadoPago.value;
+
+        const totalCalc = precio * peso;             // W
+        const detracCalc = totalCalc * 0.04;         // X
+        const totalDetr = (estado === 'No Pagado') 
+                            ? (totalCalc - detracCalc)
+                            : totalCalc;             // Z
+        const depositoCalc = totalDetr - valorAdelanto; // AA
+
+        total.value = totalCalc.toFixed(2);
+        detraccion.value = detracCalc.toFixed(2);
+        totalConDetraccion.value = totalDetr.toFixed(2);
+        deposito.value = depositoCalc.toFixed(2);
+    }
+
+    // === Eventos de recalculo ===
+    pesoNeto.addEventListener('input', recalcular);
+    precioTN.addEventListener('input', recalcular);
+    estadoPago.addEventListener('change', recalcular);
+
+    // === Cargar datos dinámicos ===
     document.getElementById('programacion_id').addEventListener('change', function() {
         const id = this.value;
         if (id) {
             fetch(`/expediente/programacion/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('placa_tracto').value = data.placa_tracto ?? '';
-                    document.getElementById('placa_carreta').value = data.placa_carreta ?? '';
-                    document.getElementById('razon_social_empresa').value = data.razon_social_transporte ?? '';
-                    document.getElementById('ruc').value = data.ruc_transporte ?? '';
-                    document.getElementById('guia_transportista').value = data.guia_transportista ?? '';
+                .then(r => r.json())
+                .then(d => {
+                    document.getElementById('placa_tracto').value = d.placa_tracto ?? '';
+                    document.getElementById('placa_carreta').value = d.placa_carreta ?? '';
+                    document.getElementById('razon_social_empresa').value = d.razon_social_transporte ?? '';
+                    document.getElementById('ruc').value = d.ruc_transporte ?? '';
+                    document.getElementById('guia_transportista').value = d.guia_transportista ?? '';
                 });
         }
     });
 
-    // === Cargar datos de TISUR ===
     document.getElementById('tisur_id').addEventListener('change', function() {
         const id = this.value;
         if (id) {
             fetch(`/expediente/tisur/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('fecha_hora_ingreso').value = data.fecha_hora_ingreso ?? '';
-                    document.getElementById('peso_neto').value = data.peso_neto ?? '';
+                .then(r => r.json())
+                .then(d => {
+                    document.getElementById('fecha_hora_ingreso').value = d.fecha_hora_ingreso ?? '';
+                    document.getElementById('peso_neto').value = d.peso_neto ?? '';
+                    recalcular();
                 });
         }
     });
 
-    // === Cargar datos del FRENTE ===
     document.getElementById('detalle_programacion_id').addEventListener('change', function() {
         const id = this.value;
         if (id) {
             fetch(`/expediente/detalle/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('precio_frente').value = data.precio_frente ?? '';
-                    document.getElementById('precio_tn').value = data.precio_tn ?? '';
+                .then(r => r.json())
+                .then(d => {
+                    document.getElementById('precio_frente').value = d.precio_frente ?? '';
+                    document.getElementById('precio_tn').value = d.precio_tn ?? '';
+                    recalcular();
                 });
         }
     });
-
 });
 </script>

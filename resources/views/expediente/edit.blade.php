@@ -21,17 +21,17 @@
 
                     <div class="col-md-4">
                         <label class="form-label">Guía de Remisión</label>
-                        <input type="text" name="guia_remision" id="edit_guia_remitente" class="form-control" readonly>
+                        <input type="text" id="edit_guia_remitente" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Razón Social Empresa</label>
-                        <input type="text" name="razon_social_empresa" id="edit_razon_social_empresa" class="form-control">
+                        <label class="form-label">Razón Social Transporte</label>
+                        <input type="text" id="edit_razon_social_transporte" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Material</label>
-                        <input type="text" name="material" id="edit_material" class="form-control">
+                        <input type="text" id="edit_tipo_mineral" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
@@ -45,8 +45,18 @@
                     </div>
 
                     <div class="col-md-4">
+                        <label class="form-label">Depósito a Proveer</label>
+                        <input type="number" step="0.01" name="deposito_a_proveer" id="edit_deposito_a_proveer" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
                         <label class="form-label">Fecha de Pago</label>
                         <input type="date" name="fecha_pago" id="edit_fecha_pago" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">N° Factura</label>
+                        <input type="text" name="numero_factura_exped" id="edit_numero_factura_exped" class="form-control">
                     </div>
 
                     <div class="col-12">
@@ -67,3 +77,4 @@
         </form>
     </div>
 </div>
+

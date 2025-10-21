@@ -22,6 +22,7 @@ class ExpedientesSeeder extends Seeder
                 'detraccion' => 123.23,
                 'estado_pago_detraccion' => null,
                 'total_con_detraccion' => null,
+                'deposito_a_proveer' => null,
                 'fecha_pago' => '2025-10-17',
                 'fecha_carga' => '2025-10-16',
                 'conformidad_exped' => null,

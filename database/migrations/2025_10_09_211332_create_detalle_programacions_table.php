@@ -13,7 +13,7 @@ return new class extends Migration
 
             $table->string('frente');
             $table->decimal('precio_frente', 10, 2);
-            $table->decimal('precio_tn', 10, 2);
+            $table->decimal('precio_tn', 10, 4);
             $table->boolean('activo')->default(true);
             $table->text('descripcion')->nullable();
             $table->timestamps();

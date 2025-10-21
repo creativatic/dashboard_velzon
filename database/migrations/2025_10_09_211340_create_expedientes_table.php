@@ -27,6 +27,7 @@ return new class extends Migration {
             $table->decimal('detraccion', 10, 2)->nullable();
             $table->string('estado_pago_detraccion', 50)->nullable();
             $table->decimal('total_con_detraccion', 10, 2)->nullable();
+            $table->decimal('deposito_a_proveer', 10, 2)->nullable();
             $table->date('fecha_pago')->nullable();
             $table->date('fecha_carga')->nullable();
             $table->string('conformidad_exped', 100)->nullable();

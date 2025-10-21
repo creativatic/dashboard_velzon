@@ -24,7 +24,7 @@ class DetalleProgramacion extends Model
 
     protected $casts = [
         'precio_frente' => 'decimal:2',
-        'precio_tn' => 'decimal:2',
+        'precio_tn' => 'decimal:4',
         'activo' => 'boolean'
     ];
 

@@ -41,7 +41,11 @@
                                     <span class="badge bg-secondary">Sin archivo</span>
                                 </p>
                             </div>
-                            <div class="col-12">
+                            <div class="col-6">
+                                <label class="form-label fw-bold">Deposito a Proveer</label>
+                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_deposito_a_proveer">--</p>
+                            </div>
+                            <div class="col-6">
                                 <label class="form-label fw-bold">Comentarios:</label>
                                 <p class="form-control-plaintext border rounded p-2 bg-light" id="show_comentarios">--</p>
                             </div>
@@ -161,6 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('show_total').textContent = data.total ? `S/ ${parseFloat(data.total).toFixed(2)}` : '--';
                     document.getElementById('show_detraccion').textContent = data.detraccion ? `S/ ${parseFloat(data.detraccion).toFixed(2)}` : '--';
                     document.getElementById('show_comentarios').textContent = data.comentarios || '--';
+                    document.getElementById('show_deposito_a_proveer').textContent = data.deposito_a_proveer || '--';
                     
                     // Manejar el archivo
                     const archivoElement = document.getElementById('show_archivo');
