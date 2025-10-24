@@ -7,7 +7,16 @@
 @include('expediente.edit')
 @include('expediente.show') {{-- ✅ Modal show incluido correctamente --}}
 
-<h4 class="mb-3">Listado de Expedientes</h4>
+<div class="page-title-box d-sm-flex align-items-center justify-content-between">
+    <h4 class="mb-sm-0">Listado de Expedientes</h4>
+    <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item"><a href="javascript: void(0);">Expedientes</a></li>
+            <li class="breadcrumb-item active">Listado de Expedientes</li>
+        </ol>
+    </div>
+</div>
+
 {{-- Botón para abrir modal crear Expediente --}}
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCreateExpediente">
     <i class="ri-add-circle-line"></i> Nuevo Expediente

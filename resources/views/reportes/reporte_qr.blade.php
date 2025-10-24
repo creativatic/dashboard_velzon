@@ -3,10 +3,21 @@
 @section('title','Reporte QR')
 
 @section('content')
-<h4 class="mb-3">Reporte de Programaciones con QR</h4>
+
+<div class="page-title-box d-sm-flex align-items-center justify-content-between">
+    <h4 class="mb-sm-0">Reporte de Programaciones con QR</h4>
+    <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item"><a href="javascript: void(0);">Programación</a></li>
+            <li class="breadcrumb-item active">Reporte de Programaciones con QR</li>
+        </ol>
+    </div>
+</div>
+
 <a href="{{ route('programacions.index') }}" class="btn btn-primary btn-sm">
     <i class="ri-arrow-left-line"></i> Volver
 </a>
+
 <div class="card mt-3">
     <div class="card-body table-responsive">
         <table class="table table-striped align-middle text-center">

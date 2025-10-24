@@ -22,6 +22,39 @@
     <!-- Custom Css-->
     <link href="{{ asset('css/custom.min.css') }}" rel="stylesheet" type="text/css" />
 
+    {{-- ✅ MODIFICACIÓN CLAVE: Definimos la clase para usar tu nueva imagen --}}
+    <style>
+        /* Definimos un estilo para la clase que maneja el fondo lateral */
+        .auth-one-bg {
+            /* Apunta a tu nueva imagen dentro del directorio public */
+            background-image: url("{{ asset('images/bhc-one-bg.jpg') }}"); 
+            background-size: cover;
+            background-position: center;
+            /* Si deseas el fondo negro, asegúrate de añadir o mantener: */
+            background-color: #000000 !important; 
+        }
+
+        /* Si quieres asegurar que el texto sea blanco sobre el fondo oscuro */
+        .p-lg-5.p-4.auth-one-bg.h-100 {
+            color: #ffffff !important; 
+        }
+        .carousel-inner .carousel-item p, .ri-double-quotes-l {
+             color: #ffffff !important; 
+        }
+    </style>
+
+    <style>
+        /* Sobrescribe la clase auth-one-bg que se usa en el panel lateral del login */
+        .auth-one-bg {
+            /* Ruta a la imagen: C:\laragon\www\ventas_seven\public\images\bhc-one-bg.jpg */
+            background-image: url("{{ asset('images/bhc-one-bg.jpg') }}") !important; 
+            background-size: cover !important;
+            background-position: center !important;
+            
+            /* Opcional: Si quieres un color de fondo plano detrás de la imagen (o si la imagen falla) */
+            background-color: #000000 !important; 
+        }
+    </style>
 
 </head>
 
@@ -38,6 +71,7 @@
                         <div class="card overflow-hidden">
                             <div class="row g-0">
                                 <div class="col-lg-6">
+                                    {{-- ✅ Este DIV ahora usará el background-image definido arriba --}}
                                     <div class="p-lg-5 p-4 auth-one-bg h-100">
                                         <div class="bg-overlay"></div>
                                         <div class="position-relative h-100 d-flex flex-column">
@@ -47,9 +81,6 @@
                                                 </a>
                                             </div>
                                             <div class="mt-auto">
-                                                <div class="mb-3">
-                                                    <i class="ri-double-quotes-l display-4 text-success"></i>
-                                                </div>
 
                                                 <div id="qoutescarouselIndicators" class="carousel slide" data-bs-ride="carousel">
                                                     <div class="carousel-indicators">
@@ -59,13 +90,13 @@
                                                     </div>
                                                     <div class="carousel-inner text-center text-white-50 pb-5">
                                                         <div class="carousel-item active">
-                                                            <p class="fs-15 fst-italic">" Great! Clean code, clean design, easy for customization. Thanks very much! "</p>
+                                                            <p class="fs-15 fst-italic">“  Garantizamos la operatividad de los sistemas informáticos y de comunicación en entornos mineros de alta exigencia.  ”</p>
                                                         </div>
                                                         <div class="carousel-item">
-                                                            <p class="fs-15 fst-italic">" The theme is really great with an amazing customer support."</p>
+                                                            <p class="fs-15 fst-italic">“  A través de un soporte TI eficiente, fortalecemos la trazabilidad, monitoreo y control de las operaciones mineras de hierro.  ”</p>
                                                         </div>
                                                         <div class="carousel-item">
-                                                            <p class="fs-15 fst-italic">" Great! Clean code, clean design, easy for customization. Thanks very much! "</p>
+                                                            <p class="fs-15 fst-italic">“  La innovación tecnológica es un pilar fundamental para asegurar operaciones sostenibles en la extracción y procesamiento del hierro.  ”</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -114,21 +145,17 @@
                                                 </div>
                                             </form>
 
+                                             <!--
                                             <div class="mt-5 text-center">
                                                 <p class="mb-0">
                                                     ¿No tienes una cuenta registrada?
                                                     <a href="{{ route('register') }}" class="fw-semibold text-primary text-decoration-underline">Signup</a>
                                                 </p>
                                             </div>
-                                            
+                                            -->
+                            
                                         </div>
 
-                                        <div class="mt-5 text-center">
-                                            <p class="mb-0">
-                                                ¿No tienes una cuenta registrada? 
-                                                <a href="{{ route('register') }}" class="fw-semibold text-primary text-decoration-underline">Signup</a>
-                                            </p>
-                                        </div>
                                     </div>
                                 </div>
                                 <!-- end col -->
@@ -153,7 +180,7 @@
                     <div class="col-lg-12">
                         <div class="text-center">
                             <p class="mb-0">&copy;
-                                <script>document.write(new Date().getFullYear())</script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand
+                                <script>document.write(new Date().getFullYear())</script> © Sistema desarrollado por el área de <strong>TI BHC</strong>.
                             </p>
                         </div>
                     </div>

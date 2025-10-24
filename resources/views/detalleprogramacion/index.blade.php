@@ -6,7 +6,15 @@
 @include('detalleprogramacion.create')
 @include('detalleprogramacion.edit')
 
-<h4 class="mb-3">Gestión de Frentes y Precios</h4>
+<div class="page-title-box d-sm-flex align-items-center justify-content-between">
+    <h4 class="mb-sm-0">Gestión de Frentes y Precios</h4>
+    <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item"><a href="javascript: void(0);">Gestión de Frente</a></li>
+            <li class="breadcrumb-item active">Gestión de Frentes y Precios</li>
+        </ol>
+    </div>
+</div>
 {{-- Botón para abrir modal crear frente --}}
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createFrenteModal">
     <i class="ri-add-circle-line"></i> Nuevo Frente

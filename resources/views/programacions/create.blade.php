@@ -65,12 +65,13 @@
                         <input type="text" name="placa_carreta" class="form-control" placeholder="DEF-456">
                     </div>
 
-                    {{-- Marca y Tipo --}}
+                    <!-- resive un valor nulo -->
                     <div class="col-md-4">
                         <label class="form-label">Marca Vehículo</label>
                         <input type="text" name="marca_vehiculo" class="form-control" placeholder="Ej: Volvo, Scania">
                     </div>
 
+                    <!-- resive un valor nulo --> 
                     <div class="col-md-4">
                         <label class="form-label">Tipo Plataforma</label>
                         <input type="text" name="tipo_plataforma" class="form-control" placeholder="Ej: Plataforma baja, Furgón">
@@ -168,6 +169,7 @@
                 </div>
             </div>
 
+            <!-- 
             {{-- Datos de Adelanto --}}
             <hr class="mt-4 mb-3">
             <h5 class="text-primary"><i class="ri-bank-line me-1"></i> Datos de Adelanto</h5>
@@ -203,7 +205,7 @@
                     ></textarea>
                 </div>
             </div>
-
+            -->
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">

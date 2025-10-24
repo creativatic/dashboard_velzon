@@ -7,8 +7,16 @@
 @include('programacions.show')
 @include('programacions.edit')
 
-<h4 class="mb-3">Gestión de Programaciones</h4>
-{{-- Botón para abrir modal crear programación --}}
+<div class="page-title-box d-sm-flex align-items-center justify-content-between">
+    <h4 class="mb-sm-0">Gestión de Programaciones</h4>
+    <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item"><a href="javascript: void(0);">Programación</a></li>
+            <li class="breadcrumb-item active">Gestión de Programaciones</li>
+        </ol>
+    </div>
+</div>
+
 <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createProgramacionModal">
     <i class="ri-add-circle-line"></i> Nueva Programación
 </button>
@@ -21,8 +29,12 @@
                         <th>#</th>
                         <th>Fecha Programación</th>
                         <th>Guía Remisión</th>
+
+                        <!-- resive un valor nulo -->
                         <th>Placa Tracto</th>
+                        <!-- resive un valor nulo -->
                         <th>Marca Vehículo</th>
+
                         <th>Tipo Plataforma</th>
                         <th>Razón Social Transporte</th>
                         <th>RUC Transporte</th>
@@ -33,6 +45,8 @@
                         <th>Tipo Mineral</th>
                         <th>Frente</th>
                         <th>Conformidad Adelanto</th>
+
+                        <!-- resive un valor nulo -->
                         <th>Guía Transportista</th>
                         <th>Acciones</th>
 
