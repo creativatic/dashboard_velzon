@@ -131,16 +131,71 @@ class ExpedienteController extends Controller
 
     public function update(Request $request, Expediente $expediente)
     {
-        $expediente->update($request->only([
-        'fecha_carga',
-        'total',
-        'detraccion',
-        'deposito_a_proveer',
-        'fecha_pago',
-        'numero_factura_exped',
-        'comentarios'
-    ]));
-        return redirect()->route('expediente.index')->with('success', 'Registro actualizado correctamente.');
+        $validated = $request->validate([
+            'fecha_carga' => 'nullable|date',
+            'total' => 'nullable|numeric',
+            'detraccion' => 'nullable|numeric',
+            'deposito_a_proveer' => 'nullable|numeric',
+            'fecha_pago' => 'nullable|date',
+            'numero_factura_exped' => 'nullable|string|max:255',
+            'comentarios' => 'nullable|string',
+            // 💡 Cambio: usar archivo.* para validar cada archivo en el array
+            'archivo.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx', 
+        ]);
+
+        // === Si se sube(n) nuevo(s) archivo(s), reemplazar el campo 'archivo' ===
+        // 💡 Cambio: Usar $request->file('archivo') para obtener el array
+        if ($request->hasFile('archivo')) {
+            // Obtenemos el array de archivos
+            $files = $request->file('archivo');
+
+            // Nos centraremos en el PRIMER archivo subido (asumiendo campo 'archivo' singular)
+            // Si necesitas manejar todos los archivos, requieres un modelo de Archivos aparte.
+            $file = $files[0] ?? null; 
+
+            if ($file) {
+                // Eliminar archivo anterior si existe
+                if ($expediente->archivo && \Storage::disk('public')->exists($expediente->archivo)) {
+                    \Storage::disk('public')->delete($expediente->archivo);
+                }
+
+                // Guardar nuevo archivo
+                $filename = time() . '_' . $file->getClientOriginalName();
+                // 💡 Usamos solo $filename para guardar la ruta correctamente
+                $path = $file->storeAs('expedientes', $filename, 'public'); 
+                $validated['archivo'] = $path;
+            } else {
+                // Si el array de archivos estaba presente pero vacío (o no se seleccionó el primero),
+                // mantenemos el archivo existente (o lo hacemos nulo si no se incluyó 'archivo' en $validated)
+                // Esto ya se maneja de facto ya que el campo 'archivo' no está en $validated si no se sube.
+            }
+        } else {
+            // Mantener archivo existente si no se subió un nuevo array de archivos
+            $validated['archivo'] = $expediente->archivo;
+        }
+        
+        // 💡 Limpiamos el 'archivo' de los validated antes de update si no se manejó antes.
+        unset($validated['archivo']); 
+        
+        // Asignar manualmente los campos
+        $expediente->fecha_carga = $validated['fecha_carga'] ?? $expediente->fecha_carga;
+        $expediente->total = $validated['total'] ?? $expediente->total;
+        $expediente->detraccion = $validated['detraccion'] ?? $expediente->detraccion;
+        $expediente->deposito_a_proveer = $validated['deposito_a_proveer'] ?? $expediente->deposito_a_proveer;
+        $expediente->fecha_pago = $validated['fecha_pago'] ?? $expediente->fecha_pago;
+        $expediente->numero_factura_exped = $validated['numero_factura_exped'] ?? $expediente->numero_factura_exped;
+        $expediente->comentarios = $validated['comentarios'] ?? $expediente->comentarios;
+        
+        // Guardar la ruta del archivo si se actualizó
+        if (isset($path)) {
+            $expediente->archivo = $path;
+        }
+
+        $expediente->save();
+        
+        return redirect()
+            ->route('expediente.index')
+            ->with('success', 'Expediente actualizado correctamente.');
     }
 
     public function destroy(Expediente $expediente)

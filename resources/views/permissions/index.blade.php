@@ -5,19 +5,17 @@
 @section('content')
 @include('permissions.create')
 @include('permissions.edit')
+<h4 class="mb-3">Gestión de Permisos</h4>
 
-<div class="container-fluid">
-    <h4 class="mb-3">Gestión de Permisos</h4>
+{{-- Botón para abrir modal crear permiso --}}
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createPermissionModal">
+    <i class="ri-add-circle-line"></i> Nuevo Permiso
+</button>
 
-    {{-- Botón para abrir modal crear permiso --}}
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createPermissionModal">
-        <i class="ri-add-circle-line"></i> Nuevo Permiso
-    </button>
-
-    <div class="card">
+    <div class="card mt-3">
         <div class="card-body table-responsive">
-            <table class="table">
-                <thead>
+            <table class="table table-striped align-middle">
+                <thead class="table-dark">
                     <tr>
                         <th>Nombre</th>
                         <th>Acciones</th>
@@ -48,7 +46,7 @@
             </table>
         </div>
     </div>
-</div>
+
 
 {{-- Mensajes de éxito --}}
 @if(session('success'))

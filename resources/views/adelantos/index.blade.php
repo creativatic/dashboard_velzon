@@ -6,16 +6,11 @@
 @include('adelantos.edit')
 @include('adelantos.show')
 
-
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0">Listado de Adelantos</h4>
-    </div>
-
-    <div class="card">
+<h4 class="mb-3">Listado de Adelantos</h4>
+<div class="card mt-3">
         <div class="card-body table-responsive">
-            <table class="table table-bordered table-hover align-middle">
-                <thead class="table-light text-center">
+            <table class="table table-striped align-middle text-center">
+                <thead class="table-dark">
                     <tr>
                         <th>#</th>
                         <th>Guía Remisión</th>
@@ -63,10 +58,10 @@
                             </td>
                             <td class="text-start">{{ $programacion->notas ?? '-' }}</td>
                             <td>
-                                <div class="btn-group" role="group">
+                           
                                     <button 
                                         type="button"
-                                        class="btn btn-sm btn-warning"
+                                        class="btn btn-warning btn-sm"
                                         data-bs-toggle="modal"
                                         data-bs-target="#editAdelantoModal"
                                         data-id="{{ $programacion->id }}"
@@ -74,11 +69,11 @@
                                         data-monto="{{ $programacion->detalleProgramacion->precio_frente ?? '-' }}"
                                         data-fecha="{{ $programacion->fecha_pago_adelantos }}"
                                         data-notas="{{ $programacion->notas }}">
-                                        Editar
+                                        <i class="ri-edit-2-line"></i>
                                     </button>
                                     <button 
                                         type="button" 
-                                        class="btn btn-sm btn-info text-white"
+                                        class="btn btn-info btn-sm"
                                         data-bs-toggle="modal" 
                                         data-bs-target="#showAdelantoModal"
                                         data-id="{{ $programacion->id }}"
@@ -89,9 +84,9 @@
                                         data-razon="{{ $programacion->razon_social_transporte }}"
                                         data-conductor="{{ trim(($programacion->nombres_conductor ?? '') . ' ' . ($programacion->apellidos_conductor ?? '')) }}"
                                         data-conformidad="{{ $programacion->conformidad_adelanto }}">
-                                        <i class="ri-eye-line"></i> Ver
+                                        <i class="fas fa-eye"></i> Ver
                                     </button>
-                                </div>
+
                             </td>
                         </tr>
                     @empty
@@ -109,8 +104,8 @@
                 </div>
             @endif
         </div>
-    </div>
 </div>
+
 <script>
 const editModal = document.getElementById('editAdelantoModal');
 editModal.addEventListener('show.bs.modal', event => {

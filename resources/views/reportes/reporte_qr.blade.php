@@ -3,17 +3,14 @@
 @section('title','Reporte QR')
 
 @section('content')
+<h4 class="mb-3">Reporte de Programaciones con QR</h4>
+<a href="{{ route('programacions.index') }}" class="btn btn-primary btn-sm">
+    <i class="ri-arrow-left-line"></i> Volver
+</a>
 <div class="card mt-3">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="card-title mb-0">Reporte de Programaciones con QR</h5>
-        <a href="{{ route('programacions.index') }}" class="btn btn-primary btn-sm">
-            <i class="ri-arrow-left-line"></i> Volver
-        </a>
-    </div>
-
-    <div class="card-body">
-        <table class="table table-striped align-middle">
-            <thead>
+    <div class="card-body table-responsive">
+        <table class="table table-striped align-middle text-center">
+            <thead class="table-dark">
                 <tr>
                     <th>#</th>
                     <th>Carguio</th>
@@ -48,7 +45,7 @@
                     </tr>
                 @endforelse
             </tbody>
-        </table>
+        </table>    
     </div>
 </div>
 @endsection

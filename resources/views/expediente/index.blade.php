@@ -7,18 +7,16 @@
 @include('expediente.edit')
 @include('expediente.show') {{-- ✅ Modal show incluido correctamente --}}
 
-<div class="card mt-3">
-    <div class="card-body">
-        <h5 class="card-title">Listado de Expedientes</h5>
+<h4 class="mb-3">Listado de Expedientes</h4>
+{{-- Botón para abrir modal crear Expediente --}}
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCreateExpediente">
+    <i class="ri-add-circle-line"></i> Nuevo Expediente
+</button>
 
-        {{-- Botón para abrir modal crear Expediente --}}
-        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalCreateExpediente">
-            <i class="ri-add-circle-line"></i> Nuevo Expediente
-        </button>
-
-        <div class="table-responsive">
-            <table class="table table-striped align-middle">
-                <thead class="table-primary text-center">
+    <div class="card mt-3">
+        <div class="card-body table-responsive">
+            <table class="table table-striped align-middle text-center">
+                <thead class="table-dark">
                     <tr>
                         <th>ID</th>
                         <th>Razón Social Empresa</th>
@@ -55,10 +53,9 @@
                                     <i class="ri-edit-2-line"></i>
                                 </button>
 
- 
-                                
                                 <!-- Botón para eliminar -->
-                                <form action="{{ route('expediente.destroy', $expediente) }}" method="POST" style="display:inline-block;">
+                                <form action="{{ route('expediente.destroy', $expediente) }}" method="POST" 
+                                      style="display:inline-block;">
                                     @csrf @method('DELETE')
                                     <button class="btn btn-danger btn-sm" onclick="return confirm('¿Deseas eliminar este expediente?')">
                                         <i class="ri-delete-bin-line"></i>
@@ -75,21 +72,17 @@
             {{ $expedientes->links() }}
         </div>
     </div>
-</div>
-
 
 @endsection
 
 <script>
 function editarExpediente(expedienteJson) {
-    // PASO CLAVE: Convertir la cadena JSON a un objeto JavaScript
     const expediente = JSON.parse(expedienteJson); 
-
     const form = document.getElementById('editExpedienteForm');
     // Asegurarse de que el ID es correcto
     form.action = `/expediente/${expediente.id}`; 
 
-    // Campos editables
+    // ... (Llenado de campos editables y de solo lectura) ...
     document.getElementById('edit_fecha_carga').value = expediente.fecha_carga ?? '';
     document.getElementById('edit_total').value = expediente.total ?? '';
     document.getElementById('edit_detraccion').value = expediente.detraccion ?? '';
@@ -98,14 +91,27 @@ function editarExpediente(expedienteJson) {
     document.getElementById('edit_numero_factura_exped').value = expediente.numero_factura_exped ?? '';
     document.getElementById('edit_comentarios').value = expediente.comentarios ?? '';
 
-    // Campos solo lectura (verificando la anidación)
     document.getElementById('edit_guia_remitente').value = expediente.programacion?.guia_remision ?? '';
     document.getElementById('edit_razon_social_transporte').value = expediente.programacion?.razon_social_transporte ?? '';
     document.getElementById('edit_tipo_mineral').value = expediente.programacion?.tipo_mineral ?? '';
-    // Los siguientes estaban en tu script original, pero no en tu modal HTML.
-    // Los dejo por si están en el include 'expediente.edit'.
-    // document.getElementById('edit_numero_ticket')?.value = expediente.tisur?.numero_ticket ?? '';
-    // document.getElementById('edit_ruc_transporte')?.value = expediente.programacion?.ruc_transporte ?? ''; 
+
+    // 💡 NUEVA LÓGICA: Mostrar el archivo actual
+    const fileDisplay = document.getElementById('current_file_display');
+    fileDisplay.innerHTML = ''; // Limpiar contenido previo
+
+    if (expediente.archivo) {
+        // Se asume que los archivos están en storage/app/public/expedientes
+        // y que tienes un enlace simbólico (storage:link) para acceder vía /storage/
+        const fileName = expediente.archivo.split('/').pop();
+        const fileUrl = `/storage/${expediente.archivo}`; 
+
+        fileDisplay.innerHTML = `
+            <span class="badge bg-success me-2">Archivo Actual</span>
+            <a href="${fileUrl}" target="_blank" class="text-decoration-none">
+                <i class="ri-file-fill"></i> Ver ${fileName}
+            </a>
+        `;
+    }
 
     // Mostrar modal
     const modal = new bootstrap.Modal(document.getElementById('editExpedienteModal'));

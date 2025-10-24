@@ -5,12 +5,10 @@
 @section('content')
 @include('seguimientos.create')
 
+<h4 class="mb-3">Listado de Seguimiento</h4>
 <div class="card mt-3">
-    <div class="card-header">
-        <h5 class="card-title mb-0">Listado de Seguimiento</h5>
-    </div>
     <div class="card-body table-responsive">
-        <table class="table table-striped align-middle">
+        <table class="table table-striped align-middle text-center">
             <thead class="table-dark">
                 <tr>
                     <th>#</th>

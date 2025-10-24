@@ -1,7 +1,6 @@
-<!-- Modal único: Editar Expediente -->
 <div class="modal fade" id="editExpedienteModal" tabindex="-1" aria-labelledby="editExpedienteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
-        <form id="editExpedienteForm" method="POST" class="modal-content">
+        <form id="editExpedienteForm" method="POST" class="modal-content" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -59,9 +58,21 @@
                         <input type="text" name="numero_factura_exped" id="edit_numero_factura_exped" class="form-control">
                     </div>
 
-                    <div class="col-12">
+                    <div class="col-6">
                         <label class="form-label">Comentarios</label>
                         <textarea name="comentarios" id="edit_comentarios" class="form-control" rows="2"></textarea>
+                    </div>
+                    
+                    {{-- === ARCHIVO === --}}
+                    <div class="col-6 mt-3">
+                        <label class="form-label">Archivos</label>
+                        {{-- 💡 NUEVA FUNCIONALIDAD: Contenedor para mostrar el archivo actual --}}
+                        <div id="current_file_display" class="mb-2">
+                            {{-- Contenido inyectado por JS si expediente.archivo existe --}}
+                        </div>
+                        
+                        <input type="file" name="archivo[]" id="edit_archivo" class="form-control" multiple>
+                        <small class="text-muted">Si selecciona un nuevo archivo, este reemplazará el archivo actual.</small>
                     </div>
                 </div>
             </div>
@@ -77,4 +88,3 @@
         </form>
     </div>
 </div>
-

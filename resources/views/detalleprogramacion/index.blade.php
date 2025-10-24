@@ -6,18 +6,16 @@
 @include('detalleprogramacion.create')
 @include('detalleprogramacion.edit')
 
-<div class="container-fluid">
-        <h4 class="mb-3">Gestión de Frentes y Precios</h4>
-        {{-- Botón para abrir modal crear frente --}}
-        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createFrenteModal">
-            <i class="ri-add-circle-line"></i> Nuevo Frente
-        </button>
+<h4 class="mb-3">Gestión de Frentes y Precios</h4>
+{{-- Botón para abrir modal crear frente --}}
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createFrenteModal">
+    <i class="ri-add-circle-line"></i> Nuevo Frente
+</button>
 
-
-    <div class="card">
+    <div class="card mt-3">
         <div class="card-body table-responsive">
-            <table class="table table-bordered table-hover align-middle">
-                <thead class="table-light">
+            <table class="table table-striped align-middle text-center">
+                <thead class="table-dark">
                     <tr>
                         <th>#</th>
                         <th>Frente</th>
@@ -42,12 +40,9 @@
                                 </span>
                             </td>
                             <td>
-                                <div class="btn-group" role="group">
-                                    <button 
-                                        type="button" 
-                                        class="btn btn-sm btn-warning"
+                                    <button class="btn btn-warning btn-sm" 
                                         onclick='openEditFrenteModal(@json($detalle))'>
-                                        Editar
+                                        <i class="ri-edit-2-line"></i>
                                     </button>
 
                                     <form action="{{ route('detalleprogramacion.destroy', $detalle->id) }}" 
@@ -55,12 +50,11 @@
                                           class="d-inline">
                                         @csrf 
                                         @method('DELETE')
-                                        <button onclick="return confirm('¿Eliminar este frente?')" 
-                                                class="btn btn-sm btn-danger">
-                                            Eliminar
+                                        <button class="btn btn-danger btn-sm"
+                                                onclick="return confirm('¿Eliminar este frente?')" >
+                                                <i class="ri-delete-bin-line"></i>
                                         </button>
                                     </form>
-                                </div>
                             </td>
                         </tr>
                     @empty
@@ -77,7 +71,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <script>
 function openEditFrenteModal(detalle) {

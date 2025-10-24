@@ -5,19 +5,16 @@
 @section('content')
 @include('roles.create')
 @include('roles.edit')
-
-<div class="container-fluid">
-    <h4 class="mb-3">Gestión de Roles</h4>
-    {{-- Botón para abrir modal crear rol--}}
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createRoleModal">
-        <i class="ri-add-circle-line"></i> Nuevo Rol
-    </button>
+<h4 class="mb-3">Gestión de Roles</h4>
+{{-- Botón para abrir modal crear rol--}}
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createRoleModal">
+    <i class="ri-add-circle-line"></i> Nuevo Rol
+</button>
     
-    <div class="card">
-        <div class="card-body table-responsive">
-
-            <table class="table">
-                <thead>
+<div class="card mt-3">
+    <div class="card-body table-responsive">
+            <table class="table table-striped align-middle">
+                <thead class="table-dark">
                     <tr>
                         <th>Nombres</th>
                         <th>Permisos</th>
@@ -46,8 +43,6 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
-
     </div>
 </div>
 @endsection

@@ -4,19 +4,17 @@
 
 @section('content')
 
-<div class="container-fluid">
-    <h4 class="mb-3">Gestión de Usuarios</h4>
+<h4 class="mb-3">Gestión de Usuarios</h4>
+{{-- Botón para abrir modal crear --}}
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createUserModal">
+    <i class="ri-add-circle-line"></i> Nuevo Usuario
+</button>
 
-    {{-- Botón para abrir modal crear --}}
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createUserModal">
-        <i class="ri-add-circle-line"></i> Nuevo Usuario
-    </button>
 
-    {{-- Tabla de usuarios --}}
-    <div class="card">
+    <div class="card mt-3">
         <div class="card-body table-responsive">
-            <table class="table align-middle">
-                <thead>
+            <table class="table table-striped align-middle text-center">
+                <thead class="table-dark">
                     <tr>
                         <th>#</th>
                         <th>Nombre y Apellidos</th>
@@ -95,7 +93,7 @@
             </table>
         </div>
     </div>
-</div>
+
 
 {{-- Modal crear usuario --}}
 <div class="modal fade" id="createUserModal" tabindex="-1">
