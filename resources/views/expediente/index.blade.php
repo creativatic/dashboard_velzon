@@ -1,121 +1,108 @@
 @extends('layouts.plantilla')
 
-@section('title', 'Expedientes')
+@section('title','Seguimiento')
 
 @section('content')
 @include('expediente.create')
-@include('expediente.edit')
-@include('expediente.show')
 
-<div class="card mt-3">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">Listado de Expedientes</h4>
-        @can('crear expedientes')
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateExpediente">
-                <i class="fas fa-plus"></i> Nuevo Expediente
-            </button>
-        @endcan
-    </div>
-
-    <div class="card-body">
-        <div class="alert alert-success py-2 mb-3">
-            Mostrando solo expedientes con <strong>Conformidad de Adelanto: Ok</strong>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-light text-center">
-                    <tr>
-                        <th>#</th>
-                        <th>Razón Social</th>
-                        <th>RUC</th>
-                        <th>Placa Tracto</th>
-                        <th>Placa Carreta</th>
-                        <th>Guía Transportista</th>
-                        <th>N° Ticket (Tisur)</th>
-                        <th>Factura</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="text-center">
-                    @forelse ($expedientes as $expediente)
-                        @php
-                            // === DATOS DE PROGRAMACION ===
-                            $prog = $expediente->programacion_id
-                                ? \App\Models\Programacion::find($expediente->programacion_id)
-                                : null;
-
-                            $razon_social = $prog->razon_social_transporte ?? '-';
-                            $ruc = $prog->ruc_transporte ?? '-';
-                            $placa_tracto = $prog->placa_tracto ?? '-';
-                            $placa_carreta = $prog->placa_carreta ?? '-';
-                            $guia_transportista = $prog->guia_transportista ?? '-';
-
-                            // === DATOS DE TISUR ===
-                            $tisur = $expediente->tisur_id
-                                ? \App\Models\Tisur::find($expediente->tisur_id)
-                                : null;
-
-                            $numero_ticket = $tisur->numero_ticket ?? '-';
-                        @endphp
-
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $razon_social }}</td>
-                            <td>{{ $ruc }}</td>
-                            <td>{{ $placa_tracto }}</td>
-                            <td>{{ $placa_carreta }}</td>
-                            <td>{{ $guia_transportista }}</td>
-                            <td>{{ $numero_ticket }}</td>
-                            <td>{{ $expediente->numero_factura_exped ?? '-' }}</td>
-                            <td>
-                                <button type="button" class="btn btn-info btn-sm"
-                                    onclick="mostrarExpediente({{ $expediente->id }})"
-                                    data-bs-toggle="modal" data-bs-target="#modalShowExpediente">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-
-                                @can('editar expedientes')
-                                    <button type="button" class="btn btn-warning btn-sm"
-                                        onclick="editarExpediente({{ $expediente->id }})"
-                                        data-bs-toggle="modal" data-bs-target="#modalEditExpediente">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                @endcan
-
-                                @can('eliminar expedientes')
-                                    <form action="{{ route('expediente.destroy', $expediente->id) }}" 
-                                          method="POST" class="d-inline-block"
-                                          onsubmit="return confirm('¿Deseas eliminar este expediente?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                @endcan
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="9">No hay expedientes con conformidad "Ok".</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center mt-3">
-            <p class="mb-0 text-muted">
-                Total de expedientes: {{ $expedientes->total() }}
-            </p>
-            {{ $expedientes->links() }}
-        </div>
+<div class="page-title-box d-sm-flex align-items-center justify-content-between">
+    <h4 class="mb-sm-0">Listado de Seguimiento</h4>
+    <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item"><a href="javascript: void(0);">Programación</a></li>
+            <li class="breadcrumb-item active">Listado de Seguimiento</li>
+        </ol>
     </div>
 </div>
+
+<div class="card mt-3">
+    <div class="card-body table-responsive">
+        <table class="table table-striped align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Grupo Carguío</th>
+                    <th>Tipo Mineral</th>
+                    <th>Frente</th>
+                    <th>Activo</th>
+                    <th>Placa Tracto</th>
+                    <th>Conductor</th>
+                    <th>Teléfono</th>
+                    <th>N° Ticket</th>
+                    <th>Notas</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($programaciones as $index => $programacion)
+                    @php
+                        $seguimiento = $programacion->seguimiento;
+                        $detalle = $programacion->detalleProgramacion ?? null;
+
+                        // ✅ Obtener número(s) de ticket desde los expedientes asociados
+                        $numero_ticket = $programacion->expedientes->pluck('tisur.numero_ticket')->filter()->implode(', ');
+                        if (empty($numero_ticket)) {
+                            $numero_ticket = 'No registrado';
+                        }
+                    @endphp
+
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $programacion->grupo_cargio ?? '-' }}</td>
+                        <td>{{ $programacion->tipo_mineral ?? '-' }}</td>
+                        <td>{{ $detalle->frente ?? 'Sin frente' }}</td>
+                        <td>
+                            <span class="badge bg-{{ $detalle && $detalle->activo ? 'success' : 'secondary' }}">
+                                {{ $detalle && $detalle->activo ? 'Activo' : 'Inactivo' }}
+                            </span>
+                        </td>
+                        <td>{{ $programacion->placa_tracto ?? '-' }}</td>
+                        <td>{{ $programacion->nombres_conductor ?? '-' }}</td>
+                        <td>{{ $programacion->telefono_conductor ?? '-' }}</td>
+                        <td>{{ $numero_ticket }}</td>
+                        <td>{{ $seguimiento->notas ?? 'Sin notas' }}</td>
+                        <td>
+                            @if($seguimiento)
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#modalEditSeguimiento{{ $seguimiento->id }}">
+                                    <i class="ri-edit-2-line"></i>
+                                </button>
+                                @include('seguimientos.edit', ['seguimiento' => $seguimiento])
+                            @else
+                                <form action="{{ route('seguimientos.store') }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    <input type="hidden" name="programacion_id" value="{{ $programacion->id }}">
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="ri-add-line"></i> Crear
+                                    </button>
+                                </form>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="11" class="text-center text-muted">No hay registros de seguimiento</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Modal dinámico -->
+<div class="modal fade" id="editSeguimientoModal" tabindex="-1" aria-labelledby="editSeguimientoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" id="modalEditContent">
+      <!-- Aquí se cargará el contenido con JS -->
+    </div>
+  </div>
+</div>
+
+
 @endsection
 
+
 @push('scripts')
+
 <script>
     function editarExpediente(id) {
         fetch(`/expediente/${id}/edit`)
