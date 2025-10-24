@@ -48,11 +48,11 @@ class Expediente extends Model
     ];
     public function tisur()
     {
-        return $this->belongsTo(Tisur::class);
+        return $this->belongsTo(Tisur::class, 'tisur_id');
     }
 
     public function programacion()
     {
-        return $this->belongsTo(Programacion::class);
+        return $this->belongsTo(Programacion::class,  'programacion_id');
     }
 }

@@ -52,17 +52,24 @@ class ExpedienteController extends Controller
     
     public function index()
     {
-       $expedientes = Expediente::with([
-            'programacion:id,guia_remision,razon_social_transporte,ruc_transporte,placa_tracto,placa_carreta,guia_transportista,nombres_conductor,apellidos_conductor,tipo_mineral',
-            'tisur:id,numero_ticket,fecha_hora_ingreso,peso_neto'  // <-- eliminar archivo
-        ])->paginate(10);
+        // 🔹 Solo expedientes cuya programacion tiene conformidad OK
+        $expedientes = Expediente::with([
+                'programacion:id,guia_remision,razon_social_transporte,ruc_transporte,placa_tracto,placa_carreta,guia_transportista,nombres_conductor,apellidos_conductor,tipo_mineral',
+                'tisur:id,numero_ticket,fecha_hora_ingreso,peso_neto'
+            ])
+            ->whereHas('programacion', function ($query) {
+                $query->where('conformidad_adelanto', 'Ok');
+            })
+            ->latest()
+            ->paginate(10);
 
-        $programacions = Programacion::select('id', 'guia_remision')->get();
+        $programacions = Programacion::select('id', 'razon_social_transporte')->orderBy('id', 'desc')->get();
         $tisurs = Tisur::select('id', 'numero_ticket')->get();
         $detalles = DetalleProgramacion::select('id', 'frente')->get();
 
         return view('expediente.index', compact('expedientes', 'programacions', 'tisurs', 'detalles'));
     }
+
 
     public function create()
     {
