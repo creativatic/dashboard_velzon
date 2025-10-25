@@ -62,15 +62,21 @@ class ExpedienteController extends Controller
 
     public function index()
     {
+        // 💡 MODIFICACIÓN: Se agrega el filtro para solo mostrar programaciones con conformidad_adelanto = 'Ok'
         $programaciones = Programacion::with([
             'seguimiento',
             'detalleProgramacion',
             'expedientes.tisur',
-        ])->latest()->paginate(10);
+        ])
+        ->where('conformidad_adelanto', 'Ok') // Filtro aplicado
+        ->latest()
+        ->paginate(10);
 
+        // Lógica para obtener Tisurs disponibles (sin expedientes asociados)
         $tisurIdsAsociados = Expediente::pluck('tisur_id')->filter()->all();
         $tisurs = Tisur::whereNotIn('id', $tisurIdsAsociados)->get();
-        $detalles = DetalleProgramacion::all(); // 👈 añade esto
+        
+        $detalles = DetalleProgramacion::all(); 
 
         return view('expediente.index', compact('programaciones', 'tisurs', 'detalles'));
     }
