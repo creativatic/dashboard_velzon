@@ -60,7 +60,6 @@ class ExpedienteController extends Controller
         }
     }
 
-
     public function index()
     {
         $programaciones = Programacion::with([
@@ -69,7 +68,8 @@ class ExpedienteController extends Controller
             'expedientes.tisur',
         ])->latest()->paginate(10);
 
-        $tisurs = Tisur::all();
+        $tisurIdsAsociados = Expediente::pluck('tisur_id')->filter()->all();
+        $tisurs = Tisur::whereNotIn('id', $tisurIdsAsociados)->get();
         $detalles = DetalleProgramacion::all(); // 👈 añade esto
 
         return view('expediente.index', compact('programaciones', 'tisurs', 'detalles'));

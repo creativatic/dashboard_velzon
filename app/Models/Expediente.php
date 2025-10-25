@@ -10,6 +10,8 @@ class Expediente extends Model
     use HasFactory;
 
     protected $fillable = [
+        'programacion_id',
+        'tisur_id',
         'fecha_carga',
         'guia_remitente',
         'placa_tracto',

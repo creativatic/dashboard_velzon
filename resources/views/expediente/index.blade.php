@@ -7,11 +7,21 @@
 @include('expediente.edit')
 @include('expediente.show')
 
+<div class="page-title-box d-sm-flex align-items-center justify-content-between">
+    <h4 class="mb-sm-0">Listado de expediente</h4>
+    <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item"><a href="javascript: void(0);">Expediente</a></li>
+            <li class="breadcrumb-item active">Listado de expediente</li>
+        </ol>
+    </div>
+</div>
+
 <div class="card mt-3">
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-striped align-middle">
-                <thead class="table-primary">
+                <thead class="table-dark">
                     <tr>
                         <th>#</th>
                         <th>Guía Remisión</th>
@@ -42,10 +52,8 @@
                                 {{-- ✅ Botón Ver Expediente (solo si existe) --}}
                                 @if($expediente)
                                     <button 
-                                        class="btn btn-info btn-sm ver-expediente-btn"
-                                        data-id="{{ $expediente->id }}"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#showExpedienteModal"
+                                        class="btn btn-info btn-sm"
+                                        onclick="verExpediente({{ $expediente->id }})"
                                     >
                                         <i class="ri-eye-line"></i> Ver
                                     </button>
@@ -55,7 +63,7 @@
                                     </button>
                                 @endif
 
-                                {{-- ✅ Botón Crear Expediente --}}
+                                {{-- ✅ Botón Crear Expediente (sin cambios, ya funciona correctamente) --}}
                                 <button 
                                     class="btn btn-success btn-sm"
                                     onclick="cargarDatosExpediente({{ $programacion->id }})"
@@ -86,15 +94,15 @@ function verExpediente(id) {
             if (!response.ok) throw new Error("Error al obtener el expediente");
             return response.json();
         })
-        .then(expediente => {
-            console.log("📦 Expediente recibido:", expediente);
+        .then(data => {
+            console.log("📦 Expediente recibido:", data);
 
-            // Programación
-            const prog = expediente.programacion || {};
-            const detalle = prog.detalle_programacion || {};
-            const tisur = expediente.tisur || {};
+            const expediente = data;
+            const prog = expediente.programacion ?? {};
+            const detalle = prog.detalle_programacion ?? {};
+            const tisur = expediente.tisur ?? {};
 
-            // === Programación ===
+            // === PROGRAMACIÓN ===
             document.getElementById('show_guia_remision').textContent = prog.guia_remision ?? '-';
             document.getElementById('show_placa_tracto').textContent = prog.placa_tracto ?? '-';
             document.getElementById('show_tipo_mineral').textContent = prog.tipo_mineral ?? '-';
@@ -106,7 +114,7 @@ function verExpediente(id) {
             document.getElementById('show_cuenta_banco').textContent = prog.cuenta_banco ?? '-';
             document.getElementById('show_banco').textContent = prog.banco ?? '-';
 
-            // === Expediente ===
+            // === EXPEDIENTE ===
             document.getElementById('show_tisur').textContent = tisur.numero_ticket ?? '-';
             document.getElementById('show_fecha_carga').textContent = expediente.fecha_carga ?? '-';
             document.getElementById('show_fecha_pago').textContent = expediente.fecha_pago ?? '-';
@@ -116,32 +124,28 @@ function verExpediente(id) {
             document.getElementById('show_factura').textContent = expediente.numero_factura_exped ?? '-';
             document.getElementById('show_comentarios').textContent = expediente.comentarios ?? '-';
 
-            // === Archivos ===
+            // === ARCHIVOS ===
             const archivosDiv = document.getElementById('show_archivos');
             archivosDiv.innerHTML = '';
-            if (expediente.archivo) {
-                try {
-                    const archivos = JSON.parse(expediente.archivo);
-                    if (Array.isArray(archivos) && archivos.length > 0) {
-                        archivos.forEach(file => {
-                            const link = document.createElement('a');
-                            link.href = `/storage/${file}`;
-                            link.target = '_blank';
-                            link.textContent = file.split('/').pop();
-                            link.classList.add('d-block');
-                            archivosDiv.appendChild(link);
-                        });
-                    } else {
-                        archivosDiv.textContent = 'Sin archivos adjuntos.';
-                    }
-                } catch (e) {
-                    archivosDiv.textContent = 'Formato de archivo inválido.';
+            try {
+                const archivos = JSON.parse(expediente.archivo || '[]');
+                if (Array.isArray(archivos) && archivos.length > 0) {
+                    archivos.forEach(file => {
+                        const link = document.createElement('a');
+                        link.href = `/storage/${file}`;
+                        link.target = '_blank';
+                        link.textContent = file.split('/').pop();
+                        link.classList.add('d-block');
+                        archivosDiv.appendChild(link);
+                    });
+                } else {
+                    archivosDiv.textContent = 'Sin archivos adjuntos.';
                 }
-            } else {
-                archivosDiv.textContent = 'Sin archivos adjuntos.';
+            } catch (e) {
+                archivosDiv.textContent = 'Formato de archivo inválido.';
             }
 
-            // Mostrar modal
+            // === MOSTRAR MODAL ===
             const modal = new bootstrap.Modal(document.getElementById('showExpedienteModal'));
             modal.show();
         })
