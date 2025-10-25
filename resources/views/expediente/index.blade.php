@@ -3,14 +3,13 @@
 @section('title','Seguimiento')
 
 @section('content')
-@include('expediente.create')
 
 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-    <h4 class="mb-sm-0">Listado de Seguimiento</h4>
+    <h4 class="mb-sm-0">Listado de Expediente</h4>
     <div class="page-title-right">
         <ol class="breadcrumb m-0">
-            <li class="breadcrumb-item"><a href="javascript: void(0);">Programación</a></li>
-            <li class="breadcrumb-item active">Listado de Seguimiento</li>
+            <li class="breadcrumb-item"><a href="javascript: void(0);">Expediente</a></li>
+            <li class="breadcrumb-item active">Listado de Expediente</li>
         </ol>
     </div>
 </div>
@@ -21,15 +20,17 @@
             <thead class="table-dark">
                 <tr>
                     <th>#</th>
-                    <th>Grupo Carguío</th>
-                    <th>Tipo Mineral</th>
-                    <th>Frente</th>
-                    <th>Activo</th>
+                    <th>N° Guía Remisión</th>
                     <th>Placa Tracto</th>
-                    <th>Conductor</th>
+                    <th>Tipo Mineral</th>
+                    <th>Conformidad Adelanto</th>
+                    <th>Frente</th>
+                    <th>Razón Social</th>
+                    <th>RUC</th>
+                    <th>Apellidos Conductor</th>
                     <th>Teléfono</th>
-                    <th>N° Ticket</th>
-                    <th>Notas</th>
+                    <th>Cuenta Banco</th>
+                    <th>Banco</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -38,91 +39,145 @@
                     @php
                         $seguimiento = $programacion->seguimiento;
                         $detalle = $programacion->detalleProgramacion ?? null;
-
-                        // ✅ Obtener número(s) de ticket desde los expedientes asociados
-                        $numero_ticket = $programacion->expedientes->pluck('tisur.numero_ticket')->filter()->implode(', ');
-                        if (empty($numero_ticket)) {
-                            $numero_ticket = 'No registrado';
-                        }
                     @endphp
 
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $programacion->grupo_cargio ?? '-' }}</td>
-                        <td>{{ $programacion->tipo_mineral ?? '-' }}</td>
-                        <td>{{ $detalle->frente ?? 'Sin frente' }}</td>
-                        <td>
-                            <span class="badge bg-{{ $detalle && $detalle->activo ? 'success' : 'secondary' }}">
-                                {{ $detalle && $detalle->activo ? 'Activo' : 'Inactivo' }}
-                            </span>
-                        </td>
+                        <td>{{ $programacion->guia_transportista ?? '-' }}</td>
                         <td>{{ $programacion->placa_tracto ?? '-' }}</td>
-                        <td>{{ $programacion->nombres_conductor ?? '-' }}</td>
+                        <td>{{ $programacion->tipo_mineral ?? '-' }}</td>
+                        <td>
+                            @if($programacion->conformidad_adelanto === 'Ok')
+                                <span class="btn btn-success btn-sm w-100">{{ $programacion->conformidad_adelanto }}</span>
+                            @elseif($programacion->conformidad_adelanto === 'Pendiente')
+                                <span class="btn btn-danger btn-sm w-100">{{ $programacion->conformidad_adelanto }}</span>
+                            @else
+                                <span class="badge bg-secondary">--</span>
+                            @endif
+                        </td>
+                        <td>{{ $detalle->frente ?? 'Sin frente' }}</td>
+                        <td>{{ $programacion->razon_social_transporte ?? '-' }}</td>
+                        <td>{{ $programacion->ruc_transporte ?? '-' }}</td>
+                        <td>{{ $programacion->apellidos_conductor  ?? '-' }}</td>
                         <td>{{ $programacion->telefono_conductor ?? '-' }}</td>
-                        <td>{{ $numero_ticket }}</td>
-                        <td>{{ $seguimiento->notas ?? 'Sin notas' }}</td>
+                        <td>{{ $programacion->cuenta_banco ?? '-' }}</td>
+                        <td>{{ $programacion->banco ?? '-' }}</td>
                         <td>
                             @if($seguimiento)
-                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#modalEditSeguimiento{{ $seguimiento->id }}">
+                                <button class="btn btn-warning btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editSeguimientoModal"
+                                    onclick="editarExpediente({{ $seguimiento->id }})">
                                     <i class="ri-edit-2-line"></i>
                                 </button>
-                                @include('seguimientos.edit', ['seguimiento' => $seguimiento])
                             @else
-                                <form action="{{ route('seguimientos.store') }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    <input type="hidden" name="programacion_id" value="{{ $programacion->id }}">
-                                    <button type="submit" class="btn btn-success btn-sm">
-                                        <i class="ri-add-line"></i> Crear
-                                    </button>
-                                </form>
+                                <button class="btn btn-success btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editSeguimientoModal"
+                                    onclick="crearExpediente({{ $programacion->id }})">
+                                    <i class="ri-add-line"></i> Crear
+                                </button>
                             @endif
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="11" class="text-center text-muted">No hay registros de seguimiento</td>
+                        <td colspan="13" class="text-center text-muted">No hay registros de expediente</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 </div>
-<!-- Modal dinámico -->
+
+<!-- 🔹 Modal dinámico reutilizable -->
 <div class="modal fade" id="editSeguimientoModal" tabindex="-1" aria-labelledby="editSeguimientoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content" id="modalEditContent">
-      <!-- Aquí se cargará el contenido con JS -->
-    </div>
+  <div class="modal-dialog modal-xl">
+    <form id="formEditExpediente" method="POST" class="modal-content" enctype="multipart/form-data">
+      @csrf
+      @method('POST')
+
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="editSeguimientoLabel">Expediente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body row g-3" id="modalEditBody">
+        <div class="text-center w-100">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-success">Guardar</button>
+      </div>
+    </form>
   </div>
 </div>
 
-
 @endsection
 
-
 @push('scripts')
-
 <script>
-    function editarExpediente(id) {
-        fetch(`/expediente/${id}/edit`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('edit_id').value = data.id;
-                document.getElementById('edit_numero_factura_exped').value = data.numero_factura_exped ?? '';
-                document.getElementById('edit_tisur_id').value = data.tisur_id ?? '';
-                document.getElementById('edit_detalle_programacion_id').value = data.detalle_programacion_id ?? '';
-            });
-    }
+function editarExpediente(id) {
+    const modalBody = document.getElementById('modalEditBody');
+    const form = document.getElementById('formEditExpediente');
+    const modalTitle = document.getElementById('editSeguimientoLabel');
 
-    function mostrarExpediente(id) {
-        fetch(`/expediente/${id}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('show_numero_factura_exped').textContent = data.numero_factura_exped ?? '-';
-                document.getElementById('show_tisur').textContent = data.tisur?.numero_ticket ?? '-';
-                document.getElementById('show_programacion').textContent = data.programacion?.razon_social_transporte ?? '-';
-            });
-    }
+    modalBody.innerHTML = `
+        <div class="text-center w-100">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </div>
+    `;
+
+    fetch(`/expediente/${id}/edit`)
+        .then(response => {
+            if (!response.ok) throw new Error("No se pudo cargar el expediente");
+            return response.text();
+        })
+        .then(html => {
+            modalBody.innerHTML = html;
+            form.action = `/expediente/${id}`;
+            form.querySelector('input[name="_method"]').value = 'PUT';
+            modalTitle.textContent = "Editar Expediente";
+        })
+        .catch(error => {
+            modalBody.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+        });
+}
+
+function crearExpediente(programacionId) {
+    const modalBody = document.getElementById('modalEditBody');
+    const form = document.getElementById('formEditExpediente');
+    const modalTitle = document.getElementById('editSeguimientoLabel');
+
+    modalBody.innerHTML = `
+        <div class="text-center w-100">
+            <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </div>
+    `;
+
+    fetch(`/expediente/create?programacion_id=${programacionId}`)
+        .then(response => {
+            if (!response.ok) throw new Error("No se pudo cargar el formulario de creación");
+            return response.text();
+        })
+        .then(html => {
+            modalBody.innerHTML = html;
+            form.action = `/expediente`;
+            form.querySelector('input[name="_method"]').value = 'POST';
+            modalTitle.textContent = "Crear Expediente";
+        })
+        .catch(error => {
+            modalBody.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+        });
+}
 </script>
 @endpush

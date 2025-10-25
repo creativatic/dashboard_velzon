@@ -51,6 +51,7 @@ class ExpedienteController extends Controller
     }
     
 
+
     public function index()
     {
         $programaciones = Programacion::with([
@@ -59,7 +60,10 @@ class ExpedienteController extends Controller
             'expedientes.tisur',
         ])->latest()->paginate(10);
 
-        return view('expediente.index', compact('programaciones'));
+        $tisurs = Tisur::all();
+        $detalles = DetalleProgramacion::all(); // 👈 añade esto
+
+        return view('expediente.index', compact('programaciones', 'tisurs', 'detalles'));
     }
 
 
@@ -74,7 +78,14 @@ class ExpedienteController extends Controller
 
         return view('expediente.create', compact('programacions', 'tisurs'));
     }
+    public function edit($id)
+    {
+        $expediente = Expediente::with(['programacion', 'tisur'])->findOrFail($id);
+        $tisurs = Tisur::all();
+        $detalles = DetalleProgramacion::all();
 
+        return view('expediente.partials.edit-form', compact('expediente', 'tisurs', 'detalles'));
+    }
     public function store(Request $request)
     {
         $request->validate([
