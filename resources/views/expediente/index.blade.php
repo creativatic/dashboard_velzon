@@ -43,7 +43,7 @@
 
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $programacion->guia_transportista ?? '-' }}</td>
+                        <td>{{ $programacion->guia_remision ?? '-' }}</td>
                         <td>{{ $programacion->placa_tracto ?? '-' }}</td>
                         <td>{{ $programacion->tipo_mineral ?? '-' }}</td>
                         <td>
@@ -75,7 +75,7 @@
                                     data-bs-toggle="modal"
                                     data-bs-target="#editSeguimientoModal"
                                     onclick="crearExpediente({{ $programacion->id }})">
-                                    <i class="ri-add-line"></i> Crear
+                                    <i class="ri-add-line"></i> EDOTAR
                                 </button>
                             @endif
                         </td>
