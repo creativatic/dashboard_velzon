@@ -139,4 +139,9 @@ class ProgramacionController extends Controller
         return redirect()->route('programacions.index')->with('success', 'Programación eliminada correctamente.');
     }
 
+    public function showJson($id)
+    {
+        $programacion = Programacion::with('detalleProgramacion')->findOrFail($id);
+        return response()->json($programacion);
+    }
 }

@@ -1,136 +1,100 @@
-{{-- C:\laragon\www\ventas_seven\resources\views\expediente\show.blade.php --}}
-<div class="modal fade" id="modalShowExpediente" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+<!-- Modal Mostrar Expediente -->
+<div class="modal fade" id="showExpedienteModal" tabindex="-1" aria-labelledby="showExpedienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title text-white">Detalles del Expediente</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="showExpedienteModalLabel">
+                    <i class="ri-eye-line"></i> Detalle del Expediente
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
 
             <div class="modal-body">
-                {{-- Información General del Expediente --}}
-                <div class="card mb-4">
-                    <div class="card-header bg-light">
-                        <h6 class="mb-0">Información del Expediente</h6>
+                <h6 class="text-primary mb-3">📋 Datos de la Programación</h6>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">N° Guía Remisión:</label>
+                        <p id="show_guia_remision" class="form-control-plaintext"></p>
                     </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">N° Factura Expediente:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_numero_factura_exped">--</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Fecha de Carga:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_fecha_carga">--</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Fecha de Pago:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_fecha_pago">--</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Total (S/):</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_total">--</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Detracción (S/):</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_detraccion">--</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Archivo:</label>
-                                <p class="form-control-plaintext" id="show_archivo">
-                                    <span class="badge bg-secondary">Sin archivo</span>
-                                </p>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-bold">Deposito a Proveer</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_deposito_a_proveer">--</p>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label fw-bold">Comentarios:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_comentarios">--</p>
-                            </div>
-                        </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Placa Tracto:</label>
+                        <p id="show_placa_tracto" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Tipo Mineral:</label>
+                        <p id="show_tipo_mineral" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Frente:</label>
+                        <p id="show_frente" class="form-control-plaintext"></p>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Razón Social:</label>
+                        <p id="show_razon_social" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">RUC:</label>
+                        <p id="show_ruc" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Conductor:</label>
+                        <p id="show_conductor" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Teléfono:</label>
+                        <p id="show_telefono" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Cuenta Banco:</label>
+                        <p id="show_cuenta_banco" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Banco:</label>
+                        <p id="show_banco" class="form-control-plaintext"></p>
                     </div>
                 </div>
 
-                {{-- Información de la Guía de Remisión --}}
-                <div class="card mb-4">
-                    <div class="card-header bg-light">
-                        <h6 class="mb-0">Información de la Guía de Remisión</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Guía de Remisión:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_guia_remision">--</p>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label fw-bold">Placa Tracto:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_placa_tracto">--</p>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label fw-bold">Placa Carreta:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_placa_carreta">--</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Razón Social Empresa:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_razon_social_empresa">--</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">RUC:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_ruc">--</p>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold">Guía Transportista:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_guia_transportista">--</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <hr class="my-4">
 
-                {{-- Información del Ticket Tisur --}}
-                <div class="card mb-4">
-                    <div class="card-header bg-light">
-                        <h6 class="mb-0">Información del Ticket Tisur</h6>
+                <h6 class="text-primary mb-3">📑 Datos del Expediente</h6>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">N° Ticket (Tisur):</label>
+                        <p id="show_tisur" class="form-control-plaintext"></p>
                     </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Número de Ticket:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_numero_ticket">--</p>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label fw-bold">Fecha Ingreso:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_fecha_hora_ingreso">--</p>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label fw-bold">Peso Neto:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_peso_neto">--</p>
-                            </div>
-                        </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Fecha Carga:</label>
+                        <p id="show_fecha_carga" class="form-control-plaintext"></p>
                     </div>
-                </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Fecha Pago:</label>
+                        <p id="show_fecha_pago" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Total:</label>
+                        <p id="show_total" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Detracción:</label>
+                        <p id="show_detraccion" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Depósito a Proveer:</label>
+                        <p id="show_deposito" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">N° Factura:</label>
+                        <p id="show_factura" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Comentarios:</label>
+                        <p id="show_comentarios" class="form-control-plaintext"></p>
+                    </div>
 
-                {{-- Información del Frente --}}
-                <div class="card mb-4">
-                    <div class="card-header bg-light">
-                        <h6 class="mb-0">Información del Frente</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Frente:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_frente">--</p>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label fw-bold">Precio Frente:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_precio_frente">--</p>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label fw-bold">Precio TN:</label>
-                                <p class="form-control-plaintext border rounded p-2 bg-light" id="show_precio_tn">--</p>
-                            </div>
-                        </div>
+                    <div class="col-12">
+                        <label class="form-label fw-bold">Archivos Adjuntos:</label>
+                        <div id="show_archivos" class="border rounded p-2 bg-light small"></div>
                     </div>
                 </div>
             </div>
@@ -142,74 +106,61 @@
     </div>
 </div>
 
-{{-- Script para cargar los datos en el modal show --}}
+<!-- === Script para mostrar datos === -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Función para abrir el modal show con los datos del expediente
-    window.mostrarExpediente = function(id) {
-        if (id) {
-            fetch(`/expediente/${id}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error al cargar los datos');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Datos recibidos:', data); // Para debug
-                    
-                    // Información general del expediente
-                    document.getElementById('show_numero_factura_exped').textContent = data.numero_factura_exped || '--';
-                    document.getElementById('show_fecha_carga').textContent = data.fecha_carga || '--';
-                    document.getElementById('show_fecha_pago').textContent = data.fecha_pago || '--';
-                    document.getElementById('show_total').textContent = data.total ? `S/ ${parseFloat(data.total).toFixed(2)}` : '--';
-                    document.getElementById('show_detraccion').textContent = data.detraccion ? `S/ ${parseFloat(data.detraccion).toFixed(2)}` : '--';
-                    document.getElementById('show_comentarios').textContent = data.comentarios || '--';
-                    document.getElementById('show_deposito_a_proveer').textContent = data.deposito_a_proveer || '--';
-                    
-                    // Manejar el archivo
-                    const archivoElement = document.getElementById('show_archivo');
-                    if (data.archivo) {
-                        const archivoUrl = `/storage/${data.archivo}`;
-                        archivoElement.innerHTML = `<a href="${archivoUrl}" target="_blank" class="btn btn-outline-success btn-sm">📎 Ver Archivo</a>`;
-                    } else {
-                        archivoElement.innerHTML = '<span class="badge bg-secondary">Sin archivo</span>';
-                    }
+function verExpediente(id) {
+    fetch(`/expediente/${id}`)
+        .then(response => {
+            if (!response.ok) throw new Error("Error al obtener el expediente");
+            return response.json();
+        })
+        .then(expediente => {
+            console.log("👀 Expediente cargado:", expediente);
 
+            const prog = expediente.programacion ?? {};
+            const detalle = prog.detalle_programacion ?? {};
 
-                    // Información de programación
-                    if (data.programacion) {
-                        document.getElementById('show_guia_remision').textContent = data.programacion.guia_remision || '--';
-                        document.getElementById('show_placa_tracto').textContent = data.programacion.placa_tracto || '--';
-                        document.getElementById('show_placa_carreta').textContent = data.programacion.placa_carreta || '--';
-                        document.getElementById('show_razon_social_empresa').textContent = data.programacion.razon_social_transporte || '--';
-                        document.getElementById('show_ruc').textContent = data.programacion.ruc_transporte || '--';
-                        document.getElementById('show_guia_transportista').textContent = data.programacion.guia_transportista || '--';
-                    }
+            // Programación
+            document.getElementById('show_guia_remision').textContent = prog.guia_remision ?? '-';
+            document.getElementById('show_placa_tracto').textContent = prog.placa_tracto ?? '-';
+            document.getElementById('show_tipo_mineral').textContent = prog.tipo_mineral ?? '-';
+            document.getElementById('show_frente').textContent = detalle.frente ?? '-';
+            document.getElementById('show_razon_social').textContent = prog.razon_social_transporte ?? '-';
+            document.getElementById('show_ruc').textContent = prog.ruc_transporte ?? '-';
+            document.getElementById('show_conductor').textContent = prog.apellidos_conductor ?? '-';
+            document.getElementById('show_telefono').textContent = prog.telefono_conductor ?? '-';
+            document.getElementById('show_cuenta_banco').textContent = prog.cuenta_banco ?? '-';
+            document.getElementById('show_banco').textContent = prog.banco ?? '-';
 
-                    // Información de Tisur
-                    if (data.tisur) {
-                        document.getElementById('show_numero_ticket').textContent = data.tisur.numero_ticket || '--';
-                        document.getElementById('show_fecha_hora_ingreso').textContent = data.tisur.fecha_hora_ingreso || '--';
-                        document.getElementById('show_peso_neto').textContent = data.tisur.peso_neto || '--';
-                    }
+            // Expediente
+            document.getElementById('show_tisur').textContent = expediente.tisur?.numero_ticket ?? '-';
+            document.getElementById('show_fecha_carga').textContent = expediente.fecha_carga ?? '-';
+            document.getElementById('show_fecha_pago').textContent = expediente.fecha_pago ?? '-';
+            document.getElementById('show_total').textContent = expediente.total ?? '-';
+            document.getElementById('show_detraccion').textContent = expediente.detraccion ?? '-';
+            document.getElementById('show_deposito').textContent = expediente.deposito_a_proveer ?? '-';
+            document.getElementById('show_factura').textContent = expediente.numero_factura_exped ?? '-';
+            document.getElementById('show_comentarios').textContent = expediente.comentarios ?? '-';
 
-                    // Información del frente (detalle programación)
-                    if (data.programacion && data.programacion.detalle_programacion) {
-                        document.getElementById('show_frente').textContent = data.programacion.detalle_programacion.frente || '--';
-                        document.getElementById('show_precio_frente').textContent = data.programacion.detalle_programacion.precio_frente || '--';
-                        document.getElementById('show_precio_tn').textContent = data.programacion.detalle_programacion.precio_tn || '--';
-                    }
-
-                    // Mostrar el modal
-                    const modal = new bootstrap.Modal(document.getElementById('modalShowExpediente'));
-                    modal.show();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error al cargar los datos del expediente');
+            // Archivos
+            const archivosDiv = document.getElementById('show_archivos');
+            archivosDiv.innerHTML = '';
+            if (expediente.archivo && Array.isArray(JSON.parse(expediente.archivo))) {
+                JSON.parse(expediente.archivo).forEach(file => {
+                    const link = document.createElement('a');
+                    link.href = `/storage/${file}`;
+                    link.target = '_blank';
+                    link.textContent = file.split('/').pop();
+                    link.classList.add('d-block');
+                    archivosDiv.appendChild(link);
                 });
-        }
-    };
-});
+            } else {
+                archivosDiv.textContent = 'Sin archivos adjuntos.';
+            }
+
+            // Mostrar modal
+            new bootstrap.Modal(document.getElementById('showExpedienteModal')).show();
+        })
+        .catch(error => console.error("❌ Error al cargar expediente:", error));
+}
 </script>

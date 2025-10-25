@@ -1,283 +1,187 @@
-<div class="modal fade" id="modalCreateExpediente" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+<!-- Modal Crear Expediente -->
+<div class="modal fade" id="createExpedienteModal" tabindex="-1" aria-labelledby="createExpedienteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
         <form action="{{ route('expediente.store') }}" method="POST" class="modal-content" enctype="multipart/form-data">
             @csrf
 
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Nuevo Expediente</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="createExpedienteModalLabel">
+                    <i class="ri-file-add-line"></i> Registrar Expediente
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
 
-            <div class="modal-body row g-3">
-
-                {{-- === AUTOCOMPLET DE GUIA REMISION (PROGRAMACIÓN) === --}}
-                <div class="col-md-6 position-relative">
-                    <label class="form-label">Guía de Remisión</label>
-                    <input type="text" id="programacion_search" class="form-control" placeholder="Buscar guía..." autocomplete="off">
+            <div class="modal-body">
+                <!-- === Datos base del Programacion === -->
+                <h6 class="text-primary mb-3">📋 Datos de la Programación</h6>
+                <div class="row g-3">
                     <input type="hidden" name="programacion_id" id="programacion_id">
-                    <div id="programacion_suggestions" class="list-group position-absolute w-100" style="z-index:1055; display:none;"></div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">N° Guía Remisión</label>
+                        <input type="text" id="guia_remision" class="form-control" readonly>
+                        <input type="hidden" name="guia_remision" id="guia_remision_hidden">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Placa Tracto</label>
+                        <input type="text" id="placa_tracto" class="form-control" readonly>
+                        <input type="hidden" name="placa_tracto" id="placa_tracto_hidden">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Tipo Mineral</label>
+                        <input type="text" id="tipo_mineral" class="form-control" readonly>
+                        <input type="hidden" name="tipo_mineral" id="tipo_mineral_hidden">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Frente</label>
+                        <input type="text" class="form-control" id="frente" readonly>
+                        <input type="hidden" name="frente" id="frente_hidden">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Razón Social</label>
+                        <input type="text" class="form-control" id="razon_social" readonly>
+                        <input type="hidden" name="razon_social_transporte" id="razon_social_hidden">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">RUC</label>
+                        <input type="text" class="form-control" id="ruc" readonly>
+                        <input type="hidden" name="ruc_transporte" id="ruc_hidden">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Conductor</label>
+                        <input type="text" class="form-control" id="apellidos_conductor" readonly>
+                        <input type="hidden" name="apellidos_conductor" id="apellidos_conductor_hidden">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" class="form-control" id="telefono" readonly>
+                        <input type="hidden" name="telefono_conductor" id="telefono_hidden">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Cuenta Banco</label>
+                        <input type="text" class="form-control" id="cuenta_banco" readonly>
+                        <input type="hidden" name="cuenta_banco" id="cuenta_banco_hidden">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Banco</label>
+                        <input type="text" class="form-control" id="banco" readonly>
+                        <input type="hidden" name="banco" id="banco_hidden">
+                    </div>
                 </div>
 
-                {{-- === DATOS AUTOMÁTICOS DE PROGRAMACIÓN === --}}
-                <div class="col-md-3">
-                    <label class="form-label">Placa Tracto</label>
-                    <input type="text" id="placa_tracto" class="form-control" readonly>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Placa Carreta</label>
-                    <input type="text" id="placa_carreta" class="form-control" readonly>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Razón Social Empresa</label>
-                    <input type="text" id="razon_social_empresa" class="form-control" readonly>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">RUC</label>
-                    <input type="text" id="ruc" class="form-control" readonly>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Guía Transportista</label>
-                    <input type="text" id="guia_transportista" class="form-control" readonly>
-                </div>
+                <hr class="my-4">
 
-                <hr class="mt-3 mb-3">
+                <!-- === Datos de Expediente === -->
+                <h6 class="text-primary mb-3">📑 Datos del Expediente</h6>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Número de Ticket (Tisur)</label>
+                        <select name="tisur_id" id="tisur_id" class="form-select" required>
+                            <option value="">-- Seleccione un ticket --</option>
+                            @foreach($tisurs as $tisur)
+                                <option value="{{ $tisur->id }}">{{ $tisur->numero_ticket }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                {{-- === SELECT DE NÚMERO DE TICKET (TISUR) === --}}
-                <div class="col-md-6">
-                    <label class="form-label">Número de Ticket (Tisur)</label>
-                    <select name="tisur_id" id="tisur_id" class="form-select" required>
-                        <option value="">-- Seleccione un ticket --</option>
-                        @foreach ($tisurs as $tisur)
-                            <option value="{{ $tisur->id }}">{{ $tisur->numero_ticket }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Fecha de Carga</label>
+                        <input type="date" name="fecha_carga" class="form-control">
+                    </div>
 
-                {{-- === DATOS AUTOMÁTICOS DE TISUR === --}}
-                <div class="col-md-3">
-                    <label class="form-label">Fecha Ingreso</label>
-                    <input type="text" id="fecha_hora_ingreso" class="form-control" readonly>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Peso Neto (U)</label>
-                    <input type="number" id="peso_neto" class="form-control" readonly>
-                </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Fecha de Pago</label>
+                        <input type="date" name="fecha_pago" class="form-control">
+                    </div>
 
-                <hr class="mt-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Total</label>
+                        <input type="number" step="0.01" name="total" class="form-control">
+                    </div>
 
-                {{-- === SELECT DE FRENTE (DETALLE PROGRAMACIÓN) === --}}
-                <div class="col-md-6">
-                    <label class="form-label">Frente</label>
-                    <select name="detalle_programacion_id" id="detalle_programacion_id" class="form-select" required>
-                        <option value="">-- Seleccione un frente --</option>
-                        @foreach ($detalles as $detalle)
-                            <option value="{{ $detalle->id }}">{{ $detalle->frente }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Detracción</label>
+                        <input type="number" step="0.01" name="detraccion" class="form-control">
+                    </div>
 
-                {{-- === DATOS AUTOMÁTICOS DE FRENTE === --}}
-                <div class="col-md-3">
-                    <label class="form-label">Precio Frente</label>
-                    <input type="text" id="precio_frente" class="form-control" readonly>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Precio TN (V)</label>
-                    <input type="number" id="precio_tn" class="form-control" readonly>
-                </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Depósito a Proveer</label>
+                        <input type="number" step="0.01" name="deposito_a_proveer" class="form-control">
+                    </div>
 
-                <hr class="mt-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">N° Factura</label>
+                        <input type="text" name="numero_factura_exped" class="form-control">
+                    </div>
 
-                {{-- === CAMPOS CALCULADOS === --}}
-                <div class="col-md-3">
-                    <label class="form-label">Estado Pago Detracción (Y)</label>
-                    <select id="estado_pago_detraccion" class="form-select">
-                        <option value="Pagado">Pagado</option>
-                        <option value="No Pagado">No Pagado</option>
-                    </select>
-                </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Archivo (PDF / Imagen / Word)</label>
+                        <input type="file" name="archivo[]" class="form-control" multiple>
+                    </div>
 
-                <div class="col-md-3">
-                    <label class="form-label">Total (W)</label>
-                    <input type="number" step="0.01" name="total" id="total" class="form-control" readonly>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Detracción (X)</label>
-                    <input type="number" step="0.01" name="detraccion" id="detraccion" class="form-control" readonly>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Total + Detracción (Z)</label>
-                    <input type="number" step="0.01" id="total_con_detraccion" class="form-control" readonly>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Depósito a Proveer (AA)</label>
-                    <input type="number" step="0.01" name="deposito_a_proveer" id="deposito_a_proveer" class="form-control" readonly>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Fecha de Pago</label>
-                    <input type="date" name="fecha_pago" class="form-control">
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Archivo (PDF, JPG, DOCX...)</label>
-                    <input type="file" name="archivo" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
-                </div>
-
-                <div class="col-md-12">
-                    <label class="form-label">Comentarios</label>
-                    <textarea name="comentarios" class="form-control" rows="2"></textarea>
+                    <div class="col-12">
+                        <label class="form-label">Comentarios</label>
+                        <textarea name="comentarios" class="form-control" rows="2"></textarea>
+                    </div>
                 </div>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="submit" class="btn btn-success">Guardar Expediente</button>
             </div>
         </form>
     </div>
 </div>
 
+<!-- === Script para cargar datos desde Programación === -->
 <script>
+function cargarDatosExpediente(id) {
+    fetch(`/programacion/${id}`)
+        .then(response => {
+            if (!response.ok) throw new Error("Error al obtener los datos de la programación");
+            return response.json();
+        })
+        .then(programacion => {
+            console.log("✅ Datos recibidos:", programacion);
 
-document.addEventListener('DOMContentLoaded', function() {
+            const detalle = programacion.detalle_programacion ?? {};
+            const frenteValue = detalle.frente ?? '';
 
-    let valorAdelanto = 500; // 🔹 Simulado (BUSCARV de hoja Adelantos)
+            // Asignación de valores a los campos visibles
+            document.getElementById('programacion_id').value = programacion.id ?? '';
+            document.getElementById('guia_remision').value = programacion.guia_remision ?? '';
+            document.getElementById('placa_tracto').value = programacion.placa_tracto ?? '';
+            document.getElementById('tipo_mineral').value = programacion.tipo_mineral ?? '';
+            document.getElementById('frente').value = frenteValue;
+            document.getElementById('razon_social').value = programacion.razon_social_transporte ?? '';
+            document.getElementById('ruc').value = programacion.ruc_transporte ?? '';
+            document.getElementById('apellidos_conductor').value = programacion.apellidos_conductor ?? '';
+            document.getElementById('telefono').value = programacion.telefono_conductor ?? '';
+            document.getElementById('cuenta_banco').value = programacion.cuenta_banco ?? '';
+            document.getElementById('banco').value = programacion.banco ?? '';
 
-    const pesoNeto = document.getElementById('peso_neto');
-    const precioTN = document.getElementById('precio_tn');
-    const estadoPago = document.getElementById('estado_pago_detraccion');
-    const total = document.getElementById('total');
-    const detraccion = document.getElementById('detraccion');
-    const totalConDetraccion = document.getElementById('total_con_detraccion');
-    const deposito = document.getElementById('deposito_a_proveer');
-
-    function recalcular() {
-        const peso = parseFloat(pesoNeto.value) || 0;
-        const precio = parseFloat(precioTN.value) || 0;
-        const estado = estadoPago.value;
-
-        const totalCalc = precio * peso;             // W
-        const detracCalc = totalCalc * 0.04;         // X
-        const totalDetr = (estado === 'No Pagado') 
-                            ? (totalCalc - detracCalc)
-                            : totalCalc;             // Z
-        const depositoCalc = totalDetr - valorAdelanto; // AA
-
-        total.value = totalCalc.toFixed(2);
-        detraccion.value = detracCalc.toFixed(2);
-        totalConDetraccion.value = totalDetr.toFixed(2);
-        deposito.value = depositoCalc.toFixed(2);
-    }
-
-    // === Eventos de recalculo ===
-    pesoNeto.addEventListener('input', recalcular);
-    precioTN.addEventListener('input', recalcular);
-    estadoPago.addEventListener('change', recalcular);
-
-    // === Cargar datos dinámicos ===
-    document.getElementById('programacion_id').addEventListener('change', function() {
-        const id = this.value;
-        if (id) {
-            fetch(`/expediente/programacion/${id}`)
-                .then(r => r.json())
-                .then(d => {
-                    document.getElementById('placa_tracto').value = d.placa_tracto ?? '';
-                    document.getElementById('placa_carreta').value = d.placa_carreta ?? '';
-                    document.getElementById('razon_social_empresa').value = d.razon_social_transporte ?? '';
-                    document.getElementById('ruc').value = d.ruc_transporte ?? '';
-                    document.getElementById('guia_transportista').value = d.guia_transportista ?? '';
-                });
-        }
-    });
-
-    document.getElementById('tisur_id').addEventListener('change', function() {
-        const id = this.value;
-        if (id) {
-            fetch(`/expediente/tisur/${id}`)
-                .then(r => r.json())
-                .then(d => {
-                    document.getElementById('fecha_hora_ingreso').value = d.fecha_hora_ingreso ?? '';
-                    document.getElementById('peso_neto').value = d.peso_neto ?? '';
-                    recalcular();
-                });
-        }
-    });
-
-    document.getElementById('detalle_programacion_id').addEventListener('change', function() {
-        const id = this.value;
-        if (id) {
-            fetch(`/expediente/detalle/${id}`)
-                .then(r => r.json())
-                .then(d => {
-                    document.getElementById('precio_frente').value = d.precio_frente ?? '';
-                    document.getElementById('precio_tn').value = d.precio_tn ?? '';
-                    recalcular();
-                });
-        }
-    });
-});
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const input = document.getElementById('programacion_search');
-    const hidden = document.getElementById('programacion_id');
-    const suggestions = document.getElementById('programacion_suggestions');
-
-    let timeout = null;
-
-    input.addEventListener('input', function() {
-        const query = this.value.trim();
-        hidden.value = ''; // limpiamos el ID
-
-        if (query.length < 2) {
-            suggestions.style.display = 'none';
-            return;
-        }
-
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            fetch(`/programaciones/search?q=${encodeURIComponent(query)}`)
-                .then(res => res.json())
-                .then(data => {
-                    suggestions.innerHTML = '';
-                    if (data.length === 0) {
-                        suggestions.style.display = 'none';
-                        return;
-                    }
-
-                    data.forEach(item => {
-                        const div = document.createElement('div');
-                        div.classList.add('list-group-item', 'list-group-item-action');
-                        div.textContent = item.guia_remision;
-                        div.addEventListener('click', () => {
-                            input.value = item.guia_remision;
-                            hidden.value = item.id;
-                            suggestions.style.display = 'none';
-                            // autollenar los campos relacionados
-                            document.getElementById('placa_tracto').value = item.placa_tracto || '';
-                            document.getElementById('placa_carreta').value = item.placa_carreta || '';
-                            document.getElementById('razon_social_empresa').value = item.razon_social_transporte || '';
-                            document.getElementById('ruc').value = item.ruc_transporte || '';
-                            document.getElementById('guia_transportista').value = item.guia_transportista || '';
-                        });
-                        suggestions.appendChild(div);
-                    });
-
-                    suggestions.style.display = 'block';
-                });
-        }, 300); // retraso de 300 ms para evitar exceso de peticiones
-    });
-
-    // Ocultar sugerencias si se hace clic fuera
-    document.addEventListener('click', function(e) {
-        if (!suggestions.contains(e.target) && e.target !== input) {
-            suggestions.style.display = 'none';
-        }
-    });
-});
+            // Asignación de valores a los hidden
+            document.getElementById('guia_remision_hidden').value = programacion.guia_remision ?? '';
+            document.getElementById('placa_tracto_hidden').value = programacion.placa_tracto ?? '';
+            document.getElementById('tipo_mineral_hidden').value = programacion.tipo_mineral ?? '';
+            document.getElementById('frente_hidden').value = frenteValue;
+            document.getElementById('razon_social_hidden').value = programacion.razon_social_transporte ?? '';
+            document.getElementById('ruc_hidden').value = programacion.ruc_transporte ?? '';
+            document.getElementById('apellidos_conductor_hidden').value = programacion.apellidos_conductor ?? '';
+            document.getElementById('telefono_hidden').value = programacion.telefono_conductor ?? '';
+            document.getElementById('cuenta_banco_hidden').value = programacion.cuenta_banco ?? '';
+            document.getElementById('banco_hidden').value = programacion.banco ?? '';
+        })
+        .catch(error => console.error("❌ Error al cargar datos:", error));
+}
 </script>

@@ -12,44 +12,53 @@ class ExpedienteController extends Controller
 {
     public function show($id)
     {
-        $expediente = Expediente::findOrFail($id);
-        
-        // Cargar datos relacionados manualmente
-        $data = [
-            'id' => $expediente->id,
-            'numero_factura_exped' => $expediente->numero_factura_exped,
-            'total' => $expediente->total,
-            'detraccion' => $expediente->detraccion,
-            'deposito_a_proveer' => $expediente->deposito_a_proveer,
-            'fecha_pago' => $expediente->fecha_pago,
-            'archivo' => $expediente->archivo,
-            'comentarios' => $expediente->comentarios,
-            'fecha_carga' => $expediente->fecha_carga,
-            // Datos de programación
-            'programacion' => $expediente->programacion ? [
-                'guia_remision' => $expediente->programacion->guia_remision,
-                'placa_tracto' => $expediente->programacion->placa_tracto,
-                'placa_carreta' => $expediente->programacion->placa_carreta,
-                'razon_social_transporte' => $expediente->programacion->razon_social_transporte,
-                'ruc_transporte' => $expediente->programacion->ruc_transporte,
-                'guia_transportista' => $expediente->programacion->guia_transportista,
-                'detalle_programacion' => $expediente->programacion->detalleProgramacion ? [
-                    'frente' => $expediente->programacion->detalleProgramacion->frente,
-                    'precio_frente' => $expediente->programacion->detalleProgramacion->precio_frente,
-                    'precio_tn' => $expediente->programacion->detalleProgramacion->precio_tn,
-                ] : null
-            ] : null,
-            // Datos de tisur
-            'tisur' => $expediente->tisur ? [
-                'numero_ticket' => $expediente->tisur->numero_ticket,
-                'fecha_hora_ingreso' => $expediente->tisur->fecha_hora_ingreso,
-                'peso_neto' => $expediente->tisur->peso_neto,
-            ] : null,
-        ];
+        try {
+            // 🔹 Cargamos el expediente con sus relaciones
+            $expediente = Expediente::with(['programacion.detalleProgramacion', 'tisur'])
+                ->findOrFail($id);
 
-        return response()->json($data);
+            return response()->json([
+                'id' => $expediente->id,
+                'numero_factura_exped' => $expediente->numero_factura_exped,
+                'total' => $expediente->total,
+                'detraccion' => $expediente->detraccion,
+                'deposito_a_proveer' => $expediente->deposito_a_proveer,
+                'fecha_pago' => $expediente->fecha_pago,
+                'archivo' => $expediente->archivo,
+                'comentarios' => $expediente->comentarios,
+                'fecha_carga' => $expediente->fecha_carga,
+
+                // 🔹 Programación relacionada
+                'programacion' => $expediente->programacion ? [
+                    'guia_remision' => $expediente->programacion->guia_remision,
+                    'placa_tracto' => $expediente->programacion->placa_tracto,
+                    'tipo_mineral' => $expediente->programacion->tipo_mineral,
+                    'razon_social_transporte' => $expediente->programacion->razon_social_transporte,
+                    'ruc_transporte' => $expediente->programacion->ruc_transporte,
+                    'apellidos_conductor' => $expediente->programacion->apellidos_conductor,
+                    'telefono_conductor' => $expediente->programacion->telefono_conductor,
+                    'cuenta_banco' => $expediente->programacion->cuenta_banco,
+                    'banco' => $expediente->programacion->banco,
+                    'detalle_programacion' => $expediente->programacion->detalleProgramacion ? [
+                        'frente' => $expediente->programacion->detalleProgramacion->frente,
+                    ] : null
+                ] : null,
+
+                // 🔹 Tisur relacionado
+                'tisur' => $expediente->tisur ? [
+                    'numero_ticket' => $expediente->tisur->numero_ticket,
+                    'fecha_hora_ingreso' => $expediente->tisur->fecha_hora_ingreso,
+                    'peso_neto' => $expediente->tisur->peso_neto,
+                ] : null,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => 'No se pudo cargar la información del expediente.',
+                'detalle' => $e->getMessage(),
+            ], 500);
+        }
     }
-    
 
 
     public function index()
@@ -86,57 +95,48 @@ class ExpedienteController extends Controller
 
         return view('expediente.partials.edit-form', compact('expediente', 'tisurs', 'detalles'));
     }
+
     public function store(Request $request)
     {
         $request->validate([
             'programacion_id' => 'required|exists:programacions,id',
             'tisur_id' => 'required|exists:tisurs,id',
-            'detalle_programacion_id' => 'required|exists:detalle_programacions,id',
-            'archivo' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:2048', // hasta 2MB
-
+            'fecha_carga' => 'nullable|date',
+            'fecha_pago' => 'nullable|date',
+            'total' => 'nullable|numeric|min:0',
+            'detraccion' => 'nullable|numeric|min:0',
+            'deposito_a_proveer' => 'nullable|numeric|min:0',
+            'numero_factura_exped' => 'nullable|string|max:255',
+            'comentarios' => 'nullable|string',
+            'archivo.*' => 'nullable|file|max:10240',
         ]);
 
-        // Buscar los modelos asociados
-        $programacion = Programacion::findOrFail($request->programacion_id);
-        $tisur = Tisur::findOrFail($request->tisur_id);
-        $detalle = DetalleProgramacion::findOrFail($request->detalle_programacion_id);
+        // 🔹 Crea solo los campos propios del expediente
+        $expediente = Expediente::create([
+            'programacion_id' => $request->programacion_id,
+            'tisur_id' => $request->tisur_id,
+            'fecha_carga' => $request->fecha_carga,
+            'fecha_pago' => $request->fecha_pago,
+            'total' => $request->total,
+            'detraccion' => $request->detraccion,
+            'deposito_a_proveer' => $request->deposito_a_proveer,
+            'numero_factura_exped' => $request->numero_factura_exped,
+            'comentarios' => $request->comentarios,
+        ]);
 
-        // === Crear el expediente ===
-        $expediente = new Expediente();
-        $expediente->programacion_id = $programacion->id;
-        $expediente->tisur_id = $tisur->id;
-
-        $expediente->fecha_carga = $tisur->fecha_hora_ingreso ?? null;
-        $expediente->numero_factura_exped = $request->numero_factura_exped;
-        $expediente->total = $request->total ?? 0;
-        $expediente->detraccion = $request->detraccion ?? 0;
-        $expediente->deposito_a_proveer = $request->deposito_a_proveer ?? 0;        
-        $expediente->fecha_pago = $request->fecha_pago ?? null;
-        $expediente->comentarios = $request->comentarios ?? null;
-
-        // === GUARDAR ARCHIVO ===
+        // 🔹 Manejo de archivos (opcional)
         if ($request->hasFile('archivo')) {
-            $file = $request->file('archivo');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('expedientes', $filename, 'public');
-            $expediente->archivo = $path; // se guarda la ruta relativa
+            $archivos = [];
+            foreach ($request->file('archivo') as $file) {
+                $path = $file->store('expedientes', 'public');
+                $archivos[] = $path;
+            }
+            $expediente->archivo = json_encode($archivos);
+            $expediente->save();
         }
 
-        $expediente->save();
-
-        // === Actualizar datos del Tisur relacionado ===
-        $tisur->update([
-            'primer_peso' => $tisur->primer_peso ?? $request->primer_peso,
-            'segundo_peso' => $tisur->segundo_peso ?? $request->segundo_peso,
-            'peso_neto' => $tisur->peso_neto ?? $request->peso_neto,
-            'factura_tisur' => $request->numero_factura_exped ?? $tisur->factura_tisur,
-            'fecha_pago' => $request->fecha_pago ?? $tisur->fecha_pago,
-            'estado' => 'Procesado', // ejemplo de cambio de estado
-        ]);
-
-        return redirect()
-            ->route('expediente.index')
-            ->with('success', 'Expediente registrado y datos de Tisur actualizados correctamente.');
+        return redirect()->route('expediente.index')
+            ->with('success', 'Expediente registrado correctamente.');
     }
 
     public function update(Request $request, Expediente $expediente)

@@ -41,6 +41,8 @@ Route::middleware(['auth'])->group(function () {
 
         // Buscadores
         Route::get('/programaciones/search', [ExpedienteController::class, 'buscarProgramacion'])->name('programaciones.search');
+        Route::get('/programacion/{id}', [ProgramacionController::class, 'showJson']);
+
         //Route::get('/tisurs/search', [ExpedienteController::class, 'buscarTisur'])->name('tisurs.search');
         //Route::get('/detalles/search', [ExpedienteController::class, 'buscarDetalle'])->name('detalles.search');
 
@@ -64,6 +66,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/expediente/programacion/{id}', [ExpedienteController::class, 'getProgramacion'])->name('expediente.getProgramacion');
         Route::get('/expediente/tisur/{id}', [ExpedienteController::class, 'getTisur']);
         Route::get('/expediente/detalle/{id}', [ExpedienteController::class, 'getDetalle']);
+        Route::get('/expediente/{id}', [ExpedienteController::class, 'show'])->name('expediente.show');
+
 
 
         //  Seguimiento
