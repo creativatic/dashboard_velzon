@@ -30,7 +30,6 @@
                     <th>Teléfono</th>
                     <th>N° Ticket</th>
                     <th>Notas</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,23 +60,6 @@
                         <td>{{ $programacion->telefono_conductor ?? '-' }}</td>
                         <td>{{ $numero_ticket }}</td>
                         <td>{{ $seguimiento->notas ?? 'Sin notas' }}</td>
-                        <td>
-                            @if($seguimiento)
-                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#modalEditSeguimiento{{ $seguimiento->id }}">
-                                    <i class="ri-edit-2-line"></i>
-                                </button>
-                                @include('seguimientos.edit', ['seguimiento' => $seguimiento])
-                            @else
-                                <form action="{{ route('seguimientos.store') }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    <input type="hidden" name="programacion_id" value="{{ $programacion->id }}">
-                                    <button type="submit" class="btn btn-success btn-sm">
-                                        <i class="ri-add-line"></i> Crear
-                                    </button>
-                                </form>
-                            @endif
-                        </td>
                     </tr>
                 @empty
                     <tr>
