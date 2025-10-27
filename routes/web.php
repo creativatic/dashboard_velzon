@@ -67,6 +67,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/expediente/tisur/{id}', [ExpedienteController::class, 'getTisur']);
         Route::get('/expediente/detalle/{id}', [ExpedienteController::class, 'getDetalle']);
         Route::get('/expediente/{id}', [ExpedienteController::class, 'show'])->name('expediente.show');
+        Route::get('/expediente/{id}/edit', [ExpedienteController::class, 'edit'])->name('expediente.edit');
+        Route::get('/expediente/precio-tn', [ExpedienteController::class, 'getPrecioTn']);
 
 
 

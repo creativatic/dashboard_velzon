@@ -93,13 +93,23 @@ class ExpedienteController extends Controller
 
         return view('expediente.create', compact('programacions', 'tisurs'));
     }
+
     public function edit($id)
     {
-        $expediente = Expediente::with(['programacion', 'tisur'])->findOrFail($id);
+        $expediente = Expediente::with([
+            'programacion.detalleProgramacion',
+            'tisur'
+        ])->findOrFail($id);
+
+        // 🔹 Si es una petición AJAX o fetch(), devolvemos JSON
+        if (request()->ajax()) {
+            return response()->json($expediente);
+        }
+
         $tisurs = Tisur::all();
         $detalles = DetalleProgramacion::all();
 
-        return view('expediente.partials.edit-form', compact('expediente', 'tisurs', 'detalles'));
+        return view('expediente.edit', compact('expediente', 'tisurs', 'detalles'));
     }
 
     public function store(Request $request)
@@ -222,7 +232,7 @@ class ExpedienteController extends Controller
 
     public function getProgramacion($id)
     {
-        $programacion = Programacion::findOrFail($id);
+        $programacion = Programacion::with('detalleProgramacion')->findOrFail($id);
 
         return response()->json([
             'placa_tracto' => $programacion->placa_tracto,
@@ -238,19 +248,65 @@ class ExpedienteController extends Controller
             'banco' => $programacion->banco,
             'tipo_mineral' => $programacion->tipo_mineral,
             'guia_transportista' => $programacion->guia_transportista,
+
+            // 👇 Se recomienda usar el nombre exacto de la relación si quieres devolverla completa:
+            'detalle_programacion' => $programacion->detalleProgramacion,
+            
+            // Opcional: Para simplificar la lectura en JS, puedes extraer los campos del detalle aquí:
+            'frente' => $programacion->detalleProgramacion->frente ?? null,
+            'precio_frente' => $programacion->detalleProgramacion->precio_frente ?? null,
+            'precio_tn' => $programacion->detalleProgramacion->precio_tn ?? null,
         ]);
     }
 
     public function getTisur($id)
     {
+        // Busca el ticket Tisur
         $tisur = Tisur::findOrFail($id);
-        return response()->json($tisur);
+        
+        // Devolvemos solo los datos del Tisur
+        return response()->json([
+            'numero_ticket' => $tisur->numero_ticket ?? null,
+            'fecha_hora_ingreso' => $tisur->fecha_hora_ingreso ?? null,
+            'peso_neto' => $tisur->peso_neto ?? null,
+        ]);
     }
 
     public function getDetalle($id)
     {
         $detalle = DetalleProgramacion::findOrFail($id);
         return response()->json($detalle);
+    }
+
+    public function getPrecioTn(Request $request)
+    {
+        $programacionId = $request->get('programacion_id');
+        $frente = $request->get('frente');
+
+        if (!$programacionId || !$frente) {
+            return response()->json(['precio_tn' => null]);
+        }
+
+        // Buscamos el detalle de programación que coincida con el Frente
+        // y que esté asociado a la Programación (Programacion.detalle_programacion_id)
+        $programacion = Programacion::with('detalleProgramacion')->find($programacionId);
+
+        $precio_tn = null;
+
+        if ($programacion && $programacion->detalleProgramacion) {
+            $detalle = $programacion->detalleProgramacion;
+            
+            // Asumiendo que Programacion.detalle_programacion_id apunta al DetalleProgramacion correcto,
+            // Y que ese DetalleProgramacion ya contiene el precio para el Frente correcto (como en la lógica original)
+            // Opcional: Podrías añadir una validación extra aquí si el modelo DetalleProgramacion también tiene el campo 'frente'
+            if ($detalle->frente == $frente) {
+                $precio_tn = $detalle->precio_tn;
+            }
+        }
+        
+        return response()->json([
+            'precio_tn' => $precio_tn,
+        ]);
     }
 
     public function buscarProgramacion(Request $request)
@@ -265,4 +321,11 @@ class ExpedienteController extends Controller
         return response()->json($programaciones);
     }
 
+    public function getExpedienteData($id)
+    {
+        $expediente = Expediente::with(['programacion.detalleProgramacion', 'tisur'])->findOrFail($id);
+        return response()->json($expediente);
+    }
+
+    
 }
