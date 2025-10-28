@@ -29,6 +29,7 @@
                     <th>Conformidad Adelanto</th>
                     <th>Monto Adelanto (S/)</th>
                     <th>Fecha de Pago Adelanto</th>
+                    <th>Fecha de Pago Expediente</th>
                     <th>Notas</th>
                     <th>Acciones</th>
                 </tr>
@@ -65,6 +66,7 @@
                                 <span class="text-muted">-</span>
                             @endif
                         </td>
+                        <td class="text-start">{{ $programacion->expediente->fecha_pago ?? '-' }}</td>
                         <td class="text-start">{{ $programacion->notas ?? '-' }}</td>
                         <td>
                             {{-- ✅ BOTÓN EDITAR CON ONCLICK --}}

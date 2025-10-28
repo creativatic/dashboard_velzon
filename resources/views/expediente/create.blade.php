@@ -108,18 +108,13 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Fecha de Carga</label>
-                        <input type="date" name="fecha_carga" class="form-control">
+                        <label class="form-label">Fecha de Ingreso Tisur</label>
+                        <input type="date" name="fecha_hora_ingreso" class="form-control">
                     </div>
                     
                     <div class="col-md-4">
                         <label class="form-label">Fecha de Pago</label>
                         <input type="date" name="fecha_pago" class="form-control">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Fecha de Ingreso</label>
-                        <input type="date" name="fecha_hora_ingreso" class="form-control">
                     </div>
 
                      <div class="col-md-4">

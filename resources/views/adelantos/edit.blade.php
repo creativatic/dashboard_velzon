@@ -26,9 +26,15 @@
                     <input type="number" id="edit_monto_adelanto" class="form-control" readonly>
                 </div>
 
-                {{-- Fecha de pago --}}
+                {{-- Fecha de pago Adelanto --}}
                 <div class="mb-3">
-                    <label for="edit_fecha_pago_adelantos" class="form-label">Fecha de Pago</label>
+                    <label for="edit_fecha_pago_adelantos" class="form-label">Fecha de Pago Adelanto</label>
+                    <input type="date" name="fecha_pago_adelantos" id="edit_fecha_pago_adelantos" class="form-control">
+                </div>
+                
+                {{-- Fecha de pago Expediente --}}
+                <div class="mb-3">
+                    <label for="edit_fecha_pago_adelantos" class="form-label">Fecha de Pago Expediente</label>
                     <input type="date" name="fecha_pago_adelantos" id="edit_fecha_pago_adelantos" class="form-control">
                 </div>
 
