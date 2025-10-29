@@ -300,23 +300,28 @@
             <div id="scrollbar">
                 <div class="container-fluid">
 
-                    <div id="two-column-menu">
-                    </div>
+                    <div id="two-column-menu"></div>
+
                     <ul class="navbar-nav" id="navbar-nav">
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
 
+                        {{-- ===== Dashboard visible según permiso ===== --}}
                         @can('ver dashboard')
                         <li class="nav-item">
-                            <a class="nav-link menu-link {{ request()->is('dashboard*') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                                <i class="ri-dashboard-2-line"></i> <span>Dashboard</span>
+                            <a class="nav-link menu-link {{ request()->is('dashboard*') ? 'active' : '' }}" 
+                                href="{{ route('dashboard') }}">
+                                <i class="ri-dashboard-2-line"></i> 
+                                <span>Dashboard</span>
                             </a>
                         </li>
                         @endcan
 
 
-                        @role('Administrador')
+                        {{-- ===== SOLO Super Administrador ===== --}}
+                        @role('Super Administrador')
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarUsuarios" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUsuarios">
+                            <a class="nav-link menu-link" href="#sidebarUsuarios" data-bs-toggle="collapse" role="button" 
+                            aria-expanded="false" aria-controls="sidebarUsuarios">
                                 <i class="ri-group-line"></i> 
                                 <span data-key="t-usuarios">Usuarios</span>
                             </a>
@@ -340,34 +345,38 @@
                                 </ul>
                             </div>
                         </li>
+                        @endrole
+
+
+                        {{-- ===== Opciones visibles para todos los roles con permiso ===== --}}
+                        @can('ver dashboard')
                         <li class="nav-item">
                             <a class="nav-link menu-link {{ request()->is('personas*') ? 'active' : '' }}"
-                            href="{{ route('personas.index') }}">
+                                href="{{ route('personas.index') }}">
                                 <i class="ri-user-3-line"></i>
                                 <span data-key="t-personal">Personal</span>
                             </a>
                         </li>
-                        <!-- ===== EPPs ===== -->
+
                         <li class="nav-item">
                             <a class="nav-link menu-link {{ request()->is('epps*') ? 'active' : '' }}"
-                            href="{{ route('epps.index') }}">
+                                href="{{ route('epps.index') }}">
                                 <i class="ri-shield-check-line"></i>
                                 <span data-key="t-epps">EPPs</span>
                             </a>
                         </li>
 
-                        <!-- ===== ENTREGAS DE EPPs   ===== -->
                         <li class="nav-item">
-                            <a class="nav-link menu-link {{ request()->is('entregas*') ? 'active' : '' }}" href="{{ route('entregas.index') }}">
+                            <a class="nav-link menu-link {{ request()->is('entregas*') ? 'active' : '' }}" 
+                                href="{{ route('entregas.index') }}">
                                 <i class="ri-hand-coin-line"></i>
                                 <span data-key="t-entregas">Entrega de EPPs</span>
                             </a>
-                        </li>    
-
-                        @endrole
-                        
+                        </li>
+                        @endcan
                     </ul>
                 </div>
+
                 <!-- Sidebar -->
             </div>
 

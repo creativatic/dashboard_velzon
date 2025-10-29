@@ -7,13 +7,13 @@
 @include('entregas.edit')
 @include('entregas.show')
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+<div class="container">
+
         <h1>Entrega de EPPs</h1>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createEntregaModal">
+        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createEntregaModal">
             <i class="ri-add-circle-line"></i> Nueva entrega
         </button>
-    </div>
+
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -22,7 +22,7 @@
     @endif
 
     <table class="table table-bordered table-striped align-middle">
-        <thead class="table-success">
+        <thead class="table-dark">
             <tr>
                 <th>Persona</th>
                 <th>EPP</th>

@@ -11,10 +11,10 @@ class RolesAndPermissionsSeeder extends Seeder
 {
     public function run(): void
     {
-        // Limpieza previa
+        // 🔄 Limpiar caché de permisos y roles
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // 🔹 Crear permisos (puedes ampliar esta lista más adelante)
+        // 🔹 Crear permisos base (puedes ampliar esta lista más adelante)
         $permissions = [
             'ver dashboard',
             'gestionar usuarios',
@@ -27,28 +27,32 @@ class RolesAndPermissionsSeeder extends Seeder
         }
 
         // 🔹 Crear roles
+        $superAdmin = Role::firstOrCreate(['name' => 'Super Administrador']);
         $admin = Role::firstOrCreate(['name' => 'Administrador']);
-        $contador = Role::firstOrCreate(['name' => 'Contador']);
+        $auxiliar = Role::firstOrCreate(['name' => 'Auxiliar']);
 
-        // 🔹 Asignar permisos a cada rol
-        $admin->syncPermissions(Permission::all());
-        $contador->syncPermissions(['ver dashboard']);
+        // 🔹 Asignar permisos por rol
+        $superAdmin->syncPermissions(Permission::all()); // todos los permisos
+        $admin->syncPermissions(['ver dashboard', 'gestionar usuarios']);
+        $auxiliar->syncPermissions(['ver dashboard']);
 
-        // 🔹 Asignar roles a usuarios existentes (si quieres probar)
-        $userAdmin = User::firstOrCreate([
-            'email' => 'Admin@gmail.com',
-        ], [
-            'name' => 'Administrador General',
-            'password' => bcrypt('12345678'),
-        ]);
-        
+        // 🔹 Crear usuarios y asignar roles
+        $userSuper = User::firstOrCreate(
+            ['email' => 'super-admin@gmail.com'],
+            ['name' => 'Super Administrador', 'password' => bcrypt('12345678')]
+        );
+        $userSuper->assignRole('Super Administrador');
+
+        $userAdmin = User::firstOrCreate(
+            ['email' => 'admin@gmail.com'],
+            ['name' => 'Administrador del Sistema', 'password' => bcrypt('12345678')]
+        );
         $userAdmin->assignRole('Administrador');
-        $userContador = User::firstOrCreate([
-            'email' => 'contador@gmail.com',
-        ], [
-            'name' => 'Usuario Contador',
-            'password' => bcrypt('12345678'),
-        ]);
-        $userContador->assignRole('Contador');
+
+        $userAux = User::firstOrCreate(
+            ['email' => 'auxiliar@gmail.com'],
+            ['name' => 'Usuario Auxiliar', 'password' => bcrypt('12345678')]
+        );
+        $userAux->assignRole('Auxiliar');
     }
 }

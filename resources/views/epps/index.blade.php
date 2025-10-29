@@ -6,20 +6,20 @@
 @include('epps.create')
 @include('epps.edit')
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+<div class="container">
+
         <h1>Listado de EPPs</h1>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createEppModal">
+        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createEppModal">
             <i class="ri-add-circle-line"></i> Agregar EPP
         </button>
-    </div>
+
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     <table class="table table-bordered table-striped">
-        <thead class="table-success">
+        <thead class="table-dark">
             <tr>
                 <th>Código</th>
                 <th>Nombre</th>

@@ -1,10 +1,10 @@
 @extends('layouts.plantilla')
 
-@section('title', 'Dashboard de EPPs')
+@section('title', 'Reporte de EPPs')
 
 @section('content')
-<div class="container mt-4">
-    <h1 class="mb-4">Dashboard de Control de EPPs</h1>
+<div class="container">
+    <h1 class="mb-4">Reporte de Control de EPPs</h1>
 
     {{-- 🔍 Buscador por DNI --}}
     <div class="input-group mb-4" style="max-width: 400px;">

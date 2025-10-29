@@ -5,7 +5,7 @@
             @csrf
 
             <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="createEntregaModalLabel">Registrar Entrega de EPP</h5>
+                <h5 class="modal-title text-white mb-3" id="createEntregaModalLabel">Registrar Entrega de EPP</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 

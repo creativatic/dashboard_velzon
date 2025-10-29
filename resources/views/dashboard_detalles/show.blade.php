@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="modalDetallesLabel">Detalles de Entregas de EPP</h5>
+                <h5 class="modal-title text-white mb-3" id="modalDetallesLabel">Detalles de Entregas de EPP</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">

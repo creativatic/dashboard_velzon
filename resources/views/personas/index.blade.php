@@ -5,8 +5,8 @@
 @section('content')
 <div class="container">
     <h1>Listado de Personal</h1>
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createPersonaModal">
-        Agregar Persona
+    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createPersonaModal">
+        <i class="ri-add-circle-line"></i> Agregar Persona
     </button>
 
     <table class="table table-bordered align-middle">

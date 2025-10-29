@@ -5,8 +5,8 @@
             @csrf
             @method('PUT')
 
-            <div class="modal-header bg-warning text-dark">
-                <h5 class="modal-title">Editar Entrega / Registrar Devolución</h5>
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title text-white mb-3">Editar Entrega / Registrar Devolución</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
