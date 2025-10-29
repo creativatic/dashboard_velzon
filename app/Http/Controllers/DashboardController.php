@@ -93,17 +93,39 @@ class DashboardController extends Controller
     }
 
     // DashboardController.php
-public function detalles($personaId, $eppId)
-{
-    $detalles = \DB::table('epp_persona')
-        ->where('persona_id', $personaId)
-        ->where('epp_id', $eppId)
-        ->select('cantidad', 'fecha_entrega', 'fecha_devolucion', 'observacion')
-        ->orderBy('fecha_entrega', 'desc')
-        ->get();
+    public function detalles($personaId, $eppId)
+    {
+        $detalles = \DB::table('epp_persona')
+            ->where('persona_id', $personaId)
+            ->where('epp_id', $eppId)
+            ->select('cantidad', 'fecha_entrega', 'fecha_devolucion', 'observacion')
+            ->orderBy('fecha_entrega', 'desc')
+            ->get();
 
-    return response()->json($detalles);
-}
+        return response()->json($detalles);
+    }
+
+    public function autocompleteDni(Request $request)
+    {
+        $term = $request->get('term');
+
+        $resultados = \App\Models\Persona::where('dni', 'LIKE', "%{$term}%")
+            ->orWhere('nombres', 'LIKE', "%{$term}%")
+            ->select('dni', 'nombres')
+            ->limit(10)
+            ->get();
+
+        // Devolvemos en formato compatible con jQuery UI Autocomplete
+        $sugerencias = $resultados->map(function ($persona) {
+            return [
+                'label' => "{$persona->dni} - {$persona->nombres}",
+                'value' => $persona->dni,
+            ];
+        });
+
+        return response()->json($sugerencias);
+    }
+
 
 
 }
