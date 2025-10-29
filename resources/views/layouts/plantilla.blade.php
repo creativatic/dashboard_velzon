@@ -313,29 +313,6 @@
                         </li>
                         @endcan
 
-                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Components</span></li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUI">
-                                <i class="ri-pencil-ruler-2-line"></i> <span data-key="t-base-ui">Base UI</span>
-                            </a>
-                            <div class="collapse menu-dropdown mega-dropdown-menu" id="sidebarUI">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <ul class="nav nav-sm flex-column">
-                                            <li class="nav-item">
-                                                <a href="ui-alerts.html" class="nav-link" data-key="t-alerts">Alerts</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="ui-badges.html" class="nav-link" data-key="t-badges">Badges</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="ui-buttons.html" class="nav-link" data-key="t-buttons">Buttons</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
 
                         @role('Administrador')
                         <li class="nav-item">
@@ -364,12 +341,29 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link {{ request()->is('programacions*') ? 'active' : '' }}" 
-                            href="{{ route('programacions.index') }}">
-                                <i class="ri-calendar-check-line"></i>
-                                <span data-key="t-programacion">Programación</span>
+                            <a class="nav-link menu-link {{ request()->is('personas*') ? 'active' : '' }}"
+                            href="{{ route('personas.index') }}">
+                                <i class="ri-user-3-line"></i>
+                                <span data-key="t-personal">Personal</span>
                             </a>
                         </li>
+                        <!-- ===== EPPs ===== -->
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->is('epps*') ? 'active' : '' }}"
+                            href="{{ route('epps.index') }}">
+                                <i class="ri-shield-check-line"></i>
+                                <span data-key="t-epps">EPPs</span>
+                            </a>
+                        </li>
+
+                        <!-- ===== ENTREGAS DE EPPs   ===== -->
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->is('entregas*') ? 'active' : '' }}" href="{{ route('entregas.index') }}">
+                                <i class="ri-hand-coin-line"></i>
+                                <span data-key="t-entregas">Entrega de EPPs</span>
+                            </a>
+                        </li>    
+
                         @endrole
                         
                     </ul>

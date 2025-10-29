@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class EntregaEpp extends Model
+{
+    use HasFactory;
+
+    protected $table = 'entrega_epp';
+
+    protected $fillable = [
+        'persona_id',
+        'epp_id',
+        'fecha_entrega',
+        'fecha_devolucion',
+    ];
+
+    public function personas()
+    {
+        return $this->belongsTo(Persona::class);
+    }
+
+    public function epps()
+    {
+        return $this->belongsTo(Epp::class);
+    }
+}

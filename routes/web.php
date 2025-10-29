@@ -11,14 +11,25 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProgramacionController;
+use App\Http\Controllers\PersonaController;
+use App\Http\Controllers\EppController;
+use App\Http\Controllers\EntregaEppController;
 
 Route::middleware(['auth'])->group(function () {
 
+    // Dashboard
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware('permission:ver dashboard')
         ->name('dashboard');
 
+    // Búsqueda por DNI
+    Route::get('/dashboard/buscar/{dni}', [DashboardController::class, 'buscarPorDni'])->name('dashboard.buscar');
+
+    // Detalles de EPP por Persona ID y EPP ID (Usado por JS)
+    // Nota: He cambiado el nombre del parámetro de {persona} a {personaId} para mayor claridad
+    Route::get('/dashboard/detalles/{personaId}/{eppId}', [DashboardController::class, 'detalles'])->name('dashboard.detalles');
+    
     // Perfil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -30,6 +41,19 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('roles', RoleController::class)->except(['show']);
         Route::resource('permissions', PermissionController::class)->except(['show']);
         Route::resource('programacions', ProgramacionController::class)->except(['show']);
+        Route::resource('personas', PersonaController::class);  
+        Route::get('/personas/buscar/{dni}', [PersonaController::class, 'buscar']);
+
+        Route::resource('epps', EppController::class);
+        //Route::get('entregas', [EntregaEppController::class, 'index'])->name('entregas.index');
+        //Route::post('entregas/{persona}/asignar', [EntregaEppController::class, 'asignarEpp'])->name('entregas.asignar');
+        //Route::post('entregas/{persona}/{epp}/devolver', [EntregaEppController::class, 'devolverEpp'])->name('entregas.devolver');
+
+        Route::resource('entregas', EntregaEppController::class)->only(['index', 'store']);
+        Route::put('entregas/{id}/devolver', [EntregaEppController::class, 'devolver'])->name('entregas.devolver');
+        Route::put('entregas/{id}', [EntregaEppController::class, 'update'])->name('entregas.update');
+        Route::get('entregas/{id}', [EntregaEppController::class, 'show'])->name('entregas.show');
+
 
     });
 });
