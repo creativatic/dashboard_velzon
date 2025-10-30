@@ -21,6 +21,7 @@ class EppController extends Controller
             'talla' => 'nullable|string|max:50',
             'categoria' => 'nullable|string|max:100',
             'stock' => 'required|integer|min:0',
+            'unidades_medidas' => 'nullable|string|max:20',
             'descripcion' => 'nullable|string',
             'estado' => 'required|boolean',
         ]);
@@ -28,6 +29,7 @@ class EppController extends Controller
         Epp::create($request->all());
         return redirect()->route('epps.index')->with('success', 'EPP agregado correctamente.');
     }
+
 
     public function update(Request $request, Epp $epp)
     {
@@ -37,6 +39,7 @@ class EppController extends Controller
             'talla' => 'nullable|string|max:50',
             'categoria' => 'nullable|string|max:100',
             'stock' => 'required|integer|min:0',
+            'unidades_medidas' => 'nullable|string|max:20',
             'descripcion' => 'nullable|string',
             'estado' => 'required|boolean',
         ]);

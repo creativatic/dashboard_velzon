@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->string('talla')->nullable();
             $table->string('categoria')->nullable();
             $table->integer('stock')->default(0);
+            $table->string('unidades_medidas')->nullable();
             $table->text('descripcion')->nullable();
             $table->boolean('estado')->default(true);
             $table->timestamps();

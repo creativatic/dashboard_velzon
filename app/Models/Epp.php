@@ -13,6 +13,7 @@ class Epp extends Model
         'nombre',
         'codigo',
         'talla',
+        'unidades_medidas',
         'categoria',
         'stock',
         'descripcion',

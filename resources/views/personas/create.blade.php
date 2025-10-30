@@ -13,16 +13,15 @@
             <div class="modal-body">
                 <div class="row g-3">
                     <div class="col-md-6">
+                        <label class="form-label">DNI</label>
+                        <input type="text" name="dni" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
                         <label class="form-label">Apellidos y Nombres</label>
                         <input type="text" name="nombres" class="form-control" required>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">DNI</label>
-                        <input type="text" name="dni" class="form-control" required>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label">Cargo</label>
+                        <label class="form-label">Especialidad</label>
                         <input type="text" name="cargo" class="form-control">
                     </div>
 

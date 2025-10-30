@@ -12,9 +12,9 @@
     <table class="table table-bordered align-middle">
         <thead class="table-dark">
             <tr>
-                <th>Nombre</th>
                 <th>DNI</th>
-                <th>Cargo</th>
+                <th>Nombre</th>
+                <th>Especialidad</th>
                 <th>Área</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -23,8 +23,8 @@
         <tbody>
             @foreach ($personas as $persona)
             <tr>
-                <td>{{ $persona->nombres }}</td>
                 <td>{{ $persona->dni }}</td>
+                <td>{{ $persona->nombres }}</td>
                 <td>{{ $persona->cargo }}</td>
                 <td>{{ $persona->area }}</td>
                 <td>
@@ -53,6 +53,72 @@
             @endforeach
         </tbody>
     </table>
+
+    <!-- 🔹 Paginación personalizada -->
+    @if ($personas->hasPages())
+        <nav aria-label="Navegación de páginas">
+            <ul class="pagination justify-content-center">
+
+                {{-- Botón "Anterior" --}}
+                @if ($personas->onFirstPage())
+                    <li class="page-item disabled">
+                        <span class="page-link">Anterior</span>
+                    </li>
+                @else
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $personas->previousPageUrl() }}" rel="prev">Anterior</a>
+                    </li>
+                @endif
+
+                {{-- 🔹 Mostrar solo 7 páginas alrededor de la actual --}}
+                @php
+                    $current = $personas->currentPage();
+                    $last = $personas->lastPage();
+                    $start = max($current - 3, 1);
+                    $end = min($current + 3, $last);
+                @endphp
+
+                {{-- Mostrar "..." si hay páginas anteriores ocultas --}}
+                @if ($start > 1)
+                    <li class="page-item"><a class="page-link" href="{{ $personas->url(1) }}">1</a></li>
+                    @if ($start > 2)
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    @endif
+                @endif
+
+                {{-- Números visibles --}}
+                @for ($page = $start; $page <= $end; $page++)
+                    @if ($page == $personas->currentPage())
+                        <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
+                    @else
+                        <li class="page-item"><a class="page-link" href="{{ $personas->url($page) }}">{{ $page }}</a></li>
+                    @endif
+                @endfor
+
+                {{-- Mostrar "..." si hay páginas siguientes ocultas --}}
+                @if ($end < $last)
+                    @if ($end < $last - 1)
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    @endif
+                    <li class="page-item"><a class="page-link" href="{{ $personas->url($last) }}">{{ $last }}</a></li>
+                @endif
+
+                {{-- Botón "Siguiente" --}}
+                @if ($personas->hasMorePages())
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $personas->nextPageUrl() }}" rel="next">Siguiente</a>
+                    </li>
+                @else
+                    <li class="page-item disabled">
+                        <span class="page-link">Siguiente</span>
+                    </li>
+                @endif
+
+            </ul>
+        </nav>
+    @endif
+
+
 </div>
 
 @include('personas.create')

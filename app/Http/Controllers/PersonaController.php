@@ -9,7 +9,7 @@ class PersonaController extends Controller
 {
     public function index()
     {
-        $personas = Persona::all();
+        $personas = Persona::orderBy('id', 'desc')->paginate(10);
         return view('personas.index', compact('personas'));
     }
 

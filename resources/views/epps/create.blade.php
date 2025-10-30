@@ -36,6 +36,22 @@
                 </div>
 
                 <div class="mb-3">
+                    <label class="form-label">Unidad de Medida</label>
+                    <select name="unidades_medidas" class="form-select">
+                        <option value="">-- Seleccione unidad --</option>
+                        <option value="und">Unidad</option>
+                        <option value="par">Par</option>
+                        <option value="jgo">Juego</option>
+                        <option value="caja">Caja</option>
+                        <option value="rollo">Rollo</option>
+                        <option value="m">Metro</option>
+                        <option value="frasco">Frasco</option>
+                        <option value="tubo">Kilogramo</option>
+                        <option value="tubo">Tubo</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label">Descripción</label>
                     <textarea name="descripcion" class="form-control"></textarea>
                 </div>
@@ -44,6 +60,7 @@
                     <input class="form-check-input" type="checkbox" name="estado" value="1" checked>
                     <label class="form-check-label">Activo</label>
                 </div>
+
             </div>
 
             <div class="modal-footer">

@@ -26,6 +26,7 @@
                 <th>Categoría</th>
                 <th>Talla</th>
                 <th>Stock</th>
+                <th>Unidad</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -38,6 +39,7 @@
                     <td>{{ $epp->categoria ?? '-' }}</td>
                     <td>{{ $epp->talla ?? '-' }}</td>
                     <td>{{ $epp->stock }}</td>
+                    <td>{{ $epp->unidades_medidas ?? '-' }}</td>
                     <td>
                         @if($epp->estado)
                             <span class="badge bg-success">Activo</span>
@@ -55,6 +57,7 @@
                                 data-categoria="{{ $epp->categoria }}"
                                 data-talla="{{ $epp->talla }}"
                                 data-stock="{{ $epp->stock }}"
+                                data-unidades_medidas="{{ $epp->unidades_medidas }}"
                                 data-descripcion="{{ $epp->descripcion }}"
                                 data-estado="{{ $epp->estado }}">
                             Editar
@@ -84,6 +87,7 @@
         document.getElementById('edit_codigo').value = button.getAttribute('data-codigo');
         document.getElementById('edit_categoria').value = button.getAttribute('data-categoria');
         document.getElementById('edit_talla').value = button.getAttribute('data-talla');
+        document.getElementById('edit_unidades_medidas').value = button.getAttribute('data-unidades_medidas');
         document.getElementById('edit_stock').value = button.getAttribute('data-stock');
         document.getElementById('edit_descripcion').value = button.getAttribute('data-descripcion');
         document.getElementById('edit_estado').checked = button.getAttribute('data-estado') == 1;
