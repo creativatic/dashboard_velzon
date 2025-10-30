@@ -40,14 +40,6 @@
                         onclick='cargarDatosPersona(@json($persona))'>
                         Editar
                     </button>
-
-                    <form action="{{ route('personas.destroy', $persona) }}" method="POST" style="display:inline;">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" 
-                            onclick="return confirm('¿Seguro que deseas eliminar esta persona?')">
-                            Eliminar
-                        </button>
-                    </form>
                 </td>
             </tr>
             @endforeach

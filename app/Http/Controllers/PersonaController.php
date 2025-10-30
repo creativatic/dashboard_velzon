@@ -36,7 +36,10 @@ class PersonaController extends Controller
 
     public function update(Request $request, Persona $persona)
     {
-        $persona->update($request->all());
+        $data = $request->all();
+        $data['estado'] = $request->boolean('estado'); // 🔒 asegura que guarde 0 o 1 correctamente
+        $persona->update($data);
+
         return redirect()->route('personas.index')->with('success', 'Persona actualizada.');
     }
 

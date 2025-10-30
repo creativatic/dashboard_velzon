@@ -59,10 +59,10 @@
                 </div>
 
                 <div class="form-check form-switch">
+                    <input type="hidden" name="estado" value="0"> {{-- Enviar 0 si está desmarcado --}}
                     <input class="form-check-input" type="checkbox" id="edit_estado" name="estado" value="1">
-                    <label class="form-check-label">Activo</label>
+                    <label class="form-check-label" for="edit_estado">Activo</label>
                 </div>
-
                 
 
             </div>

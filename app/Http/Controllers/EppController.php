@@ -9,7 +9,7 @@ class EppController extends Controller
 {
     public function index()
     {
-        $epps = Epp::orderBy('nombre')->get();
+        $epps = Epp::orderBy('nombre')->paginate(10);
         return view('epps.index', compact('epps'));
     }
 

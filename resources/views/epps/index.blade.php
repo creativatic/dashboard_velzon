@@ -26,7 +26,7 @@
                 <th>Categoría</th>
                 <th>Talla</th>
                 <th>Stock</th>
-                <th>Unidad</th>
+                <th>Medidas</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -62,20 +62,77 @@
                                 data-estado="{{ $epp->estado }}">
                             Editar
                         </button>
-
-                        <form action="{{ route('epps.destroy', $epp) }}" method="POST" style="display:inline;">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm"
-                                onclick="return confirm('¿Seguro que deseas eliminar este EPP?')">
-                                Eliminar
-                            </button>
-                        </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 </div>
+
+    <!-- 🔹 Paginación personalizada -->
+    @if ($epps->hasPages())
+        <nav aria-label="Navegación de páginas">
+            <ul class="pagination justify-content-center">
+
+                {{-- Botón "Anterior" --}}
+                @if ($epps->onFirstPage())
+                    <li class="page-item disabled">
+                        <span class="page-link">Anterior</span>
+                    </li>
+                @else
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $epps->previousPageUrl() }}" rel="prev">Anterior</a>
+                    </li>
+                @endif
+
+                {{-- 🔹 Mostrar solo 7 páginas alrededor de la actual --}}
+                @php
+                    $current = $epps->currentPage();
+                    $last = $epps->lastPage();
+                    $start = max($current - 3, 1);
+                    $end = min($current + 3, $last);
+                @endphp
+
+                {{-- Mostrar "..." si hay páginas anteriores ocultas --}}
+                @if ($start > 1)
+                    <li class="page-item"><a class="page-link" href="{{ $epps->url(1) }}">1</a></li>
+                    @if ($start > 2)
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    @endif
+                @endif
+
+                {{-- Números visibles --}}
+                @for ($page = $start; $page <= $end; $page++)
+                    @if ($page == $epps->currentPage())
+                        <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
+                    @else
+                        <li class="page-item"><a class="page-link" href="{{ $epps->url($page) }}">{{ $page }}</a></li>
+                    @endif
+                @endfor
+
+                {{-- Mostrar "..." si hay páginas siguientes ocultas --}}
+                @if ($end < $last)
+                    @if ($end < $last - 1)
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    @endif
+                    <li class="page-item"><a class="page-link" href="{{ $epps->url($last) }}">{{ $last }}</a></li>
+                @endif
+
+                {{-- Botón "Siguiente" --}}
+                @if ($epps->hasMorePages())
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $epps->nextPageUrl() }}" rel="next">Siguiente</a>
+                    </li>
+                @else
+                    <li class="page-item disabled">
+                        <span class="page-link">Siguiente</span>
+                    </li>
+                @endif
+
+            </ul>
+        </nav>
+    @endif
+
 
 <script>
     const editEppModal = document.getElementById('editEppModal');

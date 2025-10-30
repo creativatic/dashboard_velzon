@@ -9,28 +9,39 @@ use Illuminate\Support\Facades\DB;
 
 class EntregaEppController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $entregas = DB::table('epp_persona')
+        $query = DB::table('epp_persona')
             ->join('personas', 'epp_persona.persona_id', '=', 'personas.id')
-            ->join('epps', 'epp_persona.epp_id', '=', 'epps.id')
             ->select(
-                'epp_persona.id',
+                'personas.id as persona_id',
+                'personas.dni',
                 'personas.nombres as persona',
-                'epps.nombre as epp',
-                'epp_persona.fecha_entrega',
-                'epp_persona.fecha_devolucion',
-                'epp_persona.cantidad',
-                'epp_persona.observacion'
+                DB::raw('MAX(epp_persona.fecha_entrega) as ultima_entrega')
             )
-            ->orderByDesc('epp_persona.created_at')
-            ->get();
+            ->groupBy('personas.id', 'personas.dni', 'personas.nombres');
+
+        // 🔹 Filtro por fecha (si el usuario selecciona)
+        if ($request->filled('desde')) {
+            $query->whereDate('epp_persona.fecha_entrega', '>=', $request->desde);
+        }
+
+        if ($request->filled('hasta')) {
+            $query->whereDate('epp_persona.fecha_entrega', '<=', $request->hasta);
+        }
+
+        $entregas = $query->orderByDesc('ultima_entrega')->paginate(8);
+
+        // 🔹 Mantener los parámetros en los enlaces de paginación
+        $entregas->appends($request->only(['desde', 'hasta']));
 
         $personas = Persona::orderBy('nombres')->get();
         $epps = Epp::where('estado', 1)->orderBy('nombre')->get();
 
         return view('entregas.index', compact('entregas', 'personas', 'epps'));
     }
+
+
 
     public function show($id)
     {
@@ -46,7 +57,9 @@ class EntregaEppController extends Controller
                 'epp_persona.cantidad',
                 'epp_persona.fecha_entrega',
                 'epp_persona.fecha_devolucion',
-                'epp_persona.observacion'
+                'epp_persona.observacion',
+                'epp_persona.numero_vale',
+                'epp_persona.orden_trabajo'
             )
             ->where('epp_persona.id', $id)
             ->first();
@@ -56,13 +69,35 @@ class EntregaEppController extends Controller
 
     public function update(Request $request, $id)
     {
+        // 🚨 AÑADIR VALIDACIÓN AQUÍ
+        $request->validate([
+            'cantidad' => 'required|integer|min:1',
+            'fecha_entrega' => 'required|date',
+            // Valida que la fecha de devolución sea una fecha (si se proporciona) y no sea posterior a hoy.
+            'fecha_devolucion' => 'nullable|date|before_or_equal:today', 
+            'observacion' => 'nullable|string',
+            'numero_vale' => 'nullable|string|max:50',
+            'orden_trabajo' => 'nullable|string|max:50',
+        ]);
+        // 🚨 FIN DE VALIDACIÓN
+
         DB::table('epp_persona')->where('id', $id)->update([
+            // ... (resto de tus campos de actualización)
             'cantidad' => $request->cantidad,
             'fecha_entrega' => $request->fecha_entrega,
             'fecha_devolucion' => $request->fecha_devolucion,
             'observacion' => $request->observacion,
+            'numero_vale' => $request->numero_vale,
+            'orden_trabajo' => $request->orden_trabajo,
             'updated_at' => now(),
         ]);
+
+        // ... (resto del código del método update)
+
+        // Si es AJAX devolvemos 200 sin redirigir
+        if ($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
 
         return redirect()->back()->with('success', 'Entrega actualizada correctamente.');
     }
@@ -72,28 +107,42 @@ class EntregaEppController extends Controller
     {
         $request->validate([
             'persona_id' => 'required|exists:personas,id',
-            'epp_id' => 'required|exists:epps,id',
-            'cantidad' => 'required|integer|min:1',
             'fecha_entrega' => 'required|date',
-            'observacion' => 'nullable|string'
+            'numero_vale' => 'nullable|string|max:50',
+            'orden_trabajo' => 'nullable|string|max:50',
+            'epps' => 'required|array|min:1',
+            'epps.*.epp_id' => 'required|exists:epps,id',
+            'epps.*.cantidad' => 'required|integer|min:1',
+            'epps.*.observacion' => 'nullable|string'
         ]);
 
-        // Registrar entrega
-        DB::table('epp_persona')->insert([
-            'persona_id' => $request->persona_id,
-            'epp_id' => $request->epp_id,
-            'fecha_entrega' => $request->fecha_entrega,
-            'cantidad' => $request->cantidad,
-            'observacion' => $request->observacion,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        DB::beginTransaction();
+        try {
+            foreach ($request->epps as $item) {
+                // Registrar cada entrega
+                DB::table('epp_persona')->insert([
+                    'persona_id' => $request->persona_id,
+                    'epp_id' => $item['epp_id'],
+                    'fecha_entrega' => $request->fecha_entrega,
+                    'cantidad' => $item['cantidad'],
+                    'observacion' => $item['observacion'] ?? null,
+                    'numero_vale' => $request->numero_vale,
+                    'orden_trabajo' => $request->orden_trabajo,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
 
-        // Actualizar stock
-        $epp = Epp::findOrFail($request->epp_id);
-        $epp->decrement('stock', $request->cantidad);
+                // Actualizar stock
+                $epp = Epp::findOrFail($item['epp_id']);
+                $epp->decrement('stock', $item['cantidad']);
+            }
 
-        return redirect()->route('entregas.index')->with('success', 'EPP entregado correctamente.');
+            DB::commit();
+            return redirect()->route('entregas.index')->with('success', 'Entrega registrada correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Ocurrió un error al registrar la entrega: ' . $e->getMessage());
+        }
     }
 
     public function devolver($id)
@@ -115,4 +164,46 @@ class EntregaEppController extends Controller
 
         return redirect()->route('entregas.index')->with('success', 'EPP devuelto correctamente.');
     }
+
+    public function entregasPorPersona($persona_id)
+    {
+        $epps = DB::table('epp_persona')
+            ->join('epps', 'epp_persona.epp_id', '=', 'epps.id')
+            ->select('epps.id as epp_id', 'epps.nombre as epp')
+            ->where('epp_persona.persona_id', $persona_id)
+            ->groupBy('epps.id', 'epps.nombre')
+            ->get();
+
+        $resultado = [];
+
+        foreach ($epps as $epp) {
+            $registros = DB::table('epp_persona')
+                ->select(
+                    'epp_persona.id',
+                    'epp_persona.cantidad',
+                    'epp_persona.numero_vale',
+                    'epp_persona.orden_trabajo',
+                    'epp_persona.fecha_entrega',
+                    'epp_persona.fecha_devolucion',
+                    'epp_persona.observacion'
+                )
+                ->where('epp_persona.persona_id', $persona_id)
+                ->where('epp_persona.epp_id', $epp->epp_id)
+                ->orderByDesc('epp_persona.fecha_entrega')
+                ->limit(2)
+                ->get();
+
+            $resultado[] = [
+                'epp' => $epp->epp,
+                'registros' => $registros
+            ];
+        }
+
+        return response()->json($resultado);
+    }
+
+
+
 }
+
+

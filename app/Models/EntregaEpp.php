@@ -16,6 +16,10 @@ class EntregaEpp extends Model
         'epp_id',
         'fecha_entrega',
         'fecha_devolucion',
+        'cantidad',
+        'observacion',
+        'numero_vale',
+        'orden_trabajo'
     ];
 
     public function personas()

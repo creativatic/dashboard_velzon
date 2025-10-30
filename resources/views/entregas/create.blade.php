@@ -25,19 +25,46 @@
                     <input type="hidden" name="persona_id" id="persona_id">
                 </div>
 
+                {{-- 🔽 Múltiples EPPs --}}
                 <div class="mb-3">
-                    <label class="form-label">EPP</label>
-                    <select name="epp_id" class="form-select" required>
-                        <option value="">-- Seleccione un EPP --</option>
-                        @foreach($epps as $e)
-                            <option value="{{ $e->id }}">{{ $e->nombre }} (Stock: {{ $e->stock }})</option>
-                        @endforeach
-                    </select>
+                    <label class="form-label">EPPs a entregar</label>
+
+                    <table class="table table-bordered align-middle" id="tablaEpps">
+                        <thead class="table-light">
+                            <tr>
+                                <th>EPP</th>
+                                <th>Cantidad</th>
+                                <th>Observación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eppItems">
+                            <tr>
+                                <td>
+                                    <select name="epps[0][epp_id]" class="form-select" required>
+                                        <option value="">-- Seleccione un EPP --</option>
+                                        @foreach($epps as $e)
+                                            <option value="{{ $e->id }}">{{ $e->nombre }} (Stock: {{ $e->stock }})</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td><input type="number" name="epps[0][cantidad]" class="form-control" min="1" required></td>
+                                <td><input type="text" name="epps[0][observacion]" class="form-control"></td>
+                                <td><button type="button" class="btn btn-danger btn-sm eliminarFila">🗑</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <button type="button" class="btn btn-primary btn-sm" id="agregarEpp">➕ Agregar ítem</button>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Cantidad</label>
-                    <input type="number" name="cantidad" class="form-control" min="1" required>
+                    <label class="form-label">N° de Vale</label>
+                    <input type="text" name="numero_vale" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Orden de Trabajo</label>
+                    <input type="text" name="orden_trabajo" class="form-control">
                 </div>
 
                 <div class="mb-3">
@@ -45,10 +72,6 @@
                     <input type="date" name="fecha_entrega" class="form-control" value="{{ date('Y-m-d') }}" required>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Observación</label>
-                    <textarea name="observacion" class="form-control"></textarea>
-                </div>
             </div>
 
             <div class="modal-footer">
@@ -107,6 +130,36 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(e) {
         if (!inputDni.contains(e.target) && !resultados.contains(e.target)) {
             resultados.style.display = 'none';
+        }
+    });
+
+    // 🔽 Script para agregar y eliminar EPPs dinámicamente
+    let indice = 1;
+    const btnAgregar = document.getElementById('agregarEpp');
+    const tbody = document.getElementById('eppItems');
+
+    btnAgregar.addEventListener('click', () => {
+        const nuevaFila = document.createElement('tr');
+        nuevaFila.innerHTML = `
+            <td>
+                <select name="epps[${indice}][epp_id]" class="form-select" required>
+                    <option value="">-- Seleccione un EPP --</option>
+                    @foreach($epps as $e)
+                        <option value="{{ $e->id }}">{{ $e->nombre }} (Stock: {{ $e->stock }})</option>
+                    @endforeach
+                </select>
+            </td>
+            <td><input type="number" name="epps[${indice}][cantidad]" class="form-control" min="1" required></td>
+            <td><input type="text" name="epps[${indice}][observacion]" class="form-control"></td>
+            <td><button type="button" class="btn btn-danger btn-sm eliminarFila">🗑</button></td>
+        `;
+        tbody.appendChild(nuevaFila);
+        indice++;
+    });
+
+    tbody.addEventListener('click', e => {
+        if (e.target.classList.contains('eliminarFila')) {
+            e.target.closest('tr').remove();
         }
     });
 });

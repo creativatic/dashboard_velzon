@@ -8,6 +8,8 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('epp_persona', function (Blueprint $table) {
             $table->id();
+            $table->string('numero_vale')->nullable();
+            $table->string('orden_trabajo')->nullable();
             $table->foreignId('persona_id')->constrained()->onDelete('cascade');
             $table->foreignId('epp_id')->constrained()->onDelete('cascade');
             $table->date('fecha_entrega')->nullable();

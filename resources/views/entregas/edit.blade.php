@@ -12,6 +12,7 @@
 
             <div class="modal-body">
                 <input type="hidden" name="id" id="edit_id">
+                <input type="hidden" id="edit_persona_id"> <!-- ✅ añadimos para saber a quién recargar -->
 
                 <div class="mb-3">
                     <label class="form-label">Persona</label>
@@ -23,6 +24,17 @@
                     <input type="text" class="form-control" id="edit_epp" readonly>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">N° de Vale</label>
+                        <input type="text" id="edit_numero_vale" name="numero_vale" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Orden de Trabajo</label>
+                        <input type="text" id="edit_orden_trabajo" name="orden_trabajo" class="form-control">
+                    </div>
+                </div>
+                
                 <div class="mb-3">
                     <label class="form-label">Cantidad</label>
                     <input type="number" class="form-control" name="cantidad" id="edit_cantidad" min="1" required>
@@ -35,7 +47,8 @@
 
                 <div class="mb-3">
                     <label class="form-label">Fecha de Devolución</label>
-                    <input type="date" class="form-control" name="fecha_devolucion" id="edit_fecha_devolucion">
+                    <input type="date" class="form-control" name="fecha_devolucion" id="edit_fecha_devolucion" min="{{ date('Y-m-d') }}" max="{{ date('Y-m-d') }}" required
+                    >
                 </div>
 
                 <div class="mb-3">
@@ -45,7 +58,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-secondary" id="btnAtrasEdit">Atrás</button>
                 <button type="submit" class="btn btn-warning">Guardar Cambios</button>
             </div>
         </form>
@@ -53,14 +66,80 @@
 </div>
 
 <script>
+/**
+ * Refresca los datos del modal "Ver Entregas"
+ */
+function recargarEntregasPersona(personaId) {
+    fetch(`/entregas/persona/${personaId}`)
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('contenedorEntregasPersona').innerHTML = html;
+        });
+}
+
+/**
+ * 💾 Guardar cambios (editar entrega)
+ */
 document.getElementById('formEditEntrega').addEventListener('submit', function(e) {
     e.preventDefault();
     const id = document.getElementById('edit_id').value;
+    const personaId = document.getElementById('edit_persona_id').value;
+    // ✅ Necesitamos el nombre de la persona, ya que verEntregasPersona lo usa para el título
+    const personaNombre = document.getElementById('edit_persona').value; 
+    
     const formData = new FormData(this);
+    formData.append('_method', 'PUT'); // Aseguramos que se envíe como PUT aunque el método HTTP sea POST
 
     fetch(`/entregas/${id}`, {
-        method: 'POST',
+        method: 'POST', // Laravel usa POST con el campo _method=PUT para simular PUT
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }, // Para que el Controller detecte la solicitud AJAX
         body: formData
-    }).then(() => location.reload());
+    }).then(res => {
+        if (!res.ok) {
+            throw new Error('Error en la respuesta del servidor');
+        }
+        return res.json();
+    })
+    .then(() => {
+        const modalEdit = bootstrap.Modal.getInstance(document.getElementById('editEntregaModal'));
+        if(modalEdit) modalEdit.hide();
+
+        // ✅ RECARGAR CONTENIDO DEL MODAL SHOW USANDO LA FUNCIÓN QUE PROCESA JSON
+        // Esta función (en index.blade.php) cargará el contenido actualizado
+        // y lo convertirá de JSON a HTML.
+        if (typeof verEntregasPersona === 'function') {
+            verEntregasPersona(personaId, personaNombre);
+        } else {
+             console.error("verEntregasPersona no está definida.");
+        }
+
+        // Mostrar el modal SHOW después de iniciar la recarga (se mostrará "Cargando..." brevemente)
+        new bootstrap.Modal(document.getElementById('showEntregaModal')).show();
+    })
+    .catch(error => {
+        console.error("Error al actualizar la entrega:", error);
+        alert('❌ Ocurrió un error al guardar los cambios: ' + error.message);
+        // Volvemos al modal SHOW si hay un error
+        new bootstrap.Modal(document.getElementById('showEntregaModal')).show();
+    });
 });
+
+/**
+ * ⏪ Botón Atrás ➜ vuelve al modal de entregas (show)
+ */
+document.getElementById('btnAtrasEdit').addEventListener('click', () => {
+    const personaId = document.getElementById('edit_persona_id').value;
+    const personaNombre = document.getElementById('edit_persona').value;
+
+    const modalEdit = bootstrap.Modal.getInstance(document.getElementById('editEntregaModal'));
+    if(modalEdit) modalEdit.hide();
+
+    // ✅ Recargar la lista antes de volver
+    if (typeof verEntregasPersona === 'function') {
+        verEntregasPersona(personaId, personaNombre);
+    }
+
+    new bootstrap.Modal(document.getElementById('showEntregaModal')).show();
+});
+
 </script>
