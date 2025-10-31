@@ -37,29 +37,29 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Solo administrador
-    Route::middleware('role:Administrador')->group(function () {
+    Route::middleware('role:Super Administrador')->group(function () {
         Route::resource('users', UserController::class)->except(['show']);
         Route::resource('roles', RoleController::class)->except(['show']);
         Route::resource('permissions', PermissionController::class)->except(['show']);
-        Route::resource('programacions', ProgramacionController::class)->except(['show']);
-        Route::resource('personas', PersonaController::class);  
-        Route::get('/personas/buscar/{dni}', [PersonaController::class, 'buscar']);
+    });
 
-        Route::resource('epps', EppController::class);
+    Route::resource('programacions', ProgramacionController::class)->except(['show']);
+    Route::resource('personas', PersonaController::class);  
+    Route::get('/personas/buscar/{dni}', [PersonaController::class, 'buscar']);
+
+    Route::resource('epps', EppController::class);
         //Route::get('entregas', [EntregaEppController::class, 'index'])->name('entregas.index');
         //Route::post('entregas/{persona}/asignar', [EntregaEppController::class, 'asignarEpp'])->name('entregas.asignar');
         //Route::post('entregas/{persona}/{epp}/devolver', [EntregaEppController::class, 'devolverEpp'])->name('entregas.devolver');
 
-        Route::resource('entregas', EntregaEppController::class)->only(['index', 'store']);
-        Route::put('entregas/{id}/devolver', [EntregaEppController::class, 'devolver'])->name('entregas.devolver');
-        Route::put('entregas/{id}', [EntregaEppController::class, 'update'])->name('entregas.update');
-        Route::get('entregas/{id}', [EntregaEppController::class, 'show'])->name('entregas.show');
-        Route::get('/entregas/persona/{id}', [EntregaEppController::class, 'entregasPorPersona']);
-        Route::get('/entregas/persona/{id}', [EntregaEppController::class, 'entregasPorPersona'])->name('entregas.persona');
+    Route::resource('entregas', EntregaEppController::class)->only(['index', 'store']);
+    Route::put('entregas/{id}/devolver', [EntregaEppController::class, 'devolver'])->name('entregas.devolver');
+    Route::put('entregas/{id}', [EntregaEppController::class, 'update'])->name('entregas.update');
+    Route::get('entregas/{id}', [EntregaEppController::class, 'show'])->name('entregas.show');
+    Route::get('/entregas/persona/{id}', [EntregaEppController::class, 'entregasPorPersona']);
+    Route::get('/entregas/persona/{id}', [EntregaEppController::class, 'entregasPorPersona'])->name('entregas.persona');
+    Route::get('/epps/buscar/{term}', [EppController::class, 'buscar']);
 
-
-
-    });
 });
 
 // Registro

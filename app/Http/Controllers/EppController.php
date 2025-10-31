@@ -53,4 +53,17 @@ class EppController extends Controller
         $epp->delete();
         return redirect()->route('epps.index')->with('success', 'EPP eliminado correctamente.');
     }
+
+    public function buscar($term)
+    {
+        return response()->json(
+            Epp::where('nombre', 'LIKE', "%{$term}%")
+                ->select('id', 'nombre', 'stock')
+                ->limit(10)
+                ->get()
+        );
+    }
+
+
+
 }

@@ -111,7 +111,7 @@ class DashboardController extends Controller
     // DashboardController.php
     public function detalles($personaId, $eppId)
     {
-        $detalles = \DB::table('epp_persona')
+        $detalles = DB::table('epp_persona')
             ->where('persona_id', $personaId)
             ->where('epp_id', $eppId)
             ->select('cantidad', 'fecha_entrega', 'fecha_devolucion', 'observacion')
@@ -125,7 +125,7 @@ class DashboardController extends Controller
     {
         $term = $request->get('term');
 
-        $resultados = \App\Models\Persona::where('dni', 'LIKE', "%{$term}%")
+        $resultados = Persona::where('dni', 'LIKE', "%{$term}%")
             ->orWhere('nombres', 'LIKE', "%{$term}%")
             ->select('dni', 'nombres')
             ->limit(10)

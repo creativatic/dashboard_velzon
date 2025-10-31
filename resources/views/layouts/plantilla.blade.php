@@ -318,7 +318,7 @@
 
 
                         {{-- ===== SOLO Super Administrador ===== --}}
-                        @role('Super Administrador')
+                        @hasrole('Super Administrador')
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarUsuarios" data-bs-toggle="collapse" role="button" 
                             aria-expanded="false" aria-controls="sidebarUsuarios">
@@ -345,7 +345,7 @@
                                 </ul>
                             </div>
                         </li>
-                        @endrole
+                        @endhasrole
 
 
                         {{-- ===== Opciones visibles para todos los roles con permiso ===== --}}

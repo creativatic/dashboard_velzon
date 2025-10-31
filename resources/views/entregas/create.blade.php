@@ -40,13 +40,10 @@
                         </thead>
                         <tbody id="eppItems">
                             <tr>
-                                <td>
-                                    <select name="epps[0][epp_id]" class="form-select" required>
-                                        <option value="">-- Seleccione un EPP --</option>
-                                        @foreach($epps as $e)
-                                            <option value="{{ $e->id }}">{{ $e->nombre }} (Stock: {{ $e->stock }})</option>
-                                        @endforeach
-                                    </select>
+                                <td style="position: relative;">
+                                    <input type="text" class="form-control buscar-epp" placeholder="Buscar EPP..." autocomplete="off">
+                                    <input type="hidden" name="epps[0][epp_id]" class="epp_id">
+                                    <div class="resultados-epp list-group" style="position:absolute; z-index:1000; width:100%; display:none;"></div>
                                 </td>
                                 <td><input type="number" name="epps[0][cantidad]" class="form-control" min="1" required></td>
                                 <td><input type="text" name="epps[0][observacion]" class="form-control"></td>
@@ -85,6 +82,7 @@
 {{-- Script del autocompletado --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // --- AUTOCOMPLETADO DE PERSONAS ---
     const inputDni = document.getElementById('buscar_dni');
     const resultados = document.getElementById('resultados_dni');
     const nombrePersona = document.getElementById('nombre_persona');
@@ -92,12 +90,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     inputDni.addEventListener('keyup', function() {
         const dni = this.value.trim();
-
         if (dni.length < 3) {
             resultados.style.display = 'none';
             return;
         }
-
         fetch(`/personas/buscar/${dni}`)
             .then(response => response.json())
             .then(data => {
@@ -121,39 +117,33 @@ document.addEventListener('DOMContentLoaded', function() {
                     resultados.style.display = 'none';
                 }
             })
-            .catch(() => {
-                resultados.style.display = 'none';
-            });
+            .catch(() => resultados.style.display = 'none');
     });
 
-    // Cierra el dropdown si haces clic afuera
     document.addEventListener('click', function(e) {
         if (!inputDni.contains(e.target) && !resultados.contains(e.target)) {
             resultados.style.display = 'none';
         }
     });
 
-    // 🔽 Script para agregar y eliminar EPPs dinámicamente
+    // --- AGREGAR Y ELIMINAR FILAS DE EPP ---
     let indice = 1;
     const btnAgregar = document.getElementById('agregarEpp');
     const tbody = document.getElementById('eppItems');
 
     btnAgregar.addEventListener('click', () => {
-        const nuevaFila = document.createElement('tr');
-        nuevaFila.innerHTML = `
-            <td>
-                <select name="epps[${indice}][epp_id]" class="form-select" required>
-                    <option value="">-- Seleccione un EPP --</option>
-                    @foreach($epps as $e)
-                        <option value="{{ $e->id }}">{{ $e->nombre }} (Stock: {{ $e->stock }})</option>
-                    @endforeach
-                </select>
+        const fila = document.createElement('tr');
+        fila.innerHTML = `
+            <td style="position: relative;">
+                <input type="text" class="form-control buscar-epp" placeholder="Buscar EPP..." autocomplete="off">
+                <input type="hidden" name="epps[${indice}][epp_id]" class="epp_id">
+                <div class="resultados-epp list-group" style="position:absolute; z-index:1000; width:100%; display:none;"></div>
             </td>
             <td><input type="number" name="epps[${indice}][cantidad]" class="form-control" min="1" required></td>
             <td><input type="text" name="epps[${indice}][observacion]" class="form-control"></td>
             <td><button type="button" class="btn btn-danger btn-sm eliminarFila">🗑</button></td>
         `;
-        tbody.appendChild(nuevaFila);
+        tbody.appendChild(fila);
         indice++;
     });
 
@@ -161,6 +151,54 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.classList.contains('eliminarFila')) {
             e.target.closest('tr').remove();
         }
+    });
+
+    // --- AUTOCOMPLETADO DE EPPs ---
+    tbody.addEventListener('keyup', function(e) {
+        if (!e.target.classList.contains('buscar-epp')) return;
+
+        const input = e.target;
+        const resultadosEpp = input.parentElement.querySelector('.resultados-epp');
+        const eppIdInput = input.parentElement.querySelector('.epp_id');
+        const termino = input.value.trim();
+
+        if (termino.length < 2) {
+            resultadosEpp.style.display = 'none';
+            return;
+        }
+
+        fetch(`/epps/buscar/${termino}`)
+            .then(res => res.json())
+            .then(data => {
+                resultadosEpp.innerHTML = '';
+                if (data.length > 0) {
+                    data.forEach(epp => {
+                        const item = document.createElement('button');
+                        item.type = 'button';
+                        item.classList.add('list-group-item', 'list-group-item-action');
+                        item.textContent = `${epp.nombre} (Stock: ${epp.stock})`;
+                        item.addEventListener('click', () => {
+                            input.value = epp.nombre;
+                            eppIdInput.value = epp.id;
+                            resultadosEpp.style.display = 'none';
+                        });
+                        resultadosEpp.appendChild(item);
+                    });
+                    resultadosEpp.style.display = 'block';
+                } else {
+                    resultadosEpp.style.display = 'none';
+                }
+            })
+            .catch(() => resultadosEpp.style.display = 'none');
+    });
+
+    // Cierra dropdown de EPPs al hacer clic afuera
+    document.addEventListener('click', function(e) {
+        document.querySelectorAll('.resultados-epp').forEach(div => {
+            if (!div.contains(e.target) && !e.target.classList.contains('buscar-epp')) {
+                div.style.display = 'none';
+            }
+        });
     });
 });
 </script>

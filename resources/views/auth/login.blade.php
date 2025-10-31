@@ -87,8 +87,8 @@
                                                 @csrf
 
                                                 <div class="mb-3">
-                                                    <label for="email" class="form-label">Correo</label>
-                                                    <input type="text" name="email" class="form-control" id="email" placeholder="Ingresa tu correo" required autofocus>
+                                                    <label for="login" class="form-label">Correo o Usuario</label>
+                                                    <input type="text" name="login" class="form-control" id="login" placeholder="Ingresa tu correo o usuario" required autofocus>
                                                 </div>
 
                                                 <div class="mb-3">
@@ -121,13 +121,6 @@
                                                 </p>
                                             </div>
                                             
-                                        </div>
-
-                                        <div class="mt-5 text-center">
-                                            <p class="mb-0">
-                                                ¿No tienes una cuenta registrada? 
-                                                <a href="{{ route('register') }}" class="fw-semibold text-primary text-decoration-underline">Signup</a>
-                                            </p>
                                         </div>
                                     </div>
                                 </div>
