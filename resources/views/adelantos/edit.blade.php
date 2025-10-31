@@ -28,7 +28,7 @@
 
                 {{-- Fecha de pago Adelanto --}}
                 <div class="mb-3">
-                    <label for="edit_fecha_pago_adelantos" class="form-label">Fecha de Pago Adelanto</label>
+                    <label for="edit_fecha_pago_adelantos" class="form-label">Fecha de Pago Adelant</label>
                     <input type="date" name="fecha_pago_adelantos" id="edit_fecha_pago_adelantos" class="form-control">
                 </div>
                 

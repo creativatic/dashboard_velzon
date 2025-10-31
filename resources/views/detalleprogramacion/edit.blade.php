@@ -26,7 +26,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="edit_precio_tn" class="form-label">Precio TN (S/)</label>
-                        <input type="number" step="0.0000" name="precio_tn" id="edit_precio_tn" class="form-control" required>
+                        <input type="number" step="0.0001" name="precio_tn" id="edit_precio_tn" class="form-control" required>
                     </div>
                 </div>
 
