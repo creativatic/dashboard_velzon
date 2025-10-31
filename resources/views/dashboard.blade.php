@@ -31,7 +31,8 @@
             <thead class="table-success">
                 <tr>
                     <th>EPP</th>
-                    <th>Cantidad</th>
+                    <th>Cantidad Entregada</th> {{-- Nombres de columna actualizados --}}
+                     <th>Cantidad Devuelta</th> {{-- ✅ NUEVA COLUMNA --}}
                     <th>Fecha Última Entrega</th>
                     <th>Fecha Última Devolución</th>
                     <th>Acciones</th>
@@ -41,7 +42,13 @@
         </table>
 
         <div class="alert alert-info mt-3">
-            <strong>Total EPPs entregados:</strong> <span id="total_epps"></span>
+            <p class="mb-1">
+                <strong>Total EPPs entregados (por EPP):</strong> <span id="total_epps"></span>
+            </p>
+            {{-- ✅ CAMPO DE TOTAL DE VUELTOS: AÑADIDO Y LISTO PARA RECIBIR DATOS --}}
+            <p class="mb-0">
+                <strong>Total EPPs devueltos (ítems):</strong> <span id="total_epps_devueltos">0</span>
+            </p>
         </div>
     </div>
 
@@ -62,7 +69,11 @@ function buscarPorDni() {
         alert('Por favor ingrese un DNI');
         return;
     }
-
+    
+    // Limpiar totales y mensajes de error
+    document.getElementById('total_epps').innerHTML = '';
+    document.getElementById('total_epps_devueltos').textContent = '0';
+    
     fetch(`/dashboard/buscar/${dni}`)
         .then(res => {
             if (!res.ok) throw new Error('No se encontró el registro');
@@ -76,7 +87,7 @@ function buscarPorDni() {
             document.getElementById('area_persona').textContent = data.persona.area ?? '-';
             infoPersona.classList.remove('d-none');
 
-            // Mostrar entregas
+            // Mostrar entregas en la tabla
             const tbody = document.getElementById('tbody_entregas');
             tbody.innerHTML = '';
             data.entregas.forEach(e => {
@@ -84,7 +95,7 @@ function buscarPorDni() {
                 tr.innerHTML = `
                     <td>${e.epp}</td>
                     <td>${e.total_entregado}</td>
-                    <td>${e.ultima_entrega ?? '-'}</td>
+                    <td>${e.total_devuelto_epp}</td> <td>${e.ultima_entrega ?? '-'}</td>
                     <td>${e.ultima_devolucion ?? '<span class="badge bg-warning text-dark">Pendiente</span>'}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary" onclick="verDetalles('${data.persona.id}', '${e.epp_id}', '${e.epp}')">
@@ -97,25 +108,29 @@ function buscarPorDni() {
 
             tablaEntregas.classList.remove('d-none');
 
-            // Mostrar totales agrupados
+            // Mostrar totales agrupados (ahora mostrando el resumen por EPP)
             document.getElementById('total_epps').innerHTML = `
                 <ul class="mb-0">
-                    ${data.entregas.map(e => `<li><strong>${e.epp}:</strong> ${e.total_entregado}</li>`).join('')}
+                    ${data.entregas.map(e => `<li><strong>${e.epp}:</strong> ${e.total_entregado} Entregados / ${e.total_devuelto_epp} Devueltos</li>`).join('')}
                 </ul>
             `;
+            
+            // Si quieres seguir mostrando el total global, usa el nuevo campo del controlador
+            document.getElementById('total_epps_devueltos').textContent = data.total_devuelto_global ?? 0;
 
             mensajeError.classList.add('d-none');
         })
         .catch(() => {
             infoPersona.classList.add('d-none');
             tablaEntregas.classList.add('d-none');
+            document.getElementById('total_epps').innerHTML = '';
+            document.getElementById('total_epps_devueltos').textContent = '0';
             mensajeError.textContent = 'No se encontró ningún registro con ese DNI.';
             mensajeError.classList.remove('d-none');
         });
 }
 
-// ... (código anterior en dashboard.blade.php)
-
+// Función verDetalles: sin cambios
 function verDetalles(personaId, eppId, eppNombre) {
     // 💡 Paso 1: Muestra el nombre del EPP que se está consultando en el modal
     document.getElementById('modalDetallesLabel').textContent = `Detalles de Entregas de EPP: ${eppNombre}`;
@@ -136,8 +151,7 @@ function verDetalles(personaId, eppId, eppNombre) {
                 data.forEach(d => {
                     const tr = document.createElement('tr');
                     
-                    // Asegúrate de que los nombres de las propiedades (cantidad, fecha_entrega, etc.) 
-                    // coincidan exactamente con la estructura del JSON que devuelve el controlador de Laravel.
+                    // Asegúrate de que los nombres de las propiedades coincidan.
                     tr.innerHTML = `
                         <td>${d.cantidad ?? '-'}</td>
                         <td>${d.fecha_entrega ?? '-'}</td>

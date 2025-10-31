@@ -16,10 +16,17 @@ class EntregaEppController extends Controller
             ->select(
                 'personas.id as persona_id',
                 'personas.dni',
-                'personas.nombres as persona',
+                // Si quieres nombre completo, cambia 'nombres' por CONCAT(personas.nombres, ' ', personas.apellidos)
+                'personas.nombres as persona', 
                 DB::raw('MAX(epp_persona.fecha_entrega) as ultima_entrega')
             )
             ->groupBy('personas.id', 'personas.dni', 'personas.nombres');
+
+        // 🟢 NUEVO FILTRO: DNI
+        if ($request->filled('dni')) {
+            // Usamos 'like' para permitir búsquedas parciales
+            $query->where('personas.dni', 'like', '%' . $request->dni . '%'); 
+        }
 
         // 🔹 Filtro por fecha (si el usuario selecciona)
         if ($request->filled('desde')) {
@@ -33,16 +40,15 @@ class EntregaEppController extends Controller
         $entregas = $query->orderByDesc('ultima_entrega')->paginate(8);
 
         // 🔹 Mantener los parámetros en los enlaces de paginación
-        $entregas->appends($request->only(['desde', 'hasta']));
+        // ✅ AÑADIMOS 'dni' a la lista de parámetros a mantener
+        $entregas->appends($request->only(['dni', 'desde', 'hasta'])); 
 
         $personas = Persona::orderBy('nombres')->get();
         $epps = Epp::where('estado', 1)->orderBy('nombre')->get();
 
         return view('entregas.index', compact('entregas', 'personas', 'epps'));
     }
-
-
-
+    
     public function show($id)
     {
         $entrega = DB::table('epp_persona')

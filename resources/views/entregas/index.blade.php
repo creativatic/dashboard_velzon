@@ -7,33 +7,41 @@
 
 <div class="container">
 
-        <h1>Entrega de EPPs</h1>
-        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createEntregaModal">
-            <i class="ri-add-circle-line"></i> Nueva entrega
-        </button>
+    <h1>Entrega de EPPs</h1>
+    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createEntregaModal">
+        <i class="ri-add-circle-line"></i> Nueva entrega
+    </button>
+    
+    <form method="GET" action="{{ route('entregas.index') }}" class="row g-3 align-items-end mb-4">
         
-        <form method="GET" action="{{ route('entregas.index') }}" class="row g-3 align-items-end mb-4">
-            <div class="col-md-3">
-                <label for="desde" class="form-label">Desde</label>
-                <input type="date" id="desde" name="desde" class="form-control"
-                    value="{{ request('desde') }}">
-            </div>
+        {{-- ✅ NUEVO CAMPO DE FILTRO POR DNI --}}
+        <div class="col-md-3">
+            <label for="dni" class="form-label">Filtrar por DNI</label>
+            <input type="text" id="dni" name="dni" class="form-control"
+                value="{{ request('dni') }}" placeholder="DNI del colaborador">
+        </div>
 
-            <div class="col-md-3">
-                <label for="hasta" class="form-label">Hasta</label>
-                <input type="date" id="hasta" name="hasta" class="form-control"
-                    value="{{ request('hasta') }}">
-            </div>
+        <div class="col-md-2"> {{-- Ajustado a md-2 para dejar espacio --}}
+            <label for="desde" class="form-label">Desde</label>
+            <input type="date" id="desde" name="desde" class="form-control"
+                value="{{ request('desde') }}">
+        </div>
 
-            <div class="col-md-3">
-                <button type="submit" class="btn btn-primary">
-                    <i class="ri-filter-line"></i> Filtrar
-                </button>
-                <a href="{{ route('entregas.index') }}" class="btn btn-secondary">
-                    <i class="ri-refresh-line"></i> Limpiar
-                </a>
-            </div>
-        </form>
+        <div class="col-md-2"> {{-- Ajustado a md-2 --}}
+            <label for="hasta" class="form-label">Hasta</label>
+            <input type="date" id="hasta" name="hasta" class="form-control"
+                value="{{ request('hasta') }}">
+        </div>
+
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary">
+                <i class="ri-filter-line"></i> Filtrar
+            </button>
+            <a href="{{ route('entregas.index') }}" class="btn btn-secondary">
+                <i class="ri-refresh-line"></i> Limpiar
+            </a>
+        </div>
+    </form>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -69,7 +77,6 @@
     </table>
 </div>
 
-    <!-- 🔹 Paginación personalizada -->
     @if ($entregas->hasPages())
         <nav aria-label="Navegación de páginas">
             <ul class="pagination justify-content-center">
@@ -81,7 +88,8 @@
                     </li>
                 @else
                     <li class="page-item">
-                        <a class="page-link" href="{{ $entregas->previousPageUrl() }}" rel="prev">Anterior</a>
+                        {{-- 🔑 CLAVE: Añadir los query parameters a la paginación --}}
+                        <a class="page-link" href="{{ $entregas->appends(request()->query())->previousPageUrl() }}" rel="prev">Anterior</a>
                     </li>
                 @endif
 
@@ -91,11 +99,14 @@
                     $last = $entregas->lastPage();
                     $start = max($current - 3, 1);
                     $end = min($current + 3, $last);
+                    $query = request()->query(); // Obtener todos los filtros
                 @endphp
 
                 {{-- Mostrar "..." si hay páginas anteriores ocultas --}}
                 @if ($start > 1)
-                    <li class="page-item"><a class="page-link" href="{{ $entregas->url(1) }}">1</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $entregas->url(1) }}&{{ http_build_query($query) }}">1</a>
+                    </li>
                     @if ($start > 2)
                         <li class="page-item disabled"><span class="page-link">...</span></li>
                     @endif
@@ -103,10 +114,13 @@
 
                 {{-- Números visibles --}}
                 @for ($page = $start; $page <= $end; $page++)
+                    @php
+                        $url = $entregas->url($page) . '&' . http_build_query($query);
+                    @endphp
                     @if ($page == $entregas->currentPage())
                         <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
                     @else
-                        <li class="page-item"><a class="page-link" href="{{ $entregas->url($page) }}">{{ $page }}</a></li>
+                        <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
                     @endif
                 @endfor
 
@@ -115,13 +129,16 @@
                     @if ($end < $last - 1)
                         <li class="page-item disabled"><span class="page-link">...</span></li>
                     @endif
-                    <li class="page-item"><a class="page-link" href="{{ $entregas->url($last) }}">{{ $last }}</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="{{ $entregas->url($last) }}&{{ http_build_query($query) }}">{{ $last }}</a>
+                    </li>
                 @endif
 
                 {{-- Botón "Siguiente" --}}
                 @if ($entregas->hasMorePages())
                     <li class="page-item">
-                        <a class="page-link" href="{{ $entregas->nextPageUrl() }}" rel="next">Siguiente</a>
+                        {{-- 🔑 CLAVE: Añadir los query parameters a la paginación --}}
+                        <a class="page-link" href="{{ $entregas->appends(request()->query())->nextPageUrl() }}" rel="next">Siguiente</a>
                     </li>
                 @else
                     <li class="page-item disabled">

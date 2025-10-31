@@ -39,31 +39,47 @@ class DashboardController extends Controller
     }
 
     public function buscarPorDni($dni)
-    { 
+    {
         $persona = Persona::where('dni', $dni)->first();
 
         if (!$persona) {
             return response()->json(['error' => 'No se encontró ninguna persona con ese DNI.'], 404);
         }
 
-        // 🔹 Agrupamos las entregas por nombre y AHORA POR ID de EPP
+        // 🔹 Consulta para obtener entregas agrupadas por EPP
         $entregas = DB::table('epp_persona')
             ->join('epps', 'epp_persona.epp_id', '=', 'epps.id')
             ->select(
                 'epps.nombre as epp',
-                'epps.id as epp_id', // <--- ¡Añadido!
+                'epps.id as epp_id',
                 DB::raw('SUM(epp_persona.cantidad) as total_entregado'),
+                // ✅ NUEVO: SUMAR CANTIDADES DE EPPs DEVUELTOS (si fecha_devolucion NO es nula)
+                DB::raw('SUM(CASE WHEN epp_persona.fecha_devolucion IS NOT NULL THEN epp_persona.cantidad ELSE 0 END) as total_devuelto_epp'),
                 DB::raw('MAX(epp_persona.fecha_entrega) as ultima_entrega'),
                 DB::raw('MAX(epp_persona.fecha_devolucion) as ultima_devolucion')
             )
             ->where('persona_id', $persona->id)
-            ->groupBy('epps.nombre', 'epps.id') // <--- ¡Añadido al GROUP BY!
+            ->groupBy('epps.nombre', 'epps.id')
             ->orderBy('epps.nombre')
             ->get();
 
+        // 💡 Cálculo del total global de ítems devueltos (mantenemos por si es útil)
+        $totalDevueltoGlobal = DB::table('epp_persona')
+            ->where('persona_id', $persona->id)
+            ->whereNotNull('fecha_devolucion')
+            ->sum('cantidad');
+            
+        // 💡 Cálculo del total global de ítems entregados (si lo necesitas)
+        $totalEntregadoGlobal = DB::table('epp_persona')
+            ->where('persona_id', $persona->id)
+            ->sum('cantidad');
+
         return response()->json([
             'persona' => $persona,
-            'entregas' => $entregas
+            'entregas' => $entregas,
+            // Enviamos los totales globales por si se usan en otra parte
+            'total_devuelto_global' => $totalDevueltoGlobal,
+            'total_entregado_global' => $totalEntregadoGlobal
         ]);
     }
 

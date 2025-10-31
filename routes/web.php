@@ -29,7 +29,7 @@ Route::middleware(['auth'])->group(function () {
     // Detalles de EPP por Persona ID y EPP ID (Usado por JS)
     // Nota: He cambiado el nombre del parámetro de {persona} a {personaId} para mayor claridad
     Route::get('/dashboard/detalles/{personaId}/{eppId}', [DashboardController::class, 'detalles'])->name('dashboard.detalles');
-    Route::get('/dashboard/autocomplete-dni', [App\Http\Controllers\DashboardController::class, 'autocompleteDni']);
+    Route::get('/dashboard/autocomplete-dni', [DashboardController::class, 'autocompleteDni']);
 
     // Perfil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
