@@ -187,9 +187,6 @@
                     </div>
                 </div>
 
-
-
-
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
                         data-toggle="fullscreen">
@@ -204,14 +201,11 @@
                     </button>
                 </div>
 
-
-
                 <div class="dropdown ms-sm-3 header-item topbar-user">
                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
-                            <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg"
-                                alt="Header Avatar">
+                            <img class="rounded-circle header-profile-user" src="{{ asset('images/users/user-dummy-img.jpg') }}">
                             <span class="text-start ms-xl-2">
                                 <ul class="navbar-nav ms-auto">
                                     @guest
@@ -224,7 +218,7 @@
                                         </li>
                                     @endguest
                                 </ul>
-                                <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Founder</span>
+                                <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Usuario</span>
                             </span>
                         </span>
                     </button>

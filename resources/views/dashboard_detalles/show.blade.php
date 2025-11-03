@@ -10,6 +10,7 @@
                     <thead class="table-primary">
                         <tr>
                             <th>Cantidad</th>
+                            <th>Unidad Medida</th> {{-- ✅ Nueva columna --}}
                             <th>Fecha Entrega</th>
                             <th>Fecha Devolución</th>
                             <th>Observación</th>

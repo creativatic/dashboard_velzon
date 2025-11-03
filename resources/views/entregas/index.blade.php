@@ -162,6 +162,7 @@
                 document.getElementById('edit_persona_id').value = data.persona_id;
                 document.getElementById('edit_persona').value = data.persona;
                 document.getElementById('edit_epp').value = data.epp;
+                document.getElementById('edit_unidad_medida').value = data.unidades_medidas ?? '';
                 document.getElementById('edit_numero_vale').value = data.numero_vale ?? '';
                 document.getElementById('edit_orden_trabajo').value = data.orden_trabajo ?? '';
                 document.getElementById('edit_cantidad').value = data.cantidad;
@@ -190,13 +191,14 @@
                 contenedor.innerHTML = data.map(item => `
                     <div class="card mb-4 shadow-sm">
                         <div class="card-header bg-light fw-bold">
-                            ${item.epp}
+                            ${item.epp} ${ item.registros && item.registros.length ? `<small class="text-muted"> — ${item.registros[0].unidades_medidas ?? ''}</small>` : '' }
                         </div>
                         <div class="card-body p-0">
                             <table class="table table-sm mb-0">
                                 <thead class="table-secondary">
                                     <tr>
                                         <th>Cantidad</th>
+                                        <th>Unidad Medida</th>
                                         <th>N° Vale</th>
                                         <th>Orden Trabajo</th>
                                         <th>Fecha Entrega</th>
@@ -209,6 +211,7 @@
                                     ${item.registros.map(r => `
                                         <tr>
                                             <td>${r.cantidad}</td>
+                                            <td>${r.unidades_medidas ?? '-'}</td>
                                             <td>${r.numero_vale ?? '-'}</td>
                                             <td>${r.orden_trabajo ?? '-'}</td>
                                             <td>${r.fecha_entrega}</td>
@@ -237,6 +240,7 @@
                         </div>
                     </div>
                 `).join('');
+
             })
             .catch(err => {
                 console.error(err);

@@ -58,7 +58,7 @@ class EppController extends Controller
     {
         return response()->json(
             Epp::where('nombre', 'LIKE', "%{$term}%")
-                ->select('id', 'nombre', 'stock')
+                ->select('id', 'nombre', 'stock', 'unidades_medidas')
                 ->limit(10)
                 ->get()
         );

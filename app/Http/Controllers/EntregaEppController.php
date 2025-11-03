@@ -60,6 +60,7 @@ class EntregaEppController extends Controller
                 'epp_persona.epp_id',
                 'personas.nombres as persona',
                 'epps.nombre as epp',
+                'epps.unidades_medidas', // ✅ agregamos esta línea
                 'epp_persona.cantidad',
                 'epp_persona.fecha_entrega',
                 'epp_persona.fecha_devolucion',
@@ -173,11 +174,12 @@ class EntregaEppController extends Controller
 
     public function entregasPorPersona($persona_id)
     {
+        // Obtengo los EPPs que la persona ha recibido (incluyendo unidades_medidas)
         $epps = DB::table('epp_persona')
             ->join('epps', 'epp_persona.epp_id', '=', 'epps.id')
-            ->select('epps.id as epp_id', 'epps.nombre as epp')
+            ->select('epps.id as epp_id', 'epps.nombre as epp', 'epps.unidades_medidas')
             ->where('epp_persona.persona_id', $persona_id)
-            ->groupBy('epps.id', 'epps.nombre')
+            ->groupBy('epps.id', 'epps.nombre', 'epps.unidades_medidas')
             ->get();
 
         $resultado = [];
@@ -199,9 +201,14 @@ class EntregaEppController extends Controller
                 ->limit(2)
                 ->get();
 
+            // Agrego la unidad de medida a cada registro (la tomamos del epp agrupado)
+            $registrosConUnidad = $registros->map(function($r) use ($epp) {
+                return array_merge((array)$r, ['unidades_medidas' => $epp->unidades_medidas]);
+            });
+
             $resultado[] = [
                 'epp' => $epp->epp,
-                'registros' => $registros
+                'registros' => $registrosConUnidad
             ];
         }
 

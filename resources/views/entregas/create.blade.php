@@ -1,6 +1,6 @@
 <!-- Modal Crear Entrega -->
 <div class="modal fade" id="createEntregaModal" tabindex="-1" aria-labelledby="createEntregaModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <form action="{{ route('entregas.store') }}" method="POST" class="modal-content">
             @csrf
 
@@ -34,6 +34,7 @@
                             <tr>
                                 <th>EPP</th>
                                 <th>Cantidad</th>
+                                <th>Unidad</th>
                                 <th>Observación</th>
                                 <th>Acciones</th>
                             </tr>
@@ -45,7 +46,11 @@
                                     <input type="hidden" name="epps[0][epp_id]" class="epp_id">
                                     <div class="resultados-epp list-group" style="position:absolute; z-index:1000; width:100%; display:none;"></div>
                                 </td>
+                                
                                 <td><input type="number" name="epps[0][cantidad]" class="form-control" min="1" required></td>
+                                <td>
+                                    <input type="text" class="form-control unidad_epp" name="epps[0][unidad]" readonly>
+                                </td>
                                 <td><input type="text" name="epps[0][observacion]" class="form-control"></td>
                                 <td><button type="button" class="btn btn-danger btn-sm eliminarFila">🗑</button></td>
                             </tr>
@@ -80,9 +85,13 @@
 </div>
 
 {{-- Script del autocompletado --}}
+{{-- Script del autocompletado --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // --- AUTOCOMPLETADO DE PERSONAS ---
+
+    // ======================================================
+    // 🔍 AUTOCOMPLETADO DE PERSONAS POR DNI
+    // ======================================================
     const inputDni = document.getElementById('buscar_dni');
     const resultados = document.getElementById('resultados_dni');
     const nombrePersona = document.getElementById('nombre_persona');
@@ -126,7 +135,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // --- AGREGAR Y ELIMINAR FILAS DE EPP ---
+
+    // ======================================================
+    // 🧱 AGREGAR Y ELIMINAR FILAS DE EPP
+    // ======================================================
     let indice = 1;
     const btnAgregar = document.getElementById('agregarEpp');
     const tbody = document.getElementById('eppItems');
@@ -140,6 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="resultados-epp list-group" style="position:absolute; z-index:1000; width:100%; display:none;"></div>
             </td>
             <td><input type="number" name="epps[${indice}][cantidad]" class="form-control" min="1" required></td>
+            <td><input type="text" class="form-control unidad_epp" name="epps[${indice}][unidad]" readonly></td>
             <td><input type="text" name="epps[${indice}][observacion]" class="form-control"></td>
             <td><button type="button" class="btn btn-danger btn-sm eliminarFila">🗑</button></td>
         `;
@@ -147,13 +160,17 @@ document.addEventListener('DOMContentLoaded', function() {
         indice++;
     });
 
+    // Eliminar fila de EPP
     tbody.addEventListener('click', e => {
         if (e.target.classList.contains('eliminarFila')) {
             e.target.closest('tr').remove();
         }
     });
 
-    // --- AUTOCOMPLETADO DE EPPs ---
+
+    // ======================================================
+    // 🧠 AUTOCOMPLETADO DE EPPs
+    // ======================================================
     tbody.addEventListener('keyup', function(e) {
         if (!e.target.classList.contains('buscar-epp')) return;
 
@@ -180,6 +197,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         item.addEventListener('click', () => {
                             input.value = epp.nombre;
                             eppIdInput.value = epp.id;
+
+                            // ✅ Mostrar unidad de medida (columna readonly)
+                            const unidadInput = input.closest('tr').querySelector('.unidad_epp');
+                            if (unidadInput) unidadInput.value = epp.unidades_medidas || '';
+
                             resultadosEpp.style.display = 'none';
                         });
                         resultadosEpp.appendChild(item);
@@ -192,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(() => resultadosEpp.style.display = 'none');
     });
 
-    // Cierra dropdown de EPPs al hacer clic afuera
+    // Cierra dropdowns al hacer clic fuera
     document.addEventListener('click', function(e) {
         document.querySelectorAll('.resultados-epp').forEach(div => {
             if (!div.contains(e.target) && !e.target.classList.contains('buscar-epp')) {
@@ -200,5 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
 });
 </script>
+

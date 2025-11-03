@@ -31,8 +31,9 @@
             <thead class="table-success">
                 <tr>
                     <th>EPP</th>
-                    <th>Cantidad Entregada</th> {{-- Nombres de columna actualizados --}}
-                     <th>Cantidad Devuelta</th> {{-- ✅ NUEVA COLUMNA --}}
+                    <th>Cantidad Entregada</th>
+                    <th>Unidad Medida</th> {{-- ✅ Nueva columna --}}
+                    <th>Cantidad Devuelta</th>
                     <th>Fecha Última Entrega</th>
                     <th>Fecha Última Devolución</th>
                     <th>Acciones</th>
@@ -43,11 +44,12 @@
 
         <div class="alert alert-info mt-3">
             <p class="mb-1">
-                <strong>Total EPPs entregados (por EPP):</strong> <span id="total_epps"></span>
+                <strong>Total EPPs entregados (por EPP):</strong>
+                <span id="total_epps"></span>
             </p>
-            {{-- ✅ CAMPO DE TOTAL DE VUELTOS: AÑADIDO Y LISTO PARA RECIBIR DATOS --}}
             <p class="mb-0">
-                <strong>Total EPPs devueltos (ítems):</strong> <span id="total_epps_devueltos">0</span>
+                <strong>Total EPPs devueltos (ítems):</strong>
+                <span id="total_epps_devueltos">0</span>
             </p>
         </div>
     </div>
@@ -69,36 +71,40 @@ function buscarPorDni() {
         alert('Por favor ingrese un DNI');
         return;
     }
-    
-    // Limpiar totales y mensajes de error
+
+    // Limpiar totales y mensajes previos
     document.getElementById('total_epps').innerHTML = '';
     document.getElementById('total_epps_devueltos').textContent = '0';
-    
+
     fetch(`/dashboard/buscar/${dni}`)
         .then(res => {
             if (!res.ok) throw new Error('No se encontró el registro');
             return res.json();
         })
         .then(data => {
-            // Mostrar datos de persona
+            // Mostrar datos personales
             document.getElementById('nombre_persona').textContent = data.persona.nombres;
             document.getElementById('dni_persona').textContent = data.persona.dni;
             document.getElementById('cargo_persona').textContent = data.persona.cargo ?? '-';
             document.getElementById('area_persona').textContent = data.persona.area ?? '-';
             infoPersona.classList.remove('d-none');
 
-            // Mostrar entregas en la tabla
+            // Poblar la tabla principal
             const tbody = document.getElementById('tbody_entregas');
             tbody.innerHTML = '';
+
             data.entregas.forEach(e => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${e.epp}</td>
                     <td>${e.total_entregado}</td>
-                    <td>${e.total_devuelto_epp}</td> <td>${e.ultima_entrega ?? '-'}</td>
+                    <td>${e.unidades_medidas ?? '-'}</td> <!-- ✅ Mostramos unidad -->
+                    <td>${e.total_devuelto_epp}</td>
+                    <td>${e.ultima_entrega ?? '-'}</td>
                     <td>${e.ultima_devolucion ?? '<span class="badge bg-warning text-dark">Pendiente</span>'}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary" onclick="verDetalles('${data.persona.id}', '${e.epp_id}', '${e.epp}')">
+                        <button class="btn btn-sm btn-outline-primary" 
+                            onclick="verDetalles('${data.persona.id}', '${e.epp_id}', '${e.epp}')">
                             Ver
                         </button>
                     </td>
@@ -108,14 +114,20 @@ function buscarPorDni() {
 
             tablaEntregas.classList.remove('d-none');
 
-            // Mostrar totales agrupados (ahora mostrando el resumen por EPP)
+            // Mostrar totales agrupados
             document.getElementById('total_epps').innerHTML = `
                 <ul class="mb-0">
-                    ${data.entregas.map(e => `<li><strong>${e.epp}:</strong> ${e.total_entregado} Entregados / ${e.total_devuelto_epp} Devueltos</li>`).join('')}
+                    ${data.entregas.map(e => `
+                        <li>
+                            <strong>${e.epp}:</strong>
+                            ${e.total_entregado} ${e.unidades_medidas ?? ''} entregados /
+                            ${e.total_devuelto_epp} ${e.unidades_medidas ?? ''} devueltos
+                        </li>
+                    `).join('')}
                 </ul>
             `;
-            
-            // Si quieres seguir mostrando el total global, usa el nuevo campo del controlador
+
+            // Total global (si existe en el JSON)
             document.getElementById('total_epps_devueltos').textContent = data.total_devuelto_global ?? 0;
 
             mensajeError.classList.add('d-none');
@@ -130,11 +142,9 @@ function buscarPorDni() {
         });
 }
 
-// Función verDetalles: sin cambios
 function verDetalles(personaId, eppId, eppNombre) {
-    // 💡 Paso 1: Muestra el nombre del EPP que se está consultando en el modal
     document.getElementById('modalDetallesLabel').textContent = `Detalles de Entregas de EPP: ${eppNombre}`;
-    
+
     fetch(`/dashboard/detalles/${personaId}/${eppId}`)
         .then(res => {
             if (!res.ok) throw new Error('Error al obtener detalles');
@@ -142,18 +152,16 @@ function verDetalles(personaId, eppId, eppNombre) {
         })
         .then(data => {
             const tbody = document.getElementById('tbody_detalles');
-            tbody.innerHTML = ''; // Limpiar contenido previo
+            tbody.innerHTML = '';
 
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">Sin registros de entregas para este EPP.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">Sin registros de entregas para este EPP.</td></tr>`;
             } else {
-                // 💡 Paso 2: Inyectar los datos en el tbody
                 data.forEach(d => {
                     const tr = document.createElement('tr');
-                    
-                    // Asegúrate de que los nombres de las propiedades coincidan.
                     tr.innerHTML = `
                         <td>${d.cantidad ?? '-'}</td>
+                        <td>${d.unidades_medidas ?? '-'}</td>
                         <td>${d.fecha_entrega ?? '-'}</td>
                         <td>${d.fecha_devolucion ?? '<span class="badge bg-warning text-dark">Pendiente</span>'}</td>
                         <td>${d.observacion ?? '-'}</td>
@@ -162,13 +170,12 @@ function verDetalles(personaId, eppId, eppNombre) {
                 });
             }
 
-            // 💡 Paso 3: Abrir el modal
             const modal = new bootstrap.Modal(document.getElementById('modalDetalles'));
             modal.show();
         })
-        .catch((error) => {
-            console.error("Error al cargar detalles:", error);
-            alert('No se pudieron cargar los detalles. Verifique la consola para más información.');
+        .catch(err => {
+            console.error("Error al cargar detalles:", err);
+            alert('No se pudieron cargar los detalles.');
         });
 }
 </script>
