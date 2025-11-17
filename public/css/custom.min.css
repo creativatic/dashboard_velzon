@@ -1,2 +1,96 @@
 
 /*# sourceMappingURL=custom.min.css.map */
+:root {
+    --vz-primary: #dc3545;
+    --vz-primary-rgb: 220, 53, 69;
+
+    --vz-link-color: #dc3545;
+    --vz-link-hover-color: #b72b37;
+
+    --vz-vertical-menu-item-hover-color: #dc3545;
+    --vz-vertical-menu-item-active-color: #dc3545;
+    --vz-vertical-menu-sub-item-hover-color: #dc3545;
+    --vz-vertical-menu-sub-item-active-color: #dc3545;
+    --vz-vertical-menu-bg-dark: #dc3545;
+}
+
+.bg-primary,
+.card-primary,
+.btn-primary {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.text-primary {
+    color: #dc3545 !important;
+}
+
+.auth-one-bg {
+    background-image: url("{{ asset('images/bhc-one-bg.jpg') }}") !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-color: transparent !important; /* Evita el tono azul */
+}
+
+/* Esta capa es la que Velzon usa para oscurecer todo */
+.auth-one-bg .bg-overlay {
+    background: transparent !important;
+}
+
+/* También aseguramos que el login no meta un color por defecto */
+.auth-bg-cover {
+    background-color: transparent !important;
+}
+
+/* ========== CUSTOM STYLES PARA SIDEBAR ========== */
+
+/* Color de texto en el sidebar */
+.menu-title,
+.menu-link,
+.menu-link .menu-text,
+.nav-link,
+.nav-link .menu-text,
+a.menu-link,
+a.nav-link {
+    color: #1a1a1a !important; /* texto oscuro */
+}
+
+/* Iconos del menú */
+.menu-link i,
+.nav-link i {
+    color: #1a1a1a !important;
+}
+
+/* Hover del item (conserva el estilo del template) */
+.menu-link:hover,
+.menu-link:hover .menu-text,
+.menu-link:hover i,
+.nav-link:hover,
+.nav-link:hover .menu-text,
+.nav-link:hover i {
+    color: #ffffff !important; /* blanco */
+}
+
+/* Item activo (si deseas que siga siendo blanco) */
+.menu-link.active,
+.menu-link.active i,
+.menu-link.active .menu-text {
+    color: #ffffff !important;
+}
+
+/* Mejorar contraste cuando el sidebar es rojo */
+.vertical-menu,
+.app-menu.navbar-menu {
+    background-color: #c62828 !important; /* rojo más uniforme y profesional */
+}
+
+/* ===== Corregir si algun texto del header entra al sidebar ===== */
+.app-menu .navbar-brand-box .logo span,
+.app-menu .navbar-brand-box .logo-text {
+    color: #ffffff !important;
+}
+
+/* ===== Ajustes generales ===== */
+body {
+    font-family: "Inter", sans-serif !important;
+}

@@ -56,6 +56,19 @@
         }
     </style>
 
+    <style>
+    /* Fondo general del login */
+    .auth-page-wrapper.auth-bg-cover {
+        background: #b80000 !important; /* rojo fuerte */
+    }
+
+    /* Si existe una imagen o capa superpuesta, eliminala o hazla transparente */
+    .auth-page-wrapper .bg-overlay {
+        background-color: rgba(0, 0, 0, 0) !important;
+    }
+    </style>
+
+
 </head>
 
 <body>
