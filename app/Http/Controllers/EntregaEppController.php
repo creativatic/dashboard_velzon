@@ -6,6 +6,8 @@ use App\Models\Epp;
 use App\Models\Persona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\EppPersonaImport;
 
 class EntregaEppController extends Controller
 {
@@ -215,6 +217,20 @@ class EntregaEppController extends Controller
         return response()->json($resultado);
     }
 
+    public function import(Request $request)
+    {
+        $request->validate([
+            'archivo' => 'required|file|mimes:xlsx,xls'
+        ]);
+
+        try {
+            Excel::import(new EppPersonaImport, $request->file('archivo'));
+
+            return back()->with('success', 'Los registros fueron importados correctamente.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al importar: ' . $e->getMessage());
+        }
+    }
 
 
 }

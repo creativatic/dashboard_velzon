@@ -58,6 +58,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('entregas/{id}', [EntregaEppController::class, 'show'])->name('entregas.show');
     Route::get('/entregas/persona/{id}', [EntregaEppController::class, 'entregasPorPersona']);
     Route::get('/entregas/persona/{id}', [EntregaEppController::class, 'entregasPorPersona'])->name('entregas.persona');
+    Route::post('/entregas/import', [EntregaEppController::class, 'import'])->name('entregas.import');
+
+
     Route::get('/epps/buscar/{term}', [EppController::class, 'buscar']);
 
 });

@@ -102,7 +102,7 @@ class DashboardController extends Controller
             ->where('persona_id', $persona->id)
             ->where('epps.nombre', $nombreEpp)
             ->orderByDesc('epp_persona.fecha_entrega')
-            ->get();
+            ->paginate(10);
 
         return response()->json($detalles);
     }

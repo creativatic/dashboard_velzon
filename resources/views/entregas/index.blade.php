@@ -4,6 +4,8 @@
 @include('entregas.create')
 @include('entregas.edit')
 @include('entregas.show')
+@include('entregas.import')
+
 
 <div class="container">
 
@@ -12,6 +14,11 @@
         <i class="ri-add-circle-line"></i> Nueva entrega
     </button>
     
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#importEntregaModal">
+        <i class="ri-upload-cloud-line"></i> Cargar Registros
+    </button>
+        
+
     <form method="GET" action="{{ route('entregas.index') }}" class="row g-3 align-items-end mb-4">
         
         {{-- ✅ NUEVO CAMPO DE FILTRO POR DNI --}}
@@ -189,56 +196,63 @@
                 }
 
                 contenedor.innerHTML = data.map(item => `
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-header bg-light fw-bold">
-                            ${item.epp} ${ item.registros && item.registros.length ? `<small class="text-muted"> — ${item.registros[0].unidades_medidas ?? ''}</small>` : '' }
+                    <div class="card mb-4 shadow-sm w-100">
+                        <div class="card-header bg-light fw-bold fs-5">
+                            ${item.epp} 
+                            ${ item.registros && item.registros.length 
+                                ? `<small class="text-muted"> — ${item.registros[0].unidades_medidas ?? ''}</small>` 
+                                : '' }
                         </div>
                         <div class="card-body p-0">
-                            <table class="table table-sm mb-0">
-                                <thead class="table-secondary">
-                                    <tr>
-                                        <th>Cantidad</th>
-                                        <th>Unidad Medida</th>
-                                        <th>N° Vale</th>
-                                        <th>Orden Trabajo</th>
-                                        <th>Fecha Entrega</th>
-                                        <th>Fecha Devolución</th>
-                                        <th>Observación</th>
-                                        <th class="text-center">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${item.registros.map(r => `
+                            <!-- ✅ Contenedor responsivo -->
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered align-middle table-lg mb-0">
+                                    <thead class="table-secondary text-center">
                                         <tr>
-                                            <td>${r.cantidad}</td>
-                                            <td>${r.unidades_medidas ?? '-'}</td>
-                                            <td>${r.numero_vale ?? '-'}</td>
-                                            <td>${r.orden_trabajo ?? '-'}</td>
-                                            <td>${r.fecha_entrega}</td>
-                                            <td>
-                                                ${r.fecha_devolucion 
-                                                    ? `<span class="badge bg-success">${r.fecha_devolucion}</span>`
-                                                    : `<span class="badge bg-warning text-dark">Pendiente</span>`}
-                                            </td>
-                                            <td>${r.observacion ?? '-'}</td>
-                                            <td class="text-center">
-                                                ${
-                                                    !r.fecha_devolucion
-                                                        ? `<button class="btn btn-warning btn-sm" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#editEntregaModal" 
-                                                                onclick="editarEntrega(${r.id})">
-                                                            <i class='ri-edit-line'></i>
-                                                        </button>`
-                                                        : `<span class='text-muted'>—</span>`
-                                                }
-                                            </td>
+                                            <th>Cantidad</th>
+                                            <th>Unidad Medida</th>
+                                            <th>N° Vale</th>
+                                            <th>Orden Trabajo</th>
+                                            <th>Fecha Entrega</th>
+                                            <th>Fecha Devolución</th>
+                                            <th>Observación</th>
+                                            <th>Acciones</th>
                                         </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        ${item.registros.map(r => `
+                                            <tr>
+                                                <td>${r.cantidad}</td>
+                                                <td>${r.unidades_medidas ?? '-'}</td>
+                                                <td>${r.numero_vale ?? '-'}</td>
+                                                <td>${r.orden_trabajo ?? '-'}</td>
+                                                <td>${r.fecha_entrega}</td>
+                                                <td>
+                                                    ${r.fecha_devolucion 
+                                                        ? `<span class="badge bg-success">${r.fecha_devolucion}</span>`
+                                                        : `<span class="badge bg-warning text-dark">Pendiente</span>`}
+                                                </td>
+                                                <td>${r.observacion ?? '-'}</td>
+                                                <td class="text-center">
+                                                    ${
+                                                        !r.fecha_devolucion
+                                                            ? `<button class="btn btn-warning btn-sm" 
+                                                                    data-bs-toggle="modal" 
+                                                                    data-bs-target="#editEntregaModal" 
+                                                                    onclick="editarEntrega(${r.id})">
+                                                                <i class='ri-edit-line'></i>
+                                                            </button>`
+                                                            : `<span class='text-muted'>—</span>`
+                                                    }
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+
                 `).join('');
 
             })
