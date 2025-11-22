@@ -16,7 +16,7 @@
 
                     <div class="alert alert-info">
                         El archivo debe contener estas columnas:<br>
-                        <b>dni, epp, cantidad, fecha_entrega, numero_vale, orden_trabajo, observacion</b>
+                        <b>dni, nombres_apellidos, epp, cantidad, fecha_entrega, numero_vale, orden_trabajo, observacion</b>
                     </div>
 
                     <input type="file" name="archivo" class="form-control" required accept=".xlsx,.xls">
