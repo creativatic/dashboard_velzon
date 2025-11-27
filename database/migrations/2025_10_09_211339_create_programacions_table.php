@@ -16,28 +16,6 @@ return new class extends Migration
             $table->dateTime('fecha_programacion');
             $table->string('guia_remision', 100)->nullable();
             
-            //DATOS DEL CONDUCTOR
-            $table->string('dni', 8)->nullable();
-            $table->string('licencia', 20)->nullable();
-            $table->string('nombres_conductor', 100)->nullable();
-            $table->string('apellidos_conductor', 100)->nullable();
-            $table->string('telefono_conductor', 20)->nullable();
-
-            //DATOS DE LA UNIDAD 
-            $table->string('placa_tracto', 20)->nullable();
-            $table->string('placa_carreta', 20)->nullable();
-            $table->string('marca_vehiculo', 50)->nullable();
-            $table->string('tipo_plataforma', 50)->nullable();
-            $table->string('constancia_mtc_tracto', 100)->nullable();
-            $table->string('constancia_mtc_carreta', 100)->nullable();
-            
-            //DATOS DEL PROVEEDOR
-            $table->string('razon_social_transporte', 100)->nullable();
-            $table->string('ruc_transporte', 11)->nullable();            
-            $table->string('cuenta_banco', 50)->nullable();
-            $table->string('cci_banco', 50)->nullable();
-            $table->string('banco', 50)->nullable();
-
             $table->string('tipo_mineral', 50)->nullable();
             $table->enum('tipo_operacion', ['nacional', 'internacional'])->nullable(); // ← Cambiado
             $table->enum('conformidad_adelanto', ['Ok', 'Pendiente'])->nullable(); // ← Cambiado
@@ -53,7 +31,11 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('detalle_programacions')
                 ->nullOnDelete();
-
+            $table->foreignId('proveedor_id')
+                ->nullable()
+                ->constrained('proveedores')
+                ->nullOnDelete();
+            
             $table->timestamps();
         });
 

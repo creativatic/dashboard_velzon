@@ -30,26 +30,22 @@
                         <th>Fecha Programación</th>
                         <th>Guía Remisión</th>
 
-                        <!-- resive un valor nulo -->
-                        <th>Placa Tracto</th>
-                        <!-- resive un valor nulo -->
-                        <th>Marca Vehículo</th>
-
-                        <th>Tipo Plataforma</th>
-                        <th>Razón Social Transporte</th>
-                        <th>RUC Transporte</th>
+                        <!-- Conductor -->
                         <th>Nombres Conductor</th>
                         <th>Apellidos Conductor</th>
                         <th>Teléfono</th>
-                        <th>Banco</th>
-                        <th>Tipo Mineral</th>
-                        <th>Frente</th>
-                        <th>Conformidad Adelanto</th>
 
-                        <!-- resive un valor nulo -->
+                        <!-- Servicio -->
+                        <th>Tipo Mineral</th>
+                        <th>Operación</th>
+                        <th>Frente</th>
+
+                        <!-- Adelantos -->
+                        <th>Conformidad</th>
+                        <th>Monto Adelanto</th>
+
                         <th>Guía Transportista</th>
                         <th>Acciones</th>
-
                     </tr>
                 </thead>
                 <tbody>
@@ -58,60 +54,56 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ \Carbon\Carbon::parse($programacion->fecha_programacion)->format('d/m/Y') }}</td>
                             <td>{{ $programacion->guia_remision ?? '-' }}</td>
-                            <td>{{ $programacion->placa_tracto ?? '-' }}</td>
-                            <td>{{ $programacion->marca_vehiculo ?? '-' }}</td>
-                            <td>{{ $programacion->tipo_plataforma ?? '-' }}</td>
-                            <td>{{ $programacion->razon_social_transporte ?? '-' }}</td>
-                            <td>{{ $programacion->ruc_transporte ?? '-' }}</td>
-                            <td>{{ $programacion->nombres_conductor ?? '-' }}</td>
-                            <td>{{ $programacion->apellidos_conductor ?? '-' }}</td>
-                            <td>{{ $programacion->telefono_conductor ?? '-' }}</td>
-                            <td>{{ $programacion->banco ?? '-' }}</td>
+
+                            <td>{{ $programacion->nombres_conductor ?? '' }}</td>
+                            <td>{{ $programacion->apellidos_conductor ?? '' }}</td>
+                            <td>{{ $programacion->telefono_conductor ?? '' }}</td>
+
                             <td>{{ $programacion->tipo_mineral ?? '-' }}</td>
+                            <td>{{ $programacion->tipo_operacion ?? '-' }}</td>
                             <td>{{ $programacion->detalleProgramacion?->frente ?? '—' }}</td>
+
                             <td>
                                 @if($programacion->conformidad_adelanto === 'Ok')
-                                    <span class="btn btn-success btn-sm w-100">{{ $programacion->conformidad_adelanto }}</span>
+                                    <span class="btn btn-success btn-sm w-100">OK</span>
                                 @elseif($programacion->conformidad_adelanto === 'Pendiente')
-                                    <span class="btn btn-danger btn-sm w-100">{{ $programacion->conformidad_adelanto }}</span>
+                                    <span class="btn btn-danger btn-sm w-100">Pendiente</span>
                                 @else
                                     <span class="badge bg-secondary">--</span>
                                 @endif
                             </td>
 
+                            <td>{{ $programacion->monto_adelanto ? 'S/ '.number_format($programacion->monto_adelanto,2) : '-' }}</td>
                             <td>{{ $programacion->guia_transportista ?? '-' }}</td>
+
                             <td>
-                                <!-- ✅ CORREGIDO: Solo un método para Ver -->
-                                <button type="button"
-                                    class="btn btn-info btn-sm"
+                                {{-- Botones de acciones --}}
+                                <button type="button" class="btn btn-info btn-sm"
                                     onclick='openShowProgramacionModal(@json($programacion))'>
                                     <i class="fas fa-eye"></i> Ver
                                 </button>
-                                
-                                <!-- Botón para editar -->
-                                <button type="button" class="btn btn-warning btn-sm" 
-                                        onclick='openEditProgramacionModal(@json($programacion))'>
-                                        <i class="ri-edit-2-line"></i>
+
+                                <button type="button" class="btn btn-warning btn-sm"
+                                    onclick='openEditProgramacionModal(@json($programacion))'>
+                                    <i class="ri-edit-2-line"></i>
                                 </button>
 
-                                <!-- Botón para eliminar -->
                                 <form action="{{ route('programacions.destroy', $programacion) }}" 
-                                      method="POST" 
-                                      style="display:inline-block;">
+                                    method="POST" style="display:inline-block;">
                                     @csrf @method('DELETE')
-                                    <button class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta programación?')" >
-                                            <i class="ri-delete-bin-line"></i>
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="ri-delete-bin-line"></i>
                                     </button>
                                 </form>
-
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="26" class="text-muted">No hay registros de programación.</td>
+                            <td colspan="20" class="text-muted">No hay registros.</td>
                         </tr>
                     @endforelse
                 </tbody>
+
             </table>
         </div>
 </div>
@@ -126,17 +118,17 @@ function openShowProgramacionModal(programacion) {
     document.getElementById('show_licencia').textContent = programacion.licencia || '--';
     document.getElementById('show_dni').textContent = programacion.dni || '--';
     document.getElementById('show_guia_remision').textContent = programacion.guia_remision || '--';
-    document.getElementById('show_placa_tracto').textContent = programacion.placa_tracto || '--';
-    document.getElementById('show_placa_carreta').textContent = programacion.placa_carreta || '--';
-    document.getElementById('show_marca_vehiculo').textContent = programacion.marca_vehiculo || '--';
-    document.getElementById('show_tipo_plataforma').textContent = programacion.tipo_plataforma || '--';
-    document.getElementById('show_constancia_tracto').textContent = programacion.constancia_mtc_tracto || '--';
-    document.getElementById('show_constancia_carreta').textContent = programacion.constancia_mtc_carreta || '--';
-    document.getElementById('show_razon_social_transporte').textContent = programacion.razon_social_transporte || '--';
-    document.getElementById('show_ruc_transporte').textContent = programacion.ruc_transporte || '--';
-    document.getElementById('show_nombres_conductor').textContent = programacion.nombres_conductor || '--';
+    document.getElementById('show_placa_tracto').textContent = programacion.unidad?.placa_tracto|| '--';
+    document.getElementById('show_placa_carreta').textContent = programacion.unidad?.placa_carreta || '--';
+    document.getElementById('show_marca_vehiculo').textContent = programacion.unidad?.marca_vehiculo || '--';
+    document.getElementById('show_tipo_plataforma').textContent = programacion.unidad?.tipo_plataforma || '--';
+    document.getElementById('show_constancia_tracto').textContent = programacion.unidad?.constancia_mtc_tracto || '--';
+    document.getElementById('show_constancia_carreta').textContent = programacion.unidad?.constancia_mtc_carreta || '--';
+    document.getElementById('show_razon_social_transporte').textContent = programacion.unidad?.proveedor?.razon_social || '--';
+    document.getElementById('show_ruc_transporte').textContent = programacion.unidad?.proveedor?.ruc_transporte || '--';
+    document.getElementById('show_nombres_conductor').textContent = programacion.unidad?.conductor?.nombres || '--';
     document.getElementById('show_apellidos_conductor').textContent = programacion.apellidos_conductor || '--';
-    document.getElementById('show_telefono_conductor').textContent = programacion.telefono_conductor || '--';
+    document.getElementById('show_telefono_conductor').textContent = programacion.unidad?.conductor?.telefono || '--';
     document.getElementById('show_tipo_mineral').textContent = programacion.tipo_mineral || '--';
     document.getElementById('show_tipo_operacion').textContent = programacion.tipo_operacion || '--';
     // Manejar conformidad_adelanto

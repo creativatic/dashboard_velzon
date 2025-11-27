@@ -1,220 +1,214 @@
 <!-- Modal Crear Programación -->
-<div class="modal fade" id="createProgramacionModal" tabindex="-1" aria-labelledby="createProgramacionModalLabel" aria-hidden="true">
+<div class="modal fade" id="createProgramacionModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
-        <form action="{{ route('programacions.store') }}" method="POST" class="modal-content">
+        <form id="createProgramacionForm" action="{{ route('programacions.store') }}" method="POST" class="modal-content">
             @csrf
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="createProgramacionModalLabel">
-                    <i class="ri-calendar-check-line me-1"></i> Nueva Programación
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+
+            <div class="modal-header">
+                <h5 class="modal-title">Nueva Programación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
 
             <div class="modal-body">
                 <div class="row g-3">
 
-                    {{-- Fecha Programación --}}
-    
+                    <!-- Sección 1: Información Básica -->
                     <div class="col-md-4">
-                        <label class="form-label">Fecha Programación</label>
-                        <input 
-                            type="datetime-local" 
-                            name="fecha_programacion" 
-                            class="form-control" 
-                            value="{{ now()->format('Y-m-d\TH:i') }}" 
-                            required
-                        >
+                        <label for="create-fecha_programacion" class="form-label">Fecha Programación</label>
+                        <input type="datetime-local" name="fecha_programacion" id="create-fecha_programacion" class="form-control" required>
                     </div>
 
-                    {{-- Frente / Detalle Programación --}}
                     <div class="col-md-4">
-                        <label class="form-label">Frente</label>
-                        <select name="detalle_programacion_id" class="form-select">
-                            <option value="">-- Seleccionar Frente --</option>
+                        <label for="create-detalle_programacion_id" class="form-label">Frente</label>
+                        <select name="detalle_programacion_id" id="create-detalle_programacion_id" class="form-select" required>
+                            <option value="">Seleccione un frente...</option>
                             @foreach($detalles as $detalle)
-                                <option value="{{ $detalle->id }}">{{ $detalle->frente }}</option>
+                                <option value="{{ $detalle->id }}">
+                                    {{ $detalle->frente }} — S/.{{ number_format($detalle->precio_frente, 2) }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
-                                
+
                     <div class="col-md-4">
-                        <label class="form-label">Licencia</label>
-                        <input type="text" name="licencia" class="form-control" placeholder="N° Licencia">
-                    </div>
-
-                    {{-- DNI --}}
-                    <div class="col-md-3">
-                        <label class="form-label">DNI</label>
-                        <input type="text" name="dni" class="form-control" maxlength="8" placeholder="DNI del conductor">
-                    </div>
-
-                    {{-- Guía Remisión --}}
-                    <div class="col-md-3">
-                        <label class="form-label">Guía Remisión</label>
-                        <input type="text" name="guia_remision" class="form-control" placeholder="Ej: 001-000123">
-                    </div>
-
-                    {{-- Placas --}}
-                    <div class="col-md-3">
-                        <label class="form-label">Placa Tracto</label>
-                        <input type="text" name="placa_tracto" class="form-control" placeholder="ABC-123">
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label">Placa Carreta</label>
-                        <input type="text" name="placa_carreta" class="form-control" placeholder="DEF-456">
-                    </div>
-
-                    <!-- resive un valor nulo -->
-                    <div class="col-md-4">
-                        <label class="form-label">Marca Vehículo</label>
-                        <input type="text" name="marca_vehiculo" class="form-control" placeholder="Ej: Volvo, Scania">
-                    </div>
-
-                    <!-- resive un valor nulo --> 
-                    <div class="col-md-4">
-                        <label class="form-label">Tipo Plataforma</label>
-                        <input type="text" name="tipo_plataforma" class="form-control" placeholder="Ej: Plataforma baja, Furgón">
+                        <label for="create-guia_remision" class="form-label">Guía Remisión</label>
+                        <input type="text" name="guia_remision" id="create-guia_remision" class="form-control">
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Constancia MTC Tracto</label>
-                        <input type="text" name="constancia_mtc_tracto" class="form-control" placeholder="N° constancia">
+                        <label for="create-conductor_id" class="form-label">Licencia del Conductor</label>
+                        <select name="conductor_id" id="create-conductor_id" class="form-select" required>
+                            <option value="">Seleccione un conductor...</option>
+                            @foreach($conductores as $c)
+                                <option value="{{ $c->id }}">
+                                    {{ $c->licencia }} — {{ $c->nombres }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Constancia MTC Carreta</label>
-                        <input type="text" name="constancia_mtc_carreta" class="form-control" placeholder="N° constancia">
-                    </div>
-
-                    {{-- Datos del Transporte --}}
-                    <div class="col-md-8">
-                        <label class="form-label">Razón Social del Transporte</label>
-                        <input type="text" name="razon_social_transporte" class="form-control" placeholder="Nombre o empresa de transporte">
+                        <label for="create-dni" class="form-label">DNI</label>
+                        <input type="text" name="dni" id="create-dni" maxlength="8" class="form-control">
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">RUC Transporte</label>
-                        <input type="text" name="ruc_transporte" class="form-control" placeholder="20714859632">
-                    </div>
-
-                    {{-- Datos del Conductor --}}
-                    <div class="col-md-4">
-                        <label class="form-label">Nombres Conductor</label>
-                        <input type="text" name="nombres_conductor" class="form-control" placeholder="Nombres">
+                        <label for="create-nombres_conductor" class="form-label">Nombres Conductor</label>
+                        <input type="text" name="nombres_conductor" id="create-nombres_conductor" class="form-control">
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Apellidos Conductor</label>
-                        <input type="text" name="apellidos_conductor" class="form-control" placeholder="Apellidos">
-                    </div>
-
-          
-
-                    <div class="col-md-4">
-                        <label class="form-label">Teléfono Conductor</label>
-                        <input type="text" name="telefono_conductor" class="form-control" placeholder="Ej: 987654321">
-                    </div>
-
-                    {{-- Cuenta bancaria --}}
-                    <div class="col-md-4">
-                        <label class="form-label">Cuenta Banco</label>
-                        <input type="text" name="cuenta_banco" class="form-control" placeholder="Cuenta bancaria">
+                        <label for="create-apellidos_conductor" class="form-label">Apellidos Conductor</label>
+                        <input type="text" name="apellidos_conductor" id="create-apellidos_conductor" class="form-control">
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">CCI Banco</label>
-                        <input type="text" name="cci_banco" class="form-control" placeholder="Código CCI">
+                        <label for="create-telefono_conductor" class="form-label">Teléfono</label>
+                        <input type="text" name="telefono_conductor" id="create-telefono_conductor" class="form-control">
+                    </div>
+
+                    <!-- Sección 3: Datos del Vehículo -->
+                    <div class="col-md-4">
+                        <label for="create-placa_tracto" class="form-label">Placa Tracto</label>
+                        <input type="text" name="placa_tracto" id="create-placa_tracto" class="form-control">
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Banco</label>
-                        <input type="text" name="banco" class="form-control" placeholder="Ej: BCP, BBVA, Interbank">
-                    </div>
-
-                    {{-- Tipo y operación --}}
-                    <div class="col-md-4">
-                        <label class="form-label">Tipo Mineral</label>
-                        <input type="text" name="tipo_mineral" class="form-control" placeholder="Ej: Hierro, Cobre">
+                        <label for="create-placa_carreta" class="form-label">Placa Carreta</label>
+                        <input type="text" name="placa_carreta" id="create-placa_carreta" class="form-control">
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Tipo Operación</label>
-                        <select name="tipo_operacion" class="form-select">
-                            <option value="">Seleccionar...</option>
-                            <option value="nacional" selected>Nacional</option>
+                        <label for="create-marca_vehiculo" class="form-label">Marca Vehículo</label>
+                        <input type="text" name="marca_vehiculo" id="create-marca_vehiculo" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="create-tipo_plataforma" class="form-label">Tipo Plataforma</label>
+                        <input type="text" name="tipo_plataforma" id="create-tipo_plataforma" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="create-constancia_mtc_tracto" class="form-label">Constancia MTC Tracto</label>
+                        <input type="text" name="constancia_mtc_tracto" id="create-constancia_mtc_tracto" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="create-constancia_mtc_carreta" class="form-label">Constancia MTC Carreta</label>
+                        <input type="text" name="constancia_mtc_carreta" id="create-constancia_mtc_carreta" class="form-control">
+                    </div>
+
+                    <!-- Sección 4: Datos proveedor -->
+                    <div class="col-md-4">
+                        <label for="create-ruc_transporte" class="form-label">RUC Transporte</label>
+                        <input type="text" name="ruc_transporte" id="create-ruc_transporte" class="form-control" maxlength="11">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="create-razon_social_transporte" class="form-label">Razón Social Transporte</label>
+                        <input type="text" name="razon_social_transporte" id="create-razon_social_transporte" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="create-cuenta_banco" class="form-label">Cuenta Banco</label>
+                        <input type="text" name="cuenta_banco" id="create-cuenta_banco" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="create-cci_banco" class="form-label">CCI Banco</label>
+                        <input type="text" name="cci_banco" id="create-cci_banco" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="create-banco" class="form-label">Banco</label>
+                        <input type="text" name="banco" id="create-banco" class="form-control">
+                    </div>
+
+                    <!-- Sección 5: Detalles servicio -->
+                    <div class="col-md-4">
+                        <label for="create-tipo_mineral" class="form-label">Tipo Mineral</label>
+                        <input type="text" name="tipo_mineral" id="create-tipo_mineral" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="create-tipo_operacion" class="form-label">Tipo Operación</label>
+                        <select name="tipo_operacion" id="create-tipo_operacion" class="form-select">
+                            <option value="">Seleccione...</option>
+                            <option value="nacional">Nacional</option>
                             <option value="internacional">Internacional</option>
                         </select>
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Conformidad Adelanto</label>
-                        <select name="conformidad_adelanto" class="form-select">
-                            <option value="">Seleccionar...</option>
+                        <label for="create-conformidad_adelanto" class="form-label">Conformidad Adelanto</label>
+                        <select name="conformidad_adelanto" id="create-conformidad_adelanto" class="form-select">
+                            <option value="">Seleccione...</option>
                             <option value="Ok">Ok</option>
-                            <option value="Pendiente" selected>Pendiente</option>
+                            <option value="Pendiente">Pendiente</option>
                         </select>
                     </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">Guía Transportista</label>
-                        <input type="text" name="guia_transportista" class="form-control" placeholder="N° guía transportista">
+                    <div class="col-md-4">
+                        <label for="create-guia_transportista" class="form-label">Guía Transportista</label>
+                        <input type="text" name="guia_transportista" id="create-guia_transportista" class="form-control">
                     </div>
 
-                    <div class="col-md-6">
-                        <label class="form-label">Grupo Carguío</label>
-                        <input type="text" name="grupo_cargio" class="form-control" placeholder="Ej: Grupo 1, Grupo 2">
+                    <div class="col-md-4">
+                        <label for="create-grupo_cargio" class="form-label">Grupo Carguío</label>
+                        <input type="text" name="grupo_cargio" id="create-grupo_cargio" class="form-control">
                     </div>
 
                 </div>
             </div>
-
-            <!-- 
-            {{-- Datos de Adelanto --}}
-            <hr class="mt-4 mb-3">
-            <h5 class="text-primary"><i class="ri-bank-line me-1"></i> Datos de Adelanto</h5>
-
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label">Monto de Adelanto (S/)</label>
-                    <input 
-                        type="number" 
-                        name="monto_adelanto" 
-                        step="0.01" 
-                        class="form-control" 
-                        placeholder="Ej: 500.00"
-                    >
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Fecha de Pago Adelanto</label>
-                    <input 
-                        type="date" 
-                        name="fecha_pago_adelantos" 
-                        class="form-control"
-                    >
-                </div>
-
-                <div class="col-md-12">
-                    <label class="form-label">Notas</label>
-                    <textarea 
-                        name="notas" 
-                        class="form-control" 
-                        rows="2" 
-                        placeholder="Comentarios adicionales..."
-                    ></textarea>
-                </div>
-            </div>
-            -->
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="ri-close-circle-line"></i> Cancelar
                 </button>
                 <button type="submit" class="btn btn-primary">
-                    <i class="ri-save-3-line"></i> Guardar Programación
+                    <i class="ri-save-3-line"></i> Guardar
                 </button>
             </div>
         </form>
     </div>
 </div>
+
+<script>
+document.getElementById('create-conductor_id').addEventListener('change', function () {
+
+    let id = this.value;
+    if (id === "") return;
+
+    fetch(`/conductores/${id}/data`)
+        .then(res => res.json())
+        .then(data => {
+
+            // Datos personales
+            document.getElementById('create-dni').value = data.dni ?? '';
+            document.getElementById('create-nombres_conductor').value = data.nombres ?? '';
+            document.getElementById('create-apellidos_conductor').value = data.apellidos ?? '';
+            document.getElementById('create-telefono_conductor').value = data.telefono ?? '';
+
+            // Vehículo
+            document.getElementById('create-placa_tracto').value = data.placa_tracto ?? '';
+            document.getElementById('create-placa_carreta').value = data.placa_carreta ?? '';
+            document.getElementById('create-marca_vehiculo').value = data.marca_vehiculo ?? '';
+            document.getElementById('create-tipo_plataforma').value = data.tipo_plataforma ?? '';
+
+            // MTC
+            document.getElementById('create-constancia_mtc_tracto').value = data.constancia_mtc_tracto ?? '';
+            document.getElementById('create-constancia_mtc_carreta').value = data.constancia_mtc_carreta ?? '';
+
+            // Empresa transporte
+            document.getElementById('create-ruc_transporte').value = data.ruc_transporte ?? '';
+            document.getElementById('create-razon_social_transporte').value = data.razon_social_transporte ?? '';
+            document.getElementById('create-cuenta_banco').value = data.cuenta_banco ?? '';
+            document.getElementById('create-cci_banco').value = data.cci_banco ?? '';
+            document.getElementById('create-banco').value = data.banco ?? '';
+
+            // Minerales
+            document.getElementById('create-tipo_mineral').value = data.tipo_mineral ?? '';
+
+        });
+});
+</script>

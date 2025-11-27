@@ -13,33 +13,50 @@ class Programacion extends Model
 
     protected $fillable = [
         'fecha_programacion',
-        'dni',
         'guia_remision',
-        'placa_tracto', 
-        'placa_carreta',
-        'marca_vehiculo',
-        'tipo_plataforma',
-        'constancia_mtc_tracto',
-        'constancia_mtc_carreta',
-        'razon_social_transporte',
-        'ruc_transporte',
-        'nombres_conductor',
-        'apellidos_conductor', 
-        'licencia',
-        'telefono_conductor',
-        'cuenta_banco',
-        'cci_banco',
-        'banco',
+
+        // Datos del servicio
         'tipo_mineral',
         'tipo_operacion',
         'conformidad_adelanto',
         'guia_transportista',
         'grupo_cargio',
+
+        // Adelantos
         'monto_adelanto',
         'fecha_pago_adelantos',
         'glosa_banco',
         'notas',
-        'detalle_programacion_id'
+
+        // Conductor
+        'conductor_id',
+        'licencia',
+        'dni',
+        'nombres_conductor',
+        'apellidos_conductor',
+        'telefono_conductor',
+
+        // Unidad
+        'unidad_id',
+        'placa_tracto',
+        'placa_carreta',
+        'marca_vehiculo',
+        'tipo_plataforma',
+        'constancia_mtc_tracto',
+        'constancia_mtc_carreta',
+
+        // Proveedor
+        'proveedor_id',
+        'razon_social_transporte',
+        'ruc_transporte',
+        'banco',
+        'cuenta_banco',
+        'cci_banco',
+
+        // Relaciones
+        'detalle_programacion_id',
+        'unidad_id',
+        'proveedor_id',
     ];
         
     // Una programación puede tener muchos adelantos
@@ -81,6 +98,18 @@ class Programacion extends Model
             ->where('frente', $frente)
             ->where('activo', true)
             ->value('precio_tn');
+    }
+
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedor::class);
+    }
+
+    // (opcional) accesores / helpers
+    public function proveedorUnidadPrincipal()
+    {
+        // Devuelve la primera unidad asociada al proveedor (si la hay)
+        return $this->proveedor?->unidades?->first();
     }
 
 }

@@ -18,6 +18,9 @@ use App\Http\Controllers\TisurController;
 use App\Http\Controllers\ExpedienteController;
 use App\Http\Controllers\SeguimientoController;
 use App\Http\Controllers\ReporteController;
+use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\UnidadController;
+use App\Http\Controllers\ConductorController;
 
 
 Route::middleware(['auth'])->group(function () {
@@ -42,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
         // Buscadores
         Route::get('/programaciones/search', [ExpedienteController::class, 'buscarProgramacion'])->name('programaciones.search');
         Route::get('/programacion/{id}', [ProgramacionController::class, 'showJson']);
+        Route::get('/programacions/conductor/{licencia}', [ProgramacionController::class, 'getConductorByLicencia']);
 
         //Route::get('/tisurs/search', [ExpedienteController::class, 'buscarTisur'])->name('tisurs.search');
         //Route::get('/detalles/search', [ExpedienteController::class, 'buscarDetalle'])->name('detalles.search');
@@ -69,11 +73,22 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/expediente/{id}', [ExpedienteController::class, 'show'])->name('expediente.show');
         Route::get('/expediente/{id}/edit', [ExpedienteController::class, 'edit'])->name('expediente.edit');
         Route::get('/expediente/precio-tn', [ExpedienteController::class, 'getPrecioTn']);
-
-
-
         //  Seguimiento
         Route::resource('seguimientos', SeguimientoController::class)->except(['show']);
+
+        // PROVEEDORES
+        Route::resource('proveedores', ProveedorController::class)->except(['show']);
+        // UNIDADES
+        Route::resource('unidades', UnidadController::class);
+        // ⚠️ ESTA RUTA DEBE IR ANTES DEL RESOURCE
+        Route::get('/conductores/search', [ConductorController::class, 'search'])
+            ->name('conductores.search');
+        Route::get('/conductores/{id}/data', [ConductorController::class, 'getDataCUP']);
+
+
+        // RUTAS CRUD
+        Route::resource('conductores', ConductorController::class)
+            ->parameters(['conductores' => 'conductor']);
 
     });
 });

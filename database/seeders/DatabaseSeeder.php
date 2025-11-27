@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             TisurSeeder::class,
             ProgramacionSeeder::class,
             ExpedientesSeeder::class,
+            ProveedoresUnidadesConductoresSeeder::class,
         ]);
         
     }

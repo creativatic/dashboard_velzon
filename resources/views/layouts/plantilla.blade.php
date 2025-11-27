@@ -350,6 +350,7 @@
                                 </ul>
                             </div>
                         </li>
+                        {{-- Programación --}}
                         <li class="nav-item">
                             <a class="nav-link menu-link {{ request()->is('programacions*') ? 'active' : '' }}" 
                             href="#sidebarProgramacion" 
@@ -360,26 +361,29 @@
                                 <i class="ri-calendar-check-line"></i>
                                 <span data-key="t-programacion">Programación</span>
                             </a>
-                           <div class="collapse menu-dropdown" id="sidebarProgramacion">
+
+                            <div class="collapse menu-dropdown" id="sidebarProgramacion">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
                                         <a href="{{ route('programacions.index') }}" 
-                                        class="nav-link {{ request()->is('programacions*') ? 'active' : '' }}" data-key="t-programacion">
+                                        class="nav-link {{ request()->is('programacions*') ? 'active' : '' }}" 
+                                        data-key="t-programacion">
                                             Programación Principal
                                         </a>
                                     </li>
-                                    <!-- Link Adelantos -->
+
                                     <li class="nav-item">
                                         <a href="{{ route('adelantos.index') }}" 
-                                        class="nav-link {{ request()->is('adelantos*') ? 'active' : '' }}" data-key="t-listado">
+                                        class="nav-link {{ request()->is('adelantos*') ? 'active' : '' }}" 
+                                        data-key="t-listado">
                                             Adelantos
                                         </a>
                                     </li>
 
-                                    {{-- ✅ Nueva opción añadida --}}
                                     <li class="nav-item">
                                         <a href="{{ route('seguimientos.index') }}" 
-                                        class="nav-link {{ request()->is('seguimientos*') ? 'active' : '' }}" data-key="t-seguimiento">
+                                        class="nav-link {{ request()->is('seguimientos*') ? 'active' : '' }}" 
+                                        data-key="t-seguimiento">
                                             Seguimiento
                                         </a>
                                     </li>
@@ -391,29 +395,62 @@
                                             Reporte QR
                                         </a>
                                     </li>
-
                                 </ul>
                             </div>
-
-                            <li class="nav-item">
-                                <a class="nav-link menu-link {{ request()->is('expediente*') ? 'active' : '' }}" href="{{ route('expediente.index') }}">
-                                    <i class="ri-file-list-line"></i> <span>Expediente</span>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link menu-link {{ request()->is('tisur*') ? 'active' : '' }}" href="{{ route('tisur.index') }}">
-                                    <i class="ri-building-line"></i> <span>TISUR</span>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->is('detalleprogramacion*') ? 'active' : '' }}" data-key="t-precios" href="{{ route('detalleprogramacion.index') }}">
-                                    <i class="ri-coins-line"></i> <span>Gestionar Frente</span>
-                                </a>
-                            </li>
-                            
                         </li>
+
+                        {{-- Expediente --}}
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->is('expediente*') ? 'active' : '' }}" 
+                            href="{{ route('expediente.index') }}">
+                                <i class="ri-file-list-line"></i> <span>Expediente</span>
+                            </a>
+                        </li>
+
+                        {{-- TISUR --}}
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->is('tisur*') ? 'active' : '' }}" 
+                            href="{{ route('tisur.index') }}">
+                                <i class="ri-building-line"></i> <span>TISUR</span>
+                            </a>
+                        </li>
+
+                        {{-- Gestionar Frente --}}
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->is('detalleprogramacion*') ? 'active' : '' }}" 
+                            data-key="t-precios" 
+                            href="{{ route('detalleprogramacion.index') }}">
+                                <i class="ri-coins-line"></i> <span>Gestionar Frente</span>
+                            </a>
+                        </li>
+
+                        {{-- Proveedores --}}
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->is('proveedores*') ? 'active' : '' }}" 
+                            href="{{ route('proveedores.index') }}">
+                                <i class="ri-truck-line"></i>
+                                <span data-key="t-proveedores">Proveedores</span>
+                            </a>
+                        </li>
+
+                        {{-- Unidades --}}
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->is('unidades*') ? 'active' : '' }}" 
+                            href="{{ route('unidades.index') }}">
+                                <i class="ri-roadster-line"></i>
+                                <span data-key="t-unidades">Unidades</span>
+                            </a>
+                        </li>
+
+                        {{-- Conductores --}}
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->is('conductores*') ? 'active' : '' }}" 
+                            href="{{ route('conductores.index') }}">
+                                <i class="ri-user-2-line"></i>
+                                <span data-key="t-conductores">Conductores</span>
+                            </a>
+                        </li>
+
                         @endrole
                         
                     </ul>
