@@ -55,9 +55,14 @@
                             <td>{{ \Carbon\Carbon::parse($programacion->fecha_programacion)->format('d/m/Y') }}</td>
                             <td>{{ $programacion->guia_remision ?? '-' }}</td>
 
-                            <td>{{ $programacion->nombres_conductor ?? '' }}</td>
-                            <td>{{ $programacion->apellidos_conductor ?? '' }}</td>
-                            <td>{{ $programacion->telefono_conductor ?? '' }}</td>
+                            @php
+                                $unidad = $programacion->proveedor?->unidades?->first();
+                                $conductor = $unidad?->conductores?->first();
+                            @endphp
+
+                            <td>{{ $conductor->nombres ?? '-' }}</td>
+                            <td>{{ $conductor->apellidos ?? '-' }}</td>
+                            <td>{{ $conductor->telefono ?? '-' }}</td>
 
                             <td>{{ $programacion->tipo_mineral ?? '-' }}</td>
                             <td>{{ $programacion->tipo_operacion ?? '-' }}</td>
@@ -126,7 +131,7 @@ function openShowProgramacionModal(programacion) {
     document.getElementById('show_constancia_carreta').textContent = programacion.unidad?.constancia_mtc_carreta || '--';
     document.getElementById('show_razon_social_transporte').textContent = programacion.unidad?.proveedor?.razon_social || '--';
     document.getElementById('show_ruc_transporte').textContent = programacion.unidad?.proveedor?.ruc_transporte || '--';
-    document.getElementById('show_nombres_conductor').textContent = programacion.unidad?.conductor?.nombres || '--';
+    document.getElementById('show_nombres_conductor').textContent = programacion.unidad?.conductores?.[0]?.nombres || '--';
     document.getElementById('show_apellidos_conductor').textContent = programacion.apellidos_conductor || '--';
     document.getElementById('show_telefono_conductor').textContent = programacion.unidad?.conductor?.telefono || '--';
     document.getElementById('show_tipo_mineral').textContent = programacion.tipo_mineral || '--';

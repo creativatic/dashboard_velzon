@@ -17,9 +17,10 @@ class Conductor extends Model
         'telefono',
     ];
 
-    // Un conductor pertenece a una unidad
-    public function unidad()
+    public function unidades()
     {
-        return $this->belongsTo(Unidad::class, 'unidad_id');
+        return $this->belongsToMany(Unidad::class, 'conductor_unidad')
+                    ->withTimestamps();
     }
+
 }

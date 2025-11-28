@@ -23,12 +23,6 @@ class Proveedor extends Model
     {
         return $this->hasMany(Programacion::class);
     }
-
-    // Un unidad tiene un solo proveedor
-    public function unidades()
-    {
-        return $this->hasMany(Unidad::class);
-    }
     
     //✅Reglas de validación
     public static function rules($id = null)
@@ -47,5 +41,9 @@ class Proveedor extends Model
         ];
     }
 
+    public function unidades()
+    {
+        return $this->hasMany(Unidad::class);
+    }
 
 }

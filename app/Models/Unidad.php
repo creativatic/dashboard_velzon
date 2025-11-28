@@ -18,17 +18,19 @@ class Unidad extends Model
         'tipo_plataforma',
         'constancia_mtc_tracto',
         'constancia_mtc_carreta',
-        'proveedor_id',
+        'proveedor_id', // ← FALTABA ESTO
+
     ];
 
+    public function conductores()
+    {
+        return $this->belongsToMany(Conductor::class, 'conductor_unidad')
+                    ->withTimestamps();
+    }
+    
     public function proveedor()
     {
         return $this->belongsTo(Proveedor::class);
     }
 
-    // Una unidad tiene un conductor (one-to-one)
-    public function conductor()
-    {
-        return $this->hasOne(Conductor::class, 'unidad_id');
-    }
 }

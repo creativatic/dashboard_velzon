@@ -46,7 +46,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/programaciones/search', [ExpedienteController::class, 'buscarProgramacion'])->name('programaciones.search');
         Route::get('/programacion/{id}', [ProgramacionController::class, 'showJson']);
         Route::get('/programacions/conductor/{licencia}', [ProgramacionController::class, 'getConductorByLicencia']);
-
+        Route::get('/programacions/{programacion}/data', [ProgramacionController::class, 'getData']);
+        Route::get('/unidades/{id}/data', [ProgramacionController::class, 'unidadData']);
+        Route::get('/conductores/licencia/{licencia}', [ConductorController::class, 'getByLicencia']);
+        
         //Route::get('/tisurs/search', [ExpedienteController::class, 'buscarTisur'])->name('tisurs.search');
         //Route::get('/detalles/search', [ExpedienteController::class, 'buscarDetalle'])->name('detalles.search');
 

@@ -6,133 +6,164 @@
 
             <div class="modal-header">
                 <h5 class="modal-title">Nueva Programación</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
                 <div class="row g-3">
 
-                    <!-- Sección 1: Información Básica -->
+                    <!-- Fecha -->
                     <div class="col-md-4">
-                        <label for="create-fecha_programacion" class="form-label">Fecha Programación</label>
-                        <input type="datetime-local" name="fecha_programacion" id="create-fecha_programacion" class="form-control" required>
+                        <label class="form-label">Fecha Programación</label>
+                        <input type="datetime-local" name="fecha_programacion" class="form-control" required>
                     </div>
 
+                    <!-- Frente -->
                     <div class="col-md-4">
-                        <label for="create-detalle_programacion_id" class="form-label">Frente</label>
-                        <select name="detalle_programacion_id" id="create-detalle_programacion_id" class="form-select" required>
+                        <label class="form-label">Frente</label>
+                        <select name="detalle_programacion_id" class="form-select" required>
                             <option value="">Seleccione un frente...</option>
                             @foreach($detalles as $detalle)
                                 <option value="{{ $detalle->id }}">
-                                    {{ $detalle->frente }} — S/.{{ number_format($detalle->precio_frente, 2) }}
+                                    {{ $detalle->frente }} — S/. {{ number_format($detalle->precio_frente, 2) }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
 
+                    <!-- Guía -->
                     <div class="col-md-4">
-                        <label for="create-guia_remision" class="form-label">Guía Remisión</label>
-                        <input type="text" name="guia_remision" id="create-guia_remision" class="form-control">
+                        <label class="form-label">Guía Remisión</label>
+                        <input type="text" name="guia_remision" class="form-control">
                     </div>
 
+                    <!-- PROVEEDOR -->
                     <div class="col-md-4">
-                        <label for="create-conductor_id" class="form-label">Licencia del Conductor</label>
-                        <select name="conductor_id" id="create-conductor_id" class="form-select" required>
-                            <option value="">Seleccione un conductor...</option>
-                            @foreach($conductores as $c)
-                                <option value="{{ $c->id }}">
-                                    {{ $c->licencia }} — {{ $c->nombres }}
+                        <label class="form-label">Proveedor</label>
+                        <select name="proveedor_id" id="create-proveedor_id" class="form-select" required>
+                            <option value="">Seleccione proveedor...</option>
+                            @foreach($proveedores as $p)
+                                <option value="{{ $p->id }}"
+                                    data-ruc="{{ $p->ruc_transporte }}"
+                                    data-razon="{{ $p->razon_social }}"
+                                    data-banco="{{ $p->banco }}"
+                                    data-cuenta="{{ $p->cuenta_banco }}"
+                                    data-cci="{{ $p->cci_banco }}">
+                                    {{ $p->razon_social }} — {{ $p->ruc_transporte }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
 
+                    <!-- UNIDADES -->
                     <div class="col-md-4">
-                        <label for="create-dni" class="form-label">DNI</label>
-                        <input type="text" name="dni" id="create-dni" maxlength="8" class="form-control">
+                        <label class="form-label">Unidad</label>
+                        <select name="unidad_id" id="create-unidad_id" class="form-select" required>
+                            <option value="">Seleccione unidad...</option>
+                            @foreach($unidades as $u)
+                                <option value="{{ $u->id }}">
+                                    {{ $u->placa_tracto }} - {{ $u->placa_carreta }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- CONDUCTORES -->
+                    <div class="col-md-4">
+                        <label class="form-label">Conductor</label>
+                        <select id="create-conductor_id" name="conductor_id" class="form-select" required>
+                            <option value="">Seleccione conductor...</option>
+                        </select>
+                    </div>
+
+                    <!-- Datos conductor -->
+                    <div class="col-md-4">
+                        <label class="form-label">DNI</label>
+                        <input type="text" id="create-dni" name="dni" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-nombres_conductor" class="form-label">Nombres Conductor</label>
-                        <input type="text" name="nombres_conductor" id="create-nombres_conductor" class="form-control">
+                        <label class="form-label">Nombres Conductor</label>
+                        <input type="text" id="create-nombres_conductor" name="nombres_conductor" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-apellidos_conductor" class="form-label">Apellidos Conductor</label>
-                        <input type="text" name="apellidos_conductor" id="create-apellidos_conductor" class="form-control">
+                        <label class="form-label">Apellidos Conductor</label>
+                        <input type="text" id="create-apellidos_conductor" name="apellidos_conductor" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-telefono_conductor" class="form-label">Teléfono</label>
-                        <input type="text" name="telefono_conductor" id="create-telefono_conductor" class="form-control">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" id="create-telefono_conductor" name="telefono_conductor" class="form-control" readonly>
                     </div>
 
-                    <!-- Sección 3: Datos del Vehículo -->
+                    <!-- Vehículo -->
                     <div class="col-md-4">
-                        <label for="create-placa_tracto" class="form-label">Placa Tracto</label>
-                        <input type="text" name="placa_tracto" id="create-placa_tracto" class="form-control">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="create-placa_carreta" class="form-label">Placa Carreta</label>
-                        <input type="text" name="placa_carreta" id="create-placa_carreta" class="form-control">
+                        <label class="form-label">Placa Tracto</label>
+                        <input type="text" id="create-placa_tracto" name="placa_tracto" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-marca_vehiculo" class="form-label">Marca Vehículo</label>
-                        <input type="text" name="marca_vehiculo" id="create-marca_vehiculo" class="form-control">
+                        <label class="form-label">Placa Carreta</label>
+                        <input type="text" id="create-placa_carreta" name="placa_carreta" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-tipo_plataforma" class="form-label">Tipo Plataforma</label>
-                        <input type="text" name="tipo_plataforma" id="create-tipo_plataforma" class="form-control">
+                        <label class="form-label">Marca Vehículo</label>
+                        <input type="text" id="create-marca_vehiculo" name="marca_vehiculo" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-constancia_mtc_tracto" class="form-label">Constancia MTC Tracto</label>
-                        <input type="text" name="constancia_mtc_tracto" id="create-constancia_mtc_tracto" class="form-control">
+                        <label class="form-label">Tipo Plataforma</label>
+                        <input type="text" id="create-tipo_plataforma" name="tipo_plataforma" class="form-control" readonly>
+                    </div>
+
+                    <!-- MTC -->
+                    <div class="col-md-4">
+                        <label class="form-label">Constancia MTC Tracto</label>
+                        <input type="text" id="create-constancia_mtc_tracto" name="constancia_mtc_tracto" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-constancia_mtc_carreta" class="form-label">Constancia MTC Carreta</label>
-                        <input type="text" name="constancia_mtc_carreta" id="create-constancia_mtc_carreta" class="form-control">
+                        <label class="form-label">Constancia MTC Carreta</label>
+                        <input type="text" id="create-constancia_mtc_carreta" name="constancia_mtc_carreta" class="form-control" readonly>
                     </div>
 
-                    <!-- Sección 4: Datos proveedor -->
+                    <!-- Proveedor -->
                     <div class="col-md-4">
-                        <label for="create-ruc_transporte" class="form-label">RUC Transporte</label>
-                        <input type="text" name="ruc_transporte" id="create-ruc_transporte" class="form-control" maxlength="11">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="create-razon_social_transporte" class="form-label">Razón Social Transporte</label>
-                        <input type="text" name="razon_social_transporte" id="create-razon_social_transporte" class="form-control">
+                        <label class="form-label">RUC Transporte</label>
+                        <input type="text" id="create-ruc_transporte" name="ruc_transporte" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-cuenta_banco" class="form-label">Cuenta Banco</label>
-                        <input type="text" name="cuenta_banco" id="create-cuenta_banco" class="form-control">
+                        <label class="form-label">Razón Social Transporte</label>
+                        <input type="text" id="create-razon_social_transporte" name="razon_social_transporte" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-cci_banco" class="form-label">CCI Banco</label>
-                        <input type="text" name="cci_banco" id="create-cci_banco" class="form-control">
+                        <label class="form-label">Cuenta Banco</label>
+                        <input type="text" id="create-cuenta_banco" name="cuenta_banco" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-banco" class="form-label">Banco</label>
-                        <input type="text" name="banco" id="create-banco" class="form-control">
-                    </div>
-
-                    <!-- Sección 5: Detalles servicio -->
-                    <div class="col-md-4">
-                        <label for="create-tipo_mineral" class="form-label">Tipo Mineral</label>
-                        <input type="text" name="tipo_mineral" id="create-tipo_mineral" class="form-control">
+                        <label class="form-label">CCI Banco</label>
+                        <input type="text" id="create-cci_banco" name="cci_banco" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-tipo_operacion" class="form-label">Tipo Operación</label>
-                        <select name="tipo_operacion" id="create-tipo_operacion" class="form-select">
+                        <label class="form-label">Banco</label>
+                        <input type="text" id="create-banco" name="banco" class="form-control" readonly>
+                    </div>
+
+                    <!-- Servicio -->
+                    <div class="col-md-4">
+                        <label class="form-label">Tipo Mineral</label>
+                        <input type="text" id="create-tipo_mineral" name="tipo_mineral" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Tipo Operación</label>
+                        <select name="tipo_operacion" class="form-select">
                             <option value="">Seleccione...</option>
                             <option value="nacional">Nacional</option>
                             <option value="internacional">Internacional</option>
@@ -140,8 +171,8 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-conformidad_adelanto" class="form-label">Conformidad Adelanto</label>
-                        <select name="conformidad_adelanto" id="create-conformidad_adelanto" class="form-select">
+                        <label class="form-label">Conformidad Adelanto</label>
+                        <select name="conformidad_adelanto" class="form-select">
                             <option value="">Seleccione...</option>
                             <option value="Ok">Ok</option>
                             <option value="Pendiente">Pendiente</option>
@@ -149,13 +180,8 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label for="create-guia_transportista" class="form-label">Guía Transportista</label>
-                        <input type="text" name="guia_transportista" id="create-guia_transportista" class="form-control">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="create-grupo_cargio" class="form-label">Grupo Carguío</label>
-                        <input type="text" name="grupo_cargio" id="create-grupo_cargio" class="form-control">
+                        <label class="form-label">Guía Transportista</label>
+                        <input type="text" name="guia_transportista" class="form-control">
                     </div>
 
                 </div>
@@ -163,52 +189,91 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="ri-close-circle-line"></i> Cancelar
+                    Cancelar
                 </button>
                 <button type="submit" class="btn btn-primary">
-                    <i class="ri-save-3-line"></i> Guardar
+                    Guardar
                 </button>
             </div>
         </form>
     </div>
 </div>
 
+<!-- JS DINÁMICO -->
 <script>
-document.getElementById('create-conductor_id').addEventListener('change', function () {
+const proveedores = @json($proveedores);
 
-    let id = this.value;
-    if (id === "") return;
+const proveedorSelect  = document.getElementById('create-proveedor_id');
+const unidadSelect     = document.getElementById('create-unidad_id');
+const conductorSelect  = document.getElementById('create-conductor_id');
 
-    fetch(`/conductores/${id}/data`)
-        .then(res => res.json())
-        .then(data => {
 
-            // Datos personales
-            document.getElementById('create-dni').value = data.dni ?? '';
-            document.getElementById('create-nombres_conductor').value = data.nombres ?? '';
-            document.getElementById('create-apellidos_conductor').value = data.apellidos ?? '';
-            document.getElementById('create-telefono_conductor').value = data.telefono ?? '';
+// CUANDO SE SELECCIONA PROVEEDOR
+proveedorSelect.addEventListener('change', function () {
 
-            // Vehículo
-            document.getElementById('create-placa_tracto').value = data.placa_tracto ?? '';
-            document.getElementById('create-placa_carreta').value = data.placa_carreta ?? '';
-            document.getElementById('create-marca_vehiculo').value = data.marca_vehiculo ?? '';
-            document.getElementById('create-tipo_plataforma').value = data.tipo_plataforma ?? '';
+    let proveedor = proveedores.find(p => p.id == this.value);
 
-            // MTC
-            document.getElementById('create-constancia_mtc_tracto').value = data.constancia_mtc_tracto ?? '';
-            document.getElementById('create-constancia_mtc_carreta').value = data.constancia_mtc_carreta ?? '';
+    unidadSelect.innerHTML = `<option value="">Seleccione unidad...</option>`;
+    conductorSelect.innerHTML = `<option value="">Seleccione conductor...</option>`;
 
-            // Empresa transporte
-            document.getElementById('create-ruc_transporte').value = data.ruc_transporte ?? '';
-            document.getElementById('create-razon_social_transporte').value = data.razon_social_transporte ?? '';
-            document.getElementById('create-cuenta_banco').value = data.cuenta_banco ?? '';
-            document.getElementById('create-cci_banco').value = data.cci_banco ?? '';
-            document.getElementById('create-banco').value = data.banco ?? '';
+    if (!proveedor) return;
 
-            // Minerales
-            document.getElementById('create-tipo_mineral').value = data.tipo_mineral ?? '';
+    // AUTOCOMPLETAR DATOS DEL PROVEEDOR
+    document.getElementById('create-ruc_transporte').value = this.selectedOptions[0].dataset.ruc;
+    document.getElementById('create-razon_social_transporte').value = this.selectedOptions[0].dataset.razon;
+    document.getElementById('create-cuenta_banco').value = this.selectedOptions[0].dataset.cuenta;
+    document.getElementById('create-cci_banco').value = this.selectedOptions[0].dataset.cci;
+    document.getElementById('create-banco').value = this.selectedOptions[0].dataset.banco;
 
-        });
+    // CARGAR UNIDADES
+    proveedor.unidades.forEach(u => {
+        unidadSelect.innerHTML += `<option value="${u.id}">
+            ${u.placa_tracto} / ${u.placa_carreta}
+        </option>`;
+    });
+});
+
+
+// CUANDO SE SELECCIONA UNIDAD
+unidadSelect.addEventListener('change', function () {
+
+    let proveedor = proveedores.find(p => p.id == proveedorSelect.value);
+    let unidad = proveedor?.unidades.find(u => u.id == this.value);
+
+    conductorSelect.innerHTML = `<option value="">Seleccione conductor...</option>`;
+
+    if (!unidad) return;
+
+    // AUTOCOMPLETAR DATOS DE LA UNIDAD
+    document.getElementById('create-placa_tracto').value = unidad.placa_tracto ?? '';
+    document.getElementById('create-placa_carreta').value = unidad.placa_carreta ?? '';
+    document.getElementById('create-marca_vehiculo').value = unidad.marca_vehiculo ?? '';
+    document.getElementById('create-tipo_plataforma').value = unidad.tipo_plataforma ?? '';
+    document.getElementById('create-constancia_mtc_tracto').value = unidad.constancia_mtc_tracto ?? '';
+    document.getElementById('create-constancia_mtc_carreta').value = unidad.constancia_mtc_carreta ?? '';
+
+    // CARGAR CONDUCTORES RELACIONADOS A ESA UNIDAD
+    unidad.conductores.forEach(c => {
+        conductorSelect.innerHTML += `<option value="${c.id}">
+            ${c.nombres} ${c.apellidos} — Lic: ${c.licencia}
+        </option>`;
+    });
+});
+
+
+// CUANDO SE SELECCIONA CONDUCTOR (NUEVO, SIN FETCH)
+conductorSelect.addEventListener('change', function () {
+
+    let proveedor = proveedores.find(p => p.id == proveedorSelect.value);
+    let unidad    = proveedor?.unidades.find(u => u.id == unidadSelect.value);
+    let conductor = unidad?.conductores.find(c => c.id == this.value);
+
+    if (!conductor) return;
+
+    // AUTOCOMPLETAR DATOS DEL CONDUCTOR
+    document.getElementById('create-dni').value                 = conductor.dni ?? '';
+    document.getElementById('create-nombres_conductor').value   = conductor.nombres ?? '';
+    document.getElementById('create-apellidos_conductor').value = conductor.apellidos ?? '';
+    document.getElementById('create-telefono_conductor').value  = conductor.telefono ?? '';
 });
 </script>

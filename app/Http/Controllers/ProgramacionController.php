@@ -19,23 +19,46 @@ class ProgramacionController extends Controller
     {
         $programaciones = Programacion::with([
             'detalleProgramacion',
-            'proveedor.unidades.conductor'
+            'proveedor',
+            'proveedor.unidades',
+            'proveedor.unidades.conductores',
         ])->orderBy('fecha_programacion', 'desc')->get();
 
-        $detalles = DetalleProgramacion::where('activo', true)->get();
-        $licencias = Unidad::with('conductor')->get(); // <- Agregado
-        $conductores = Conductor::select('id', 'licencia', 'nombres')
-        ->orderBy('nombres')
-        ->get();
+        // Cargamos proveedores con unidades y conductores (sin selects complejos en el with)
+        $proveedores = Proveedor::with('unidades.conductores')
+            ->select('id', 'razon_social', 'ruc_transporte', 'cuenta_banco', 'cci_banco', 'banco')
+            ->get();
 
-        return view('programacions.index', compact('programaciones', 'detalles', 'licencias', 'conductores'));
+        $detalles = DetalleProgramacion::where('activo', true)->get();
+        $licencias = Unidad::with('conductores')->get();
+        $unidades = Unidad::with('proveedor')->get();
+        $conductores = Conductor::select('id', 'licencia', 'nombres')
+            ->orderBy('nombres')
+            ->get();
+
+        return view('programacions.index', compact(
+            'programaciones',
+            'proveedores',
+            'detalles',
+            'licencias',
+            'unidades',
+            'conductores'
+        ));
     }
+
 
     public function showJson($id)
     {
-        $programacion = Programacion::with('detalleProgramacion')->findOrFail($id);
+        $programacion = Programacion::with([
+            'detalleProgramacion',
+            'conductor',
+            'unidad',
+            'proveedor'
+        ])->findOrFail($id);
+
         return response()->json($programacion);
     }
+
     /**
      * Guarda una nueva programación desde el modal.
      */
@@ -43,9 +66,14 @@ class ProgramacionController extends Controller
     public function create()
     {
         $detalles = DetalleProgramacion::where('activo', true)->get();
- 
 
-        return view('programacions.create', compact('detalles'));
+        // Cargamos proveedores con Unidades y Conductores
+        $proveedores = Proveedor::with([
+            'unidades',
+            'unidades.conductores'
+        ])->get();
+
+        return view('programacions.create', compact('detalles', 'proveedores'));
     }
 
     /** GUARDAR **/
@@ -161,8 +189,15 @@ class ProgramacionController extends Controller
     public function edit(Programacion $programacion)
     {
         $detalles = DetalleProgramacion::where('activo', true)->get();
-        $licencias = Unidad::with('conductor')->get();
-        return view('programacions.edit', compact('programacion', 'detalles', 'licencias'));
+        $conductores = Conductor::all();
+        $proveedores = Proveedor::all();
+
+        return view('programacions.edit', compact(
+            'programacion',
+            'detalles',
+            'conductores',
+            'proveedores'
+        ));
     }
     /**
      * Actualiza una programación existente.
@@ -392,5 +427,26 @@ class ProgramacionController extends Controller
             ],
         ]);
     }
+    
+    public function unidadData($id)
+    {
+        $unidad = Unidad::with('proveedor')->findOrFail($id);
 
+        return response()->json([
+            'placa_tracto' => $unidad->placa_tracto,
+            'placa_carreta' => $unidad->placa_carreta,
+            'marca_vehiculo' => $unidad->marca_vehiculo,
+            'tipo_plataforma' => $unidad->tipo_plataforma,
+            'constancia_mtc_tracto' => $unidad->constancia_mtc_tracto,
+            'constancia_mtc_carreta' => $unidad->constancia_mtc_carreta,
+
+            // DATOS PROVEEDOR
+            'ruc_transporte' => $unidad->proveedor->ruc_transporte ?? '',
+            'razon_social_transporte' => $unidad->proveedor->razon_social ?? '',
+            'cuenta_banco' => $unidad->proveedor->cuenta_banco ?? '',
+            'cci_banco' => $unidad->proveedor->cci_banco ?? '',
+            'banco' => $unidad->proveedor->banco ?? '',
+        ]);
+    }
+    
 }

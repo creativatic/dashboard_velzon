@@ -11,8 +11,10 @@ class ConductorController extends Controller
 {
     public function index()
     {
-        // Trae conductores (con paginación) y todas las unidades para el select
-        $conductores = Conductor::with('unidad')->paginate(10);
+        // Trae conductores con sus unidades asignadas
+        $conductores = Conductor::with('unidades')->paginate(10);
+
+        // Todas las unidades para asignaciones
         $unidades = Unidad::orderBy('placa_tracto')->get();
 
         return view('conductores.index', compact('conductores', 'unidades'));
@@ -41,9 +43,15 @@ class ConductorController extends Controller
             'unidad_id' => 'required|exists:unidades,id',
         ]);
 
-        Conductor::create($request->all());
+        // Crear conductor sin unidad_id
+        $conductor = Conductor::create($request->only([
+            'dni', 'licencia', 'nombres', 'apellidos', 'telefono'
+        ]));
 
-        return redirect()->route('conductores.index')->with('success', 'Conductor creado correctamente.');
+        // Asignar unidad en tabla pivote
+        $conductor->unidades()->attach($request->unidad_id);
+
+        return redirect()->route('conductores.index')->with('success', 'Conductor creado.');
     }
 
     public function update(Request $request, Conductor $conductor)
@@ -57,10 +65,17 @@ class ConductorController extends Controller
             'unidad_id' => 'required|exists:unidades,id',
         ]);
 
-        $conductor->update($request->all());
+        // Actualizar info del conductor
+        $conductor->update($request->only([
+            'dni', 'licencia', 'nombres', 'apellidos', 'telefono'
+        ]));
 
-        return redirect()->route('conductores.index')->with('success', 'Conductor actualizado correctamente.');
+        // Sincronizar la unidad asignada
+        $conductor->unidades()->sync([$request->unidad_id]);
+
+        return redirect()->route('conductores.index')->with('success', 'Conductor actualizado.');
     }
+
 
     public function destroy(Conductor $conductor)
     {
@@ -104,7 +119,7 @@ class ConductorController extends Controller
         return response()->json($conductor);
     }
 
-    public function getDataCUP($id)
+    public function getData($id)
     {
         $conductor = Conductor::with(['unidad.proveedor'])->findOrFail($id);
 
@@ -136,5 +151,40 @@ class ConductorController extends Controller
         ]);
     }
 
+    public function getByLicencia($licencia)
+    {
+        $conductor = Conductor::where('licencia', $licencia)
+            ->with(['unidades.proveedor'])
+            ->first();
+
+        if (!$conductor) {
+            return response()->json([]);
+        }
+
+        // obtener la unidad asociada (si tiene varias, tomamos la primera)
+        $unidad = $conductor->unidades->first();
+
+        return response()->json([
+            'dni' => $conductor->dni,
+            'nombres' => $conductor->nombres,
+            'apellidos' => $conductor->apellidos,
+            'telefono' => $conductor->telefono,
+
+            // Unidad
+            'placa_tracto' => $unidad->placa_tracto ?? '',
+            'placa_carreta' => $unidad->placa_carreta ?? '',
+            'marca_vehiculo' => $unidad->marca_vehiculo ?? '',
+            'tipo_plataforma' => $unidad->tipo_plataforma ?? '',
+            'constancia_mtc_tracto' => $unidad->constancia_mtc_tracto ?? '',
+            'constancia_mtc_carreta' => $unidad->constancia_mtc_carreta ?? '',
+
+            // Proveedor (si existe)
+            'proveedor_id' => $unidad->proveedor->id ?? '',
+            'razon_social_transporte' => $unidad->proveedor->razon_social ?? '',
+            'banco' => $unidad->proveedor->banco ?? '',
+            'cuenta_banco' => $unidad->proveedor->cuenta_banco ?? '',
+            'cci_banco' => $unidad->proveedor->cci_banco ?? '',
+        ]);
+    }
 
 }

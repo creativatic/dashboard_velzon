@@ -43,99 +43,128 @@
                     <!-- CONDUCTOR -->
                     <div class="col-md-4">
                         <label class="form-label">Licencia Conductor</label>
-                        <select name="conductor_id" id="edit-conductor_id" class="form-select" required>
-                            <option value="">Seleccione un conductor...</option>
-                            @foreach($conductores as $c)
-                                <option value="{{ $c->id }}">
-                                    {{ $c->licencia }} — {{ $c->nombres }}
+                            <select name="licencia" id="edit-licencia" class="form-select" required>
+                                <option value="">Seleccione un conductor...</option>
+                                @foreach($conductores as $c)
+                                    <option value="{{ $c->licencia }}"
+                                        data-dni="{{ $c->dni }}"
+                                        data-nombres="{{ $c->nombres }}"
+                                        data-apellidos="{{ $c->apellidos }}"
+                                        data-telefono="{{ $c->telefono }}"
+                                        data-unidad="{{ $c->unidad->id ?? '' }}"
+                                        data-proveedor="{{ $c->unidad->proveedor->id ?? '' }}">
+                                        {{ $c->licencia }} — {{ $c->nombres }} {{ $c->apellidos }}
+                                    </option>
+                                @endforeach
+                            </select>
+                    </div>
+
+                    <!-- DATOS DEL CONDUCTOR -->
+                    <div class="col-md-4">
+                        <label class="form-label">DNI</label>
+                        <input type="text" id="edit-dni" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Nombres</label>
+                        <input type="text" id="edit-nombres_conductor" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Apellidos</label>
+                        <input type="text" id="edit-apellidos_conductor" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" id="edit-telefono_conductor" class="form-control" readonly>
+                    </div>
+
+                    <!-- VEHICULO -->
+                    <div class="col-md-4">
+                        <label class="form-label">Placa Tracto</label>
+                        <input type="text" id="edit-placa_tracto" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Placa Carreta</label>
+                        <input type="text" id="edit-placa_carreta" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Marca Vehículo</label>
+                        <input type="text" id="edit-marca_vehiculo" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Tipo Plataforma</label>
+                        <input type="text" id="edit-tipo_plataforma" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Constancia MTC Tracto</label>
+                        <input type="text" id="edit-constancia_mtc_tracto" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Constancia MTC Carreta</label>
+                        <input type="text" id="edit-constancia_mtc_carreta" class="form-control" readonly>
+                    </div>
+
+                    <!-- PROVEEDOR -->
+                    <div class="col-md-4">
+                        <label class="form-label">Proveedor</label>
+                        <select id="edit-proveedor_id" name="proveedor_id" class="form-select" required>
+                            <option value="">Seleccione...</option>
+                            @foreach($proveedores as $p)
+                                <option value="{{ $p->id }}"
+                                    data-ruc="{{ $p->ruc_transporte }}"
+                                    data-razon="{{ $p->razon_social }}"
+                                    data-banco="{{ $p->banco }}"
+                                    data-cuenta="{{ $p->cuenta_banco }}"
+                                    data-cci="{{ $p->cci_banco }}">
+                                    {{ $p->razon_social }} — {{ $p->ruc_transporte }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
 
-                    <!-- DATOS CONDUCTOR -->
+                    <!-- UNIDAD -->
                     <div class="col-md-4">
-                        <label class="form-label">DNI</label>
-                        <input type="text" id="edit-dni" name="dni" class="form-control">
+                        <label class="form-label">Unidad</label>
+                        <select id="edit-unidad_id" name="unidad_id" class="form-select" required>
+                            <option value="">Seleccione unidad...</option>
+                        </select>
                     </div>
 
-                    <div class="col-md-4">
-                        <label class="form-label">Nombres</label>
-                        <input type="text" id="edit-nombres_conductor" name="nombres_conductor" class="form-control">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Apellidos</label>
-                        <input type="text" id="edit-apellidos_conductor" name="apellidos_conductor" class="form-control">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Teléfono</label>
-                        <input type="text" id="edit-telefono_conductor" name="telefono_conductor" class="form-control">
-                    </div>
-
-                    <!-- VEHÍCULO -->
-                    <div class="col-md-4">
-                        <label class="form-label">Placa Tracto</label>
-                        <input type="text" id="edit-placa_tracto" name="placa_tracto" class="form-control">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Placa Carreta</label>
-                        <input type="text" id="edit-placa_carreta" name="placa_carreta" class="form-control">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Marca Vehículo</label>
-                        <input type="text" id="edit-marca_vehiculo" name="marca_vehiculo" class="form-control">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Tipo Plataforma</label>
-                        <input type="text" id="edit-tipo_plataforma" name="tipo_plataforma" class="form-control">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Constancia MTC Tracto</label>
-                        <input type="text" id="edit-constancia_mtc_tracto" name="constancia_mtc_tracto" class="form-control">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Constancia MTC Carreta</label>
-                        <input type="text" id="edit-constancia_mtc_carreta" name="constancia_mtc_carreta" class="form-control">
-                    </div>
-
-                    <!-- PROVEEDOR -->
-                    <div class="col-md-4">
-                        <label class="form-label">RUC Transporte</label>
-                        <input type="text" id="edit-ruc_transporte" name="ruc_transporte" class="form-control">
-                    </div>
-
+                    <!-- DATOS PROVEEDOR -->
                     <div class="col-md-4">
                         <label class="form-label">Razón Social</label>
-                        <input type="text" id="edit-razon_social_transporte" name="razon_social_transporte" class="form-control">
+                        <input type="text" id="edit-razon_social_transporte" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Cuenta Banco</label>
-                        <input type="text" id="edit-cuenta_banco" name="cuenta_banco" class="form-control">
+                        <input type="text" id="edit-cuenta_banco" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">CCI</label>
-                        <input type="text" id="edit-cci_banco" name="cci_banco" class="form-control">
+                        <input type="text" id="edit-cci_banco" class="form-control" readonly>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Banco</label>
-                        <input type="text" id="edit-banco" name="banco" class="form-control">
+                        <input type="text" id="edit-banco" class="form-control" readonly>
                     </div>
 
+                    <!-- MINERAL -->
                     <div class="col-md-4">
                         <label class="form-label">Tipo Mineral</label>
-                        <input type="text" id="edit-tipo_mineral" name="tipo_mineral" class="form-control">
+                        <input type="text" id="edit-tipo_mineral" class="form-control">
                     </div>
 
+                    <!-- TIPO OPERACION -->
                     <div class="col-md-4">
                         <label class="form-label">Tipo Operación</label>
                         <select id="edit-tipo_operacion" name="tipo_operacion" class="form-select">
@@ -145,6 +174,7 @@
                         </select>
                     </div>
 
+                    <!-- CONFORMIDAD ADELANTO -->
                     <div class="col-md-4">
                         <label class="form-label">Conformidad Adelanto</label>
                         <select id="edit-conformidad_adelanto" name="conformidad_adelanto" class="form-select">
@@ -154,11 +184,20 @@
                         </select>
                     </div>
 
+                    <!-- MONTO ADELANTO -->
+                    <div class="col-md-4">
+                        <label class="form-label">Monto Adelanto (S/)</label>
+                        <input type="number" step="0.01" min="0" id="edit-monto_adelanto" name="monto_adelanto"
+                               class="form-control">
+                    </div>
+
+                    <!-- GUIA TRANSPORTISTA -->
                     <div class="col-md-4">
                         <label class="form-label">Guía Transportista</label>
                         <input type="text" id="edit-guia_transportista" name="guia_transportista" class="form-control">
                     </div>
 
+                    <!-- GRUPO CARGUÍO -->
                     <div class="col-md-4">
                         <label class="form-label">Grupo Carguío</label>
                         <input type="text" id="edit-grupo_cargio" name="grupo_cargio" class="form-control">
@@ -181,83 +220,125 @@
 </div>
 
 <script>
+
+// ============================================================
+// FUNCIÓN PRINCIPAL PARA ABRIR EL MODAL DE EDICIÓN
+// ============================================================
 function openEditProgramacionModal(data) {
 
-    // Cambiar la ruta del formulario a PUT programacions/{id}
-    document.getElementById("editProgramacionForm").action =
-        "/programacions/" + data.id;
+    // Ruta del PUT
+    document.getElementById("editProgramacionForm").action = "/programacions/" + data.id;
 
-    // Cargar campos
+    // Campos generales
     document.getElementById('edit-fecha_programacion').value = data.fecha_programacion.replace(" ", "T");
     document.getElementById('edit-detalle_programacion_id').value = data.detalle_programacion_id;
     document.getElementById('edit-guia_remision').value = data.guia_remision ?? "";
 
-    // Datos conductor
-    document.getElementById('edit-conductor_id').value = data.conductor_id ?? "";
-    document.getElementById('edit-dni').value = data.dni ?? "";
-    document.getElementById('edit-nombres_conductor').value = data.nombres_conductor ?? "";
-    document.getElementById('edit-apellidos_conductor').value = data.apellidos_conductor ?? "";
-    document.getElementById('edit-telefono_conductor').value = data.telefono_conductor ?? "";
+    // Conductor
+    document.getElementById('edit-licencia').value = data.conductor?.licencia ?? "";
 
-    // Vehículo
-    document.getElementById('edit-placa_tracto').value = data.placa_tracto ?? "";
-    document.getElementById('edit-placa_carreta').value = data.placa_carreta ?? "";
-    document.getElementById('edit-marca_vehiculo').value = data.marca_vehiculo ?? "";
-    document.getElementById('edit-tipo_plataforma').value = data.tipo_plataforma ?? "";
+    // ===========================================
+    // NUEVO: MOSTRAR CONFORMIDAD ADELANTO
+    // ===========================================
+    document.getElementById('edit-conformidad_adelanto').value = data.conformidad_adelanto ?? "";
 
-    // MTC
-    document.getElementById('edit-constancia_mtc_tracto').value = data.constancia_mtc_tracto ?? "";
-    document.getElementById('edit-constancia_mtc_carreta').value = data.constancia_mtc_carreta ?? "";
+    // ===========================================
+    // NUEVO: TIPO OPERACION
+    // ===========================================
+    document.getElementById('edit-tipo_operacion').value = data.tipo_operacion ?? "";
 
-    // Proveedor
-    document.getElementById('edit-ruc_transporte').value = data.ruc_transporte ?? "";
-    document.getElementById('edit-razon_social_transporte').value = data.razon_social_transporte ?? "";
-    document.getElementById('edit-cuenta_banco').value = data.cuenta_banco ?? "";
-    document.getElementById('edit-cci_banco').value = data.cci_banco ?? "";
-    document.getElementById('edit-banco').value = data.banco ?? "";
+    // ===========================================
+    // NUEVO: CAMPOS DE PROVEEDOR
+    // ===========================================
+    document.getElementById('edit-proveedor_id').value = data.proveedor_id ?? "";
 
     document.getElementById('edit-tipo_mineral').value = data.tipo_mineral ?? "";
-    document.getElementById('edit-tipo_operacion').value = data.tipo_operacion ?? "";
-    document.getElementById('edit-conformidad_adelanto').value = data.conformidad_adelanto ?? "";
     document.getElementById('edit-guia_transportista').value = data.guia_transportista ?? "";
     document.getElementById('edit-grupo_cargio').value = data.grupo_cargio ?? "";
+    document.getElementById('edit-monto_adelanto').value = data.monto_adelanto ?? "";
 
-    // Abrir modal
+    // Cargar unidades del proveedor
+    if (data.proveedor_id) {
+        loadUnidadesForProveedor(data.proveedor_id, data.unidad_id);
+    }
+
+    // ===========================================
+    // Cargar datos del conductor si ya existía
+    // ===========================================
+    if (data.conductor?.licencia) {
+        document.getElementById('edit-licencia').value = data.conductor.licencia;
+
+        fetch(`/conductores/licencia/${data.conductor.licencia}`)
+            .then(res => res.json())
+            .then(c => fillConductorFields(c));
+    }
+    // Mostrar modal
     let modal = new bootstrap.Modal(document.getElementById('editProgramacionModal'));
     modal.show();
 }
 
-document.getElementById('edit-conductor_id').addEventListener('change', function () {
 
-    let id = this.value;
-    if (!id) return;
+// ============================================================
+// FUNCIÓN PARA LLENAR LOS CAMPOS DEL CONDUCTOR
+// ============================================================
+function fillConductorFields(c) {
 
-    fetch(`/conductores/${id}/data`)
+    document.getElementById('edit-dni').value = c.dni ?? '';
+    document.getElementById('edit-nombres_conductor').value = c.nombres ?? '';
+    document.getElementById('edit-apellidos_conductor').value = c.apellidos ?? '';
+    document.getElementById('edit-telefono_conductor').value = c.telefono ?? '';
+
+    document.getElementById('edit-placa_tracto').value = c.placa_tracto ?? '';
+    document.getElementById('edit-placa_carreta').value = c.placa_carreta ?? '';
+    document.getElementById('edit-marca_vehiculo').value = c.marca_vehiculo ?? '';
+    document.getElementById('edit-tipo_plataforma').value = c.tipo_plataforma ?? '';
+
+    document.getElementById('edit-constancia_mtc_tracto').value = c.constancia_mtc_tracto ?? '';
+    document.getElementById('edit-constancia_mtc_carreta').value = c.constancia_mtc_carreta ?? '';
+
+    document.getElementById('edit-razon_social_transporte').value = c.razon_social_transporte ?? '';
+    document.getElementById('edit-cuenta_banco').value = c.cuenta_banco ?? '';
+    document.getElementById('edit-cci_banco').value = c.cci_banco ?? '';
+    document.getElementById('edit-banco').value = c.banco ?? '';
+
+    document.getElementById('edit-tipo_mineral').value = c.tipo_mineral ?? '';
+}
+
+
+// ============================================================
+// CUANDO CAMBIA EL SELECT DE CONDUCTOR
+// ============================================================
+document.getElementById('edit-licencia').addEventListener('change', function () {
+    let licencia = this.value;
+    if (!licencia) return;
+
+    fetch(`/conductores/licencia/${licencia}`)
         .then(res => res.json())
-        .then(data => {
-
-            document.getElementById('edit-dni').value = data.dni ?? '';
-            document.getElementById('edit-nombres_conductor').value = data.nombres ?? '';
-            document.getElementById('edit-apellidos_conductor').value = data.apellidos ?? '';
-            document.getElementById('edit-telefono_conductor').value = data.telefono ?? '';
-
-            document.getElementById('edit-placa_tracto').value = data.placa_tracto ?? '';
-            document.getElementById('edit-placa_carreta').value = data.placa_carreta ?? '';
-            document.getElementById('edit-marca_vehiculo').value = data.marca_vehiculo ?? '';
-            document.getElementById('edit-tipo_plataforma').value = data.tipo_plataforma ?? '';
-
-            document.getElementById('edit-constancia_mtc_tracto').value = data.constancia_mtc_tracto ?? '';
-            document.getElementById('edit-constancia_mtc_carreta').value = data.constancia_mtc_carreta ?? '';
-
-            document.getElementById('edit-ruc_transporte').value = data.ruc_transporte ?? '';
-            document.getElementById('edit-razon_social_transporte').value = data.razon_social_transporte ?? '';
-            document.getElementById('edit-cuenta_banco').value = data.cuenta_banco ?? '';
-            document.getElementById('edit-cci_banco').value = data.cci_banco ?? '';
-            document.getElementById('edit-banco').value = data.banco ?? '';
-
-            document.getElementById('edit-tipo_mineral').value = data.tipo_mineral ?? '';
-        });
+        .then(c => fillConductorFields(c));
 });
 
-</script>
 
+// ============================================================
+// CARGAR UNIDADES DEL PROVEEDOR PARA EL EDIT
+// ============================================================
+function loadUnidadesForProveedor(proveedorId, selectedUnidadId) {
+
+    fetch(`/proveedores/${proveedorId}/unidades`)
+        .then(res => res.json())
+        .then(unidades => {
+
+            let unidadSelect = document.getElementById("edit-unidad_id");
+            unidadSelect.innerHTML = `<option value="">Seleccione unidad...</option>`;
+
+            unidades.forEach(u => {
+                let selected = u.id == selectedUnidadId ? "selected" : "";
+                unidadSelect.innerHTML += `
+                    <option value="${u.id}" ${selected}>
+                        ${u.placa_tracto} / ${u.placa_carreta}
+                    </option>
+                `;
+            });
+        });
+}
+
+</script>

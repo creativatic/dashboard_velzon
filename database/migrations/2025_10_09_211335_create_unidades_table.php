@@ -19,16 +19,16 @@ return new class extends Migration
             $table->string('tipo_plataforma', 50)->nullable();
             $table->string('constancia_mtc_tracto', 100)->nullable();
             $table->string('constancia_mtc_carreta', 100)->nullable();
-            
+        
             // 🌟 AÑADIR ESTA LÍNEA PARA SOFT DELETES
             $table->softDeletes();
-            
-            $table->timestamps();
 
             $table->foreignId('proveedor_id')
-                ->nullable()
-                ->constrained('proveedores')
-                ->nullOnDelete();
+                    ->nullable()
+                    ->constrained('proveedores')
+                    ->nullOnDelete();
+  
+            $table->timestamps();
         });
     }
 

@@ -14,6 +14,7 @@ class ProveedoresUnidadesConductoresSeeder extends Seeder
     public function run(): void
     {
         DB::transaction(function () {
+
             $proveedores = [
                 [
                     'razon_social' => 'TRANSPORTES EL AGUILA S.A.C.',
@@ -39,13 +40,13 @@ class ProveedoresUnidadesConductoresSeeder extends Seeder
             ];
 
             foreach ($proveedores as $provData) {
-                // Evita duplicados por RUC
+
                 $proveedor = Proveedor::firstOrCreate(
                     ['ruc_transporte' => $provData['ruc_transporte']],
                     $provData
                 );
 
-                // Crear 1 (o más) unidades para el proveedor
+                // Crear UNA UNIDAD
                 $unidad = Unidad::create([
                     'placa_tracto' => 'ABC-' . rand(100, 999),
                     'placa_carreta' => 'XYZ-' . rand(100, 999),
@@ -56,15 +57,17 @@ class ProveedoresUnidadesConductoresSeeder extends Seeder
                     'proveedor_id' => $proveedor->id,
                 ]);
 
-                // Crear conductor asociado (respeta la FK unidad_id)
-                Conductor::create([
+                // Crear CONDUCTOR SIN unidad_id
+                $conductor = Conductor::create([
                     'dni' => str_pad(rand(10000000, 99999999), 8, '0', STR_PAD_LEFT),
                     'licencia' => 'AIIIB-' . rand(100000, 999999),
                     'nombres' => 'Juan ' . rand(1, 99),
                     'apellidos' => 'Perez ' . rand(1, 99),
                     'telefono' => '9' . rand(10000000, 99999999),
-                    'unidad_id' => $unidad->id,
                 ]);
+
+                // 🌟 ASOCIAR CONDUCTOR Y UNIDAD A TRAVÉS DE LA TABLA PIVOTE
+                $conductor->unidades()->attach($unidad->id);
             }
         });
     }

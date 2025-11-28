@@ -43,7 +43,13 @@
                     <td>{{ $c->nombres }}</td>
                     <td>{{ $c->apellidos }}</td>
                     <td>{{ $c->telefono }}</td>
-                    <td>{{ $c->unidad?->placa_tracto ?? '—' }}</td>
+                    <td>
+                        @forelse ($c->unidades as $u)
+                            <span class="badge bg-primary">{{ $u->placa_tracto }}</span>
+                        @empty
+                            —
+                        @endforelse
+                    </td>
 
                     <td class="text-center">
                         <button class="btn btn-sm btn-warning"

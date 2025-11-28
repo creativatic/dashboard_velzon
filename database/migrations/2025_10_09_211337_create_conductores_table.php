@@ -20,9 +20,6 @@ return new class extends Migration
             $table->string('telefono', 20)->nullable();
             $table->timestamps();
 
-            $table->foreignId('unidad_id')
-                ->constrained('unidades')
-                ->cascadeOnDelete();
         });
     }
 

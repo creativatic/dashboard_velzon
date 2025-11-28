@@ -49,9 +49,14 @@
                             <label class="form-label">Unidad Asociada <span class="text-danger">*</span></label>
                             <select name="unidad_id" class="form-select" required>
                                 <option value="">-- Seleccione unidad --</option>
+
+                                @php
+                                    $unidadActual = $conductor->unidades->first()->id ?? null;
+                                @endphp
+
                                 @foreach($unidades as $u)
                                     <option value="{{ $u->id }}"
-                                        {{ $conductor->unidad_id == $u->id ? 'selected' : '' }}>
+                                        {{ $unidadActual == $u->id ? 'selected' : '' }}>
                                         {{ $u->placa_tracto }} - {{ $u->placa_carreta }}
                                     </option>
                                 @endforeach
