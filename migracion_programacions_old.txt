@@ -247,3 +247,18 @@ function openShowProgramacionModal(programacion) {
 
 // relacion de programacions
 Perfecto. Siguiendo la lógica correcta de relaciones (Programación → Proveedor → Unidades → Conductor),
+
+// relacion para la logica de como se visualiza los datos de 
+
+4️⃣ Resumen del camino
+
+expedientes → programacion
+programacion → proveedor
+proveedor → unidades
+unidad → conductores
+
+expediente
+    └── programacion
+            └── proveedor
+                    └── unidades
+                            └── conductores (a través de conductor_unidad) 

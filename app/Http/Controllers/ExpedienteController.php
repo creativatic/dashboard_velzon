@@ -3,88 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expediente;
-use Illuminate\Http\Request;
 use App\Models\Programacion;
 use App\Models\Tisur;
 use App\Models\DetalleProgramacion;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ExpedienteController extends Controller
 {
-    public function show($id)
-    {
-        try {
-            // 🔹 Cargamos el expediente con sus relaciones
-            $expediente = Expediente::with(['programacion.detalleProgramacion', 'tisur'])
-                ->findOrFail($id);
-
-            return response()->json([
-                'id' => $expediente->id,
-                'numero_factura_exped' => $expediente->numero_factura_exped,
-                'total' => $expediente->total,
-                'detraccion' => $expediente->detraccion,
-                'deposito_a_proveer' => $expediente->deposito_a_proveer,
-                'fecha_pago' => $expediente->fecha_pago,
-                'archivo' => $expediente->archivo,
-                'comentarios' => $expediente->comentarios,
-                'fecha_carga' => $expediente->fecha_carga,
-
-                // 🔹 Programación relacionada
-                'programacion' => $expediente->programacion ? [
-                    'guia_remision' => $expediente->programacion->guia_remision,
-                    'placa_tracto' => $expediente->programacion->placa_tracto,
-                    'tipo_mineral' => $expediente->programacion->tipo_mineral,
-                    'razon_social_transporte' => $expediente->programacion->razon_social_transporte,
-                    'ruc_transporte' => $expediente->programacion->ruc_transporte,
-                    'apellidos_conductor' => $expediente->programacion->apellidos_conductor,
-                    'telefono_conductor' => $expediente->programacion->telefono_conductor,
-                    'cuenta_banco' => $expediente->programacion->cuenta_banco,
-                    'banco' => $expediente->programacion->banco,
-                    'detalle_programacion' => $expediente->programacion->detalleProgramacion ? [
-                        'frente' => $expediente->programacion->detalleProgramacion->frente,
-                    ] : null
-                ] : null,
-
-                // 🔹 Tisur relacionado
-                'tisur' => $expediente->tisur ? [
-                    'numero_ticket' => $expediente->tisur->numero_ticket,
-                    'fecha_hora_ingreso' => $expediente->tisur->fecha_hora_ingreso,
-                    'peso_neto' => $expediente->tisur->peso_neto,
-                ] : null,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => true,
-                'message' => 'No se pudo cargar la información del expediente.',
-                'detalle' => $e->getMessage(),
-            ], 500);
-        }
-    }
-
+    /**
+     * Mostrar la lista de expedientes y programaciones filtradas.
+     */
     public function index()
     {
-        // 💡 MODIFICACIÓN: Se agrega el filtro para solo mostrar programaciones con conformidad_adelanto = 'Ok'
-        $programaciones = Programacion::with([
+       $programaciones = Programacion::with([
             'seguimiento',
             'detalleProgramacion',
             'expedientes.tisur',
+            'proveedor.unidades.conductores'
         ])
-        ->where('conformidad_adelanto', 'Ok') // Filtro aplicado
-        ->latest()
-        ->paginate(10);
+            ->where('conformidad_adelanto', 'Ok')
+            ->latest()
+            ->paginate(10);
 
-        // Lógica para obtener Tisurs disponibles (sin expedientes asociados)
         $tisurIdsAsociados = Expediente::pluck('tisur_id')->filter()->all();
         $tisurs = Tisur::whereNotIn('id', $tisurIdsAsociados)->get();
-        
-        $detalles = DetalleProgramacion::all(); 
+        $detalles = DetalleProgramacion::all();
 
         return view('expediente.index', compact('programaciones', 'tisurs', 'detalles'));
     }
 
-
+    /**
+     * Formulario para crear expediente.
+     */
     public function create()
     {
-        // Cargar datos necesarios para los selects
         $programacions = Programacion::with('detalleProgramacion:id,frente,precio_frente,precio_tn')
             ->select('id', 'guia_remision', 'detalle_programacion_id')
             ->get();
@@ -94,14 +47,13 @@ class ExpedienteController extends Controller
         return view('expediente.create', compact('programacions', 'tisurs'));
     }
 
+    /**
+     * Formulario para editar expediente.
+     */
     public function edit($id)
     {
-        $expediente = Expediente::with([
-            'programacion.detalleProgramacion',
-            'tisur'
-        ])->findOrFail($id);
+        $expediente = Expediente::with(['programacion.detalleProgramacion', 'tisur'])->findOrFail($id);
 
-        // 🔹 Si es una petición AJAX o fetch(), devolvemos JSON
         if (request()->ajax()) {
             return response()->json($expediente);
         }
@@ -112,172 +64,172 @@ class ExpedienteController extends Controller
         return view('expediente.edit', compact('expediente', 'tisurs', 'detalles'));
     }
 
+    /**
+     * Guardar un nuevo expediente.
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'programacion_id' => 'required|exists:programacions,id',
-            'tisur_id' => 'required|exists:tisurs,id',
-            'fecha_carga' => 'nullable|date',
-            'fecha_pago' => 'nullable|date',
-            'total' => 'nullable|numeric|min:0',
-            'detraccion' => 'nullable|numeric|min:0',
-            'deposito_a_proveer' => 'nullable|numeric|min:0',
-            'numero_factura_exped' => 'nullable|string|max:255',
-            'comentarios' => 'nullable|string',
-            'archivo.*' => 'nullable|file|max:10240',
-        ]);
+        $validated = $this->validateExpediente($request);
 
-        // 🔹 Crea solo los campos propios del expediente
-        $expediente = Expediente::create([
-            'programacion_id' => $request->programacion_id,
-            'tisur_id' => $request->tisur_id,
-            'fecha_carga' => $request->fecha_carga,
-            'fecha_pago' => $request->fecha_pago,
-            'total' => $request->total,
-            'detraccion' => $request->detraccion,
-            'deposito_a_proveer' => $request->deposito_a_proveer,
-            'numero_factura_exped' => $request->numero_factura_exped,
-            'comentarios' => $request->comentarios,
-        ]);
+        $expediente = Expediente::create($validated);
 
-        // 🔹 Manejo de archivos (opcional)
         if ($request->hasFile('archivo')) {
-            $archivos = [];
-            foreach ($request->file('archivo') as $file) {
-                $path = $file->store('expedientes', 'public');
-                $archivos[] = $path;
-            }
-            $expediente->archivo = json_encode($archivos);
-            $expediente->save();
+            $this->saveArchivo($request->file('archivo'), $expediente);
         }
 
-        return redirect()->route('expediente.index')
-            ->with('success', 'Expediente registrado correctamente.');
+        return redirect()->route('expediente.index')->with('success', 'Expediente registrado correctamente.');
     }
 
+    /**
+     * Actualizar un expediente existente.
+     */
     public function update(Request $request, Expediente $expediente)
     {
-        $validated = $request->validate([
-            'fecha_carga' => 'nullable|date',
-            'total' => 'nullable|numeric',
-            'detraccion' => 'nullable|numeric',
-            'deposito_a_proveer' => 'nullable|numeric',
-            'fecha_pago' => 'nullable|date',
-            'numero_factura_exped' => 'nullable|string|max:255',
-            'comentarios' => 'nullable|string',
-            // 💡 Cambio: usar archivo.* para validar cada archivo en el array
-            'archivo.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx', 
-        ]);
+        $validated = $this->validateExpediente($request, $expediente);
 
-        // === Si se sube(n) nuevo(s) archivo(s), reemplazar el campo 'archivo' ===
-        // 💡 Cambio: Usar $request->file('archivo') para obtener el array
+        $expediente->update($validated);
+
         if ($request->hasFile('archivo')) {
-            // Obtenemos el array de archivos
-            $files = $request->file('archivo');
-
-            // Nos centraremos en el PRIMER archivo subido (asumiendo campo 'archivo' singular)
-            // Si necesitas manejar todos los archivos, requieres un modelo de Archivos aparte.
-            $file = $files[0] ?? null; 
-
-            if ($file) {
-                // Eliminar archivo anterior si existe
-                if ($expediente->archivo && \Storage::disk('public')->exists($expediente->archivo)) {
-                    \Storage::disk('public')->delete($expediente->archivo);
-                }
-
-                // Guardar nuevo archivo
-                $filename = time() . '_' . $file->getClientOriginalName();
-                // 💡 Usamos solo $filename para guardar la ruta correctamente
-                $path = $file->storeAs('expedientes', $filename, 'public'); 
-                $validated['archivo'] = $path;
-            } else {
-                // Si el array de archivos estaba presente pero vacío (o no se seleccionó el primero),
-                // mantenemos el archivo existente (o lo hacemos nulo si no se incluyó 'archivo' en $validated)
-                // Esto ya se maneja de facto ya que el campo 'archivo' no está en $validated si no se sube.
-            }
-        } else {
-            // Mantener archivo existente si no se subió un nuevo array de archivos
-            $validated['archivo'] = $expediente->archivo;
-        }
-        
-        // 💡 Limpiamos el 'archivo' de los validated antes de update si no se manejó antes.
-        unset($validated['archivo']); 
-        
-        // Asignar manualmente los campos
-        $expediente->fecha_carga = $validated['fecha_carga'] ?? $expediente->fecha_carga;
-        $expediente->total = $validated['total'] ?? $expediente->total;
-        $expediente->detraccion = $validated['detraccion'] ?? $expediente->detraccion;
-        $expediente->deposito_a_proveer = $validated['deposito_a_proveer'] ?? $expediente->deposito_a_proveer;
-        $expediente->fecha_pago = $validated['fecha_pago'] ?? $expediente->fecha_pago;
-        $expediente->numero_factura_exped = $validated['numero_factura_exped'] ?? $expediente->numero_factura_exped;
-        $expediente->comentarios = $validated['comentarios'] ?? $expediente->comentarios;
-        
-        // Guardar la ruta del archivo si se actualizó
-        if (isset($path)) {
-            $expediente->archivo = $path;
+            $this->saveArchivo($request->file('archivo'), $expediente);
         }
 
-        $expediente->save();
-        
-        return redirect()
-            ->route('expediente.index')
-            ->with('success', 'Expediente actualizado correctamente.');
+        return redirect()->route('expediente.index')->with('success', 'Expediente actualizado correctamente.');
     }
 
+    /**
+     * Eliminar un expediente.
+     */
     public function destroy(Expediente $expediente)
     {
+        if ($expediente->archivo && Storage::disk('public')->exists($expediente->archivo)) {
+            Storage::disk('public')->delete($expediente->archivo);
+        }
+
         $expediente->delete();
+
         return redirect()->route('expediente.index')->with('success', 'Registro eliminado correctamente.');
     }
 
+    /**
+     * Mostrar un expediente en JSON.
+     */
+    public function show($id)
+    {
+        $expediente = Expediente::with([
+            'programacion.detalleProgramacion',
+            'programacion.proveedor.unidades.conductores',
+            'tisur'
+        ])->findOrFail($id);
+
+        $programacion = $expediente->programacion;
+        $proveedor    = $programacion?->proveedor;
+        $unidad       = $proveedor?->unidades->first();
+        $conductor    = $unidad?->conductores->first();
+        $tisur        = $expediente->tisur;
+
+        return response()->json([
+            // 🔵 Programación
+            'guia_remision'     => $programacion?->guia_remision,
+            'tipo_mineral'      => $programacion?->tipo_mineral,
+            'frente'            => $programacion?->detalleProgramacion?->frente,
+            'placa_tracto'      => $unidad?->placa_tracto,
+            'placa_carreta'     => $unidad?->placa_carreta,
+
+            // 🔵 Proveedor
+            'razon_social'      => $proveedor?->razon_social,
+            'ruc_transporte'    => $proveedor?->ruc_transporte,
+            'banco'             => $proveedor?->banco,
+            'cuenta_banco'      => $proveedor?->cuenta_banco,
+
+            // 🔵 Conductor
+            'conductor'         => trim(($conductor?->nombres ?? '') . ' ' . ($conductor?->apellidos ?? '')),
+            'telefono'          => $conductor?->telefono,
+
+            // 🔵 Expediente
+            'tisur'             => $tisur?->numero_ticket,
+            'fecha_carga'       => $tisur?->fecha_carga,
+            'fecha_pago'        => $expediente->fecha_pago,
+            'total'             => $expediente->total,
+            'detraccion'        => $expediente->detraccion,
+            'deposito_a_proveer'=> $expediente->deposito_a_proveer,
+            'numero_factura_exped' => $expediente->numero_factura_exped,
+            'comentarios'       => $expediente->comentarios,
+
+            // 🔵 Archivos
+            'archivos'          => $expediente->archivo ?? [],
+        ]);
+    }
+
+
+    /**
+     * Obtener datos de programación en JSON.
+     */
     public function getProgramacion($id)
     {
-        $programacion = Programacion::with('detalleProgramacion')->findOrFail($id);
+        $programacion = Programacion::with([
+            'detalleProgramacion',
+            'proveedor.unidades.conductores'
+        ])->findOrFail($id);
+
+        $proveedor = $programacion->proveedor;
+        $unidad     = $proveedor?->unidades->first() ?? null;
+        $conductor  = $unidad?->conductores->first() ?? null;
 
         return response()->json([
-            'placa_tracto' => $programacion->placa_tracto,
-            'placa_carreta' => $programacion->placa_carreta,
-            'razon_social_transporte' => $programacion->razon_social_transporte,
-            'ruc_transporte' => $programacion->ruc_transporte,
-            'nombres_conductor' => $programacion->nombres_conductor,
-            'apellidos_conductor' => $programacion->apellidos_conductor,
-            'licencia' => $programacion->licencia,
-            'telefono_conductor' => $programacion->telefono_conductor,
-            'cuenta_banco' => $programacion->cuenta_banco,
-            'cci_banco' => $programacion->cci_banco,
-            'banco' => $programacion->banco,
-            'tipo_mineral' => $programacion->tipo_mineral,
-            'guia_transportista' => $programacion->guia_transportista,
+            'id'                    => $programacion->id,
+            'guia_remision'         => $programacion->guia_remision,
+            'tipo_mineral'          => $programacion->tipo_mineral,
+            'guia_transportista'    => $programacion->guia_transportista,
 
-            // 👇 Se recomienda usar el nombre exacto de la relación si quieres devolverla completa:
-            'detalle_programacion' => $programacion->detalleProgramacion,
-            
-            // Opcional: Para simplificar la lectura en JS, puedes extraer los campos del detalle aquí:
-            'frente' => $programacion->detalleProgramacion->frente ?? null,
-            'precio_frente' => $programacion->detalleProgramacion->precio_frente ?? null,
-            'precio_tn' => $programacion->detalleProgramacion->precio_tn ?? null,
+            // 🔥 DETALLE PROGRAMACIÓN
+            'frente'                => $programacion->detalleProgramacion->frente ?? null,
+            'precio_tn'             => $programacion->detalleProgramacion->precio_tn ?? null,
+            'precio_frente'         => $programacion->detalleProgramacion->precio_frente ?? null,
+
+            // 🔥 PROVEEDOR
+            'razon_social_transporte' => $proveedor?->razon_social,
+            'ruc_transporte'          => $proveedor?->ruc_transporte,
+            'banco'                   => $proveedor?->banco,
+            'cuenta_banco'            => $proveedor?->cuenta_banco,
+
+            // 🔥 UNIDAD
+            'placa_tracto'          => $unidad?->placa_tracto,
+            'placa_carreta'         => $unidad?->placa_carreta,
+
+            // 🔥 CONDUCTOR
+            'nombres_conductor'     => $conductor?->nombres,
+            'apellidos_conductor'   => $conductor?->apellidos,
+            'telefono_conductor'    => $conductor?->telefono,
         ]);
     }
 
+
+    /**
+     * Obtener datos de Tisur.
+     */
     public function getTisur($id)
     {
-        // Busca el ticket Tisur
         $tisur = Tisur::findOrFail($id);
-        
-        // Devolvemos solo los datos del Tisur
+
         return response()->json([
-            'numero_ticket' => $tisur->numero_ticket ?? null,
-            'fecha_hora_ingreso' => $tisur->fecha_hora_ingreso ?? null,
-            'peso_neto' => $tisur->peso_neto ?? null,
+            'numero_ticket' => $tisur->numero_ticket,
+            'fecha_hora_ingreso' => $tisur->fecha_hora_ingreso,
+            'peso_neto' => $tisur->peso_neto,
         ]);
     }
 
+    /**
+     * Obtener detalle de programación.
+     */
     public function getDetalle($id)
     {
         $detalle = DetalleProgramacion::findOrFail($id);
         return response()->json($detalle);
     }
 
+    /**
+     * Obtener precio TN de programación y frente.
+     */
     public function getPrecioTn(Request $request)
     {
         $programacionId = $request->get('programacion_id');
@@ -287,28 +239,17 @@ class ExpedienteController extends Controller
             return response()->json(['precio_tn' => null]);
         }
 
-        // Buscamos el detalle de programación que coincida con el Frente
-        // y que esté asociado a la Programación (Programacion.detalle_programacion_id)
         $programacion = Programacion::with('detalleProgramacion')->find($programacionId);
+        $precio_tn = ($programacion && $programacion->detalleProgramacion && $programacion->detalleProgramacion->frente == $frente)
+            ? $programacion->detalleProgramacion->precio_tn
+            : null;
 
-        $precio_tn = null;
-
-        if ($programacion && $programacion->detalleProgramacion) {
-            $detalle = $programacion->detalleProgramacion;
-            
-            // Asumiendo que Programacion.detalle_programacion_id apunta al DetalleProgramacion correcto,
-            // Y que ese DetalleProgramacion ya contiene el precio para el Frente correcto (como en la lógica original)
-            // Opcional: Podrías añadir una validación extra aquí si el modelo DetalleProgramacion también tiene el campo 'frente'
-            if ($detalle->frente == $frente) {
-                $precio_tn = $detalle->precio_tn;
-            }
-        }
-        
-        return response()->json([
-            'precio_tn' => $precio_tn,
-        ]);
+        return response()->json(['precio_tn' => $precio_tn]);
     }
 
+    /**
+     * Buscar programaciones por guía de remisión.
+     */
     public function buscarProgramacion(Request $request)
     {
         $query = $request->get('q');
@@ -321,11 +262,87 @@ class ExpedienteController extends Controller
         return response()->json($programaciones);
     }
 
+    /**
+     * Obtener datos completos de un expediente en JSON.
+     */
     public function getExpedienteData($id)
     {
         $expediente = Expediente::with(['programacion.detalleProgramacion', 'tisur'])->findOrFail($id);
         return response()->json($expediente);
     }
 
-    
+    /**
+     * Validar datos de expediente.
+     */
+    private function validateExpediente(Request $request, $expediente = null)
+    {
+        return $request->validate([
+            'programacion_id' => 'required|exists:programacions,id',
+            'tisur_id' => 'required|exists:tisurs,id',
+            'fecha_carga' => 'nullable|date',
+            'fecha_pago' => 'nullable|date',
+            'total' => 'nullable|numeric|min:0',
+            'detraccion' => 'nullable|numeric|min:0',
+            'deposito_a_proveer' => 'nullable|numeric|min:0',
+            'numero_factura_exped' => 'nullable|string|max:255',
+            'comentarios' => 'nullable|string',
+            // ❌ Línea eliminada
+            // 'archivo.*' => ...
+        ]);
+    }
+
+    /**
+     * Guardar archivo(s) asociado(s) a expediente.
+     */
+    private function saveArchivo($files, Expediente $expediente)
+    {
+        $archivos = [];
+
+        foreach ((array)$files as $file) {
+            if ($file) {
+                // Este bloque debe ejecutarse UNA sola vez, no dentro del foreach
+            }
+        }
+
+        // El recomendado (opcional):
+        // Mover la eliminación del archivo fuera del foreach
+    }
+
+
+    /**
+     * Formatear expediente para respuesta JSON.
+     */
+    private function formatExpediente(Expediente $expediente)
+    {
+        return [
+            'id' => $expediente->id,
+            'numero_factura_exped' => $expediente->numero_factura_exped,
+            'total' => $expediente->total,
+            'detraccion' => $expediente->detraccion,
+            'deposito_a_proveer' => $expediente->deposito_a_proveer,
+            'fecha_pago' => $expediente->fecha_pago,
+            'archivo' => $expediente->archivo,
+            'comentarios' => $expediente->comentarios,
+            'fecha_carga' => $expediente->fecha_carga,
+            'programacion' => $expediente->programacion ? [
+                'guia_remision' => $expediente->programacion->guia_remision,
+                'placa_tracto' => $expediente->programacion->placa_tracto,
+                'tipo_mineral' => $expediente->programacion->tipo_mineral,
+                'razon_social_transporte' => $expediente->programacion->razon_social_transporte,
+                'ruc_transporte' => $expediente->programacion->ruc_transporte,
+                'apellidos_conductor' => $expediente->programacion->apellidos_conductor,
+                'telefono_conductor' => $expediente->programacion->telefono_conductor,
+                'cuenta_banco' => $expediente->programacion->cuenta_banco,
+                'banco' => $expediente->programacion->banco,
+                'detalle_programacion' => $expediente->programacion->detalleProgramacion ? [
+                    'frente' => $expediente->programacion->detalleProgramacion->frente,
+                ] : null
+            ] : null,
+            'tisur' => $expediente->tisur ? [
+                'numero_ticket' => $expediente->tisur->numero_ticket,
+                'fecha_hora_ingreso' => $expediente->tisur->fecha_hora_ingreso,
+                'peso_neto' => $expediente->tisur->peso_neto,
+            ] : null,
+        ];
+    }
 }

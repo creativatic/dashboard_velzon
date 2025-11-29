@@ -43,13 +43,13 @@
 
                     <div class="col-md-3">
                         <label class="form-label">Razón Social</label>
-                        <input type="text" class="form-control" id="razon_social" readonly>
+                        <input type="text" id="razon_social" class="form-control" readonly>
                         <input type="hidden" name="razon_social_transporte" id="razon_social_hidden">
                     </div>
 
                     <div class="col-md-3">
                         <label class="form-label">RUC</label>
-                        <input type="text" class="form-control" id="ruc" readonly>
+                        <input type="text" id="ruc" class="form-control" readonly>
                         <input type="hidden" name="ruc_transporte" id="ruc_hidden">
                     </div>
 
@@ -177,189 +177,118 @@
 
 <!-- === Script para cargar datos desde Programación === -->
 <script>
-/**
- * Realiza el cálculo del Total (precio_tn * peso_neto).
- */
-function calcularTotalBase() {
-    const precioTnElement = document.getElementById('precio_tn_hidden');
-    const pesoNetoElement = document.getElementById('peso_neto');
-    const totalElement = document.getElementById('total');
-
-    if (!precioTnElement || !pesoNetoElement || !totalElement) {
-        return 0;
-    }
-
-    const precioTn = parseFloat(precioTnElement.value) || 0;
-    const pesoNeto = parseFloat(pesoNetoElement.value) || 0;
-    const total = precioTn * pesoNeto;
-    
-    totalElement.value = total.toFixed(2);
-    return total;
+/** ===================== UTILIDADES ===================== */
+function setInputValues(dataMap) {
+    Object.keys(dataMap).forEach(key => {
+        const elVisible = document.getElementById(key);
+        const elHidden = document.getElementById(key + '_hidden');
+        if(elVisible) elVisible.value = dataMap[key] ?? '';
+        if(elHidden) elHidden.value = dataMap[key] ?? '';
+    });
 }
 
-/**
- * Realiza el cálculo de Detracción, Total Neto a Pagar (total_con_detraccion) 
- * y Depósito a Proveer.
- */
+function formatDateToInput(dateString) {
+    if(!dateString) return '';
+    const d = new Date(dateString);
+    if(isNaN(d)) return '';
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+/** ===================== CÁLCULOS ===================== */
 function calcularTotalesExpediente() {
-    // 1. Obtener el Total ya calculado
-    const total = calcularTotalBase(); 
-    
-    // 2. Obtener elementos de Cálculo
-    const detraccionElement = document.getElementById('detraccion');
-    const estadoPagoDetraccionElement = document.getElementById('estado_pago_detraccion');
-    const totalConDetraccionElement = document.getElementById('total_con_detraccion');
-    const precioFrenteHiddenElement = document.getElementById('precio_frente_hidden'); // Nuevo elemento
-    const depositoAProveerElement = document.querySelector('input[name="deposito_a_proveer"]'); // Campo final
+    const precioTn = parseFloat(document.getElementById('precio_tn_hidden')?.value) || 0;
+    const pesoNeto = parseFloat(document.getElementById('peso_neto')?.value) || 0;
+    const total = precioTn * pesoNeto;
 
-    if (!detraccionElement || !estadoPagoDetraccionElement || !totalConDetraccionElement || !precioFrenteHiddenElement || !depositoAProveerElement) {
-        console.error("Faltan elementos de Detracción o Depósito a Proveer en el DOM.");
-        return;
-    }
-    
-    const estadoPagoDetraccion = estadoPagoDetraccionElement.value;
-    const precioFrente = parseFloat(precioFrenteHiddenElement.value) || 0;
-    
-    // A) CALCULAR DETRACCIÓN (4% del Total)
+    const totalElement = document.getElementById('total');
+    if(totalElement) totalElement.value = total.toFixed(2);
+
     const detraccion = total * 0.04;
-    detraccionElement.value = detraccion.toFixed(2);
+    const detraccionElement = document.getElementById('detraccion');
+    if(detraccionElement) detraccionElement.value = detraccion.toFixed(2);
 
-    let totalConDetraccion;
+    const estadoPagoDetraccion = document.getElementById('estado_pago_detraccion')?.value || 'No Pagado';
+    const totalConDetraccion = (estadoPagoDetraccion === 'No Pagado') ? total - detraccion : total;
+    const totalConDetraccionElement = document.getElementById('total_con_detraccion');
+    if(totalConDetraccionElement) totalConDetraccionElement.value = totalConDetraccion.toFixed(2);
 
-    // B) CALCULAR TOTAL NETO A PAGAR (total_con_detraccion)
-    if (estadoPagoDetraccion === "No Pagado") {
-        // total_con_detraccion = Total - Detracción
-        totalConDetraccion = total - detraccion;
-    } else if (estadoPagoDetraccion === "Pagado") {
-        // total_con_detraccion = Total
-        totalConDetraccion = total; 
-    } else {
-        totalConDetraccion = total;
-    }
-
-    // Asignar el resultado de Total Neto a Pagar
-    totalConDetraccionElement.value = totalConDetraccion.toFixed(2);
-    
-    // C) CALCULAR DEPÓSITO A PROVEER
-    // Depósito a Proveer = total_con_detraccion - precio_frente_hidden
+    const precioFrente = parseFloat(document.getElementById('precio_frente_hidden')?.value) || 0;
     const depositoAProveer = totalConDetraccion - precioFrente;
-    
-    // Asignar el resultado al campo Depósito a Proveer
-    depositoAProveerElement.value = depositoAProveer.toFixed(2);
-    
-    console.log(`Detracción: ${detraccion.toFixed(2)}, Total Neto: ${totalConDetraccion.toFixed(2)}, Precio Frente: ${precioFrente.toFixed(2)}, Depósito a Proveer: ${depositoAProveer.toFixed(2)}`);
+    const depositoAProveerInput = document.querySelector('input[name="deposito_a_proveer"]');
+    if(depositoAProveerInput) depositoAProveerInput.value = depositoAProveer.toFixed(2);
 }
 
-/**
- * Carga los datos de la Programación al modal.
- */
+/** ===================== CARGA DE DATOS ===================== */
 function cargarDatosExpediente(id) {
-    // Se utiliza la ruta original /programacion/{id}
-    fetch(`/programacion/${id}`) 
-        .then(response => {
-            if (!response.ok) throw new Error(`Error ${response.status}: No se pudo obtener la programación.`);
-            return response.json();
-        })
+    if (!id) return;
+
+    fetch(`/expediente/programacion/${id}`)
+        .then(res => res.json())
         .then(programacion => {
-            console.log("✅ Datos de Programación recibidos:", programacion);
+            setInputValues({
+                'programacion_id': programacion.id,
+                'guia_remision': programacion.guia_remision,
+                'tipo_mineral': programacion.tipo_mineral,
+                'placa_tracto': programacion.placa_tracto,
+                'frente': programacion.frente,
+                'precio_tn': programacion.precio_tn,
+                'precio_frente': programacion.precio_frente,
 
-            const detalle = programacion.detalle_programacion ?? {};
-            const frenteValue = detalle.frente ?? '';
-            const precioTnValue = detalle.precio_tn ?? ''; 
-            const precioFrenteValue = detalle.precio_frente ?? ''; // Precio Frente (visible)
+                // 🔥 AHORA SÍ LOS NOMBRES QUE LLEGA EN EL JSON
+                'razon_social': programacion.razon_social_transporte,
+                'ruc': programacion.ruc_transporte,
+                'banco': programacion.banco,
+                'cuenta_banco': programacion.cuenta_banco,
 
-            // Asignación de valores a los campos visibles
-            document.getElementById('programacion_id').value = programacion.id ?? '';
-            document.getElementById('guia_remision').value = programacion.guia_remision ?? '';
-            document.getElementById('placa_tracto').value = programacion.placa_tracto ?? '';
-            document.getElementById('tipo_mineral').value = programacion.tipo_mineral ?? '';
-            document.getElementById('frente').value = frenteValue;
-            document.getElementById('precio_tn').value = precioTnValue;
-            document.getElementById('precio_frente').value = precioFrenteValue; // Asignación Precio Frente visible
+                // 🔥 NOMBRES Y APELLIDOS DEL JSON
+                'apellidos_conductor':
+                    `${programacion.nombres_conductor ?? ''} ${programacion.apellidos_conductor ?? ''}`,
 
-            document.getElementById('razon_social').value = programacion.razon_social_transporte ?? '';
-            document.getElementById('ruc').value = programacion.ruc_transporte ?? '';
-            document.getElementById('apellidos_conductor').value = programacion.apellidos_conductor ?? '';
-            
-            document.getElementById('telefono').value = programacion.telefono_conductor ?? '';
-            document.getElementById('cuenta_banco').value = programacion.cuenta_banco ?? '';
-            document.getElementById('banco').value = programacion.banco ?? '';
+                'telefono': programacion.telefono_conductor
+            });
 
-            // Asignación de valores a los hidden
-            document.getElementById('guia_remision_hidden').value = programacion.guia_remision ?? '';
-            document.getElementById('placa_tracto_hidden').value = programacion.placa_tracto ?? '';
-            document.getElementById('tipo_mineral_hidden').value = programacion.tipo_mineral ?? '';
-            document.getElementById('frente_hidden').value = frenteValue;
-            document.getElementById('razon_social_hidden').value = programacion.razon_social_transporte ?? '';
-            document.getElementById('ruc_hidden').value = programacion.ruc_transporte ?? '';
-            document.getElementById('apellidos_conductor_hidden').value = programacion.apellidos_conductor ?? '';
-            document.getElementById('precio_tn_hidden').value = precioTnValue ?? ''; 
-            document.getElementById('precio_frente_hidden').value = precioFrenteValue ?? ''; // Asignación Precio Frente hidden
-            document.getElementById('telefono_hidden').value = programacion.telefono_conductor ?? '';
-            document.getElementById('cuenta_banco_hidden').value = programacion.cuenta_banco ?? '';
-            document.getElementById('banco_hidden').value = programacion.banco ?? '';
-
-            // ✅ LLAMADA AL CÁLCULO DE TODOS LOS TOTALES
             calcularTotalesExpediente();
         })
-        .catch(error => {
-             console.error("❌ Error al cargar datos de Programación. Verifique la ruta del fetch o la estructura de la respuesta JSON:", error);
-             document.getElementById('guia_remision').value = "ERROR";
+        .catch(err => {
+            console.error("❌ Error al cargar programación:", err);
+            alert("No se pudieron cargar los datos de la programación.");
         });
 }
 
 
-document.addEventListener('DOMContentLoaded', function () {
+/** ===================== EVENTOS DOM ===================== */
+document.addEventListener('DOMContentLoaded', function() {
     const tisurSelect = document.getElementById('tisur_id');
-    const pesoNetoInput = document.getElementById('peso_neto'); 
-    const estadoPagoDetraccionSelect = document.getElementById('estado_pago_detraccion'); 
-    const depositoAProveerInput = document.querySelector('input[name="deposito_a_proveer"]'); // Campo a poner como readonly
+    const pesoNetoInput = document.getElementById('peso_neto');
+    const estadoPagoDetraccionSelect = document.getElementById('estado_pago_detraccion');
+    const depositoAProveerInput = document.querySelector('input[name="deposito_a_proveer"]');
 
-    // Opcional: Establecer deposito_a_proveer como readonly
-    if (depositoAProveerInput) {
-        depositoAProveerInput.setAttribute('readonly', true);
-    }
-    
-    // 1. Escuchar cuando se selecciona un ticket Tisur
-    tisurSelect.addEventListener('change', function () {
-        const tisurId = this.value;
-        if (!tisurId) {
-            pesoNetoInput.value = ''; 
-            calcularTotalesExpediente(); // Recalcular a cero
-            return;
-        }
+    if(depositoAProveerInput) depositoAProveerInput.setAttribute('readonly', true);
 
-        fetch(`/expediente/tisur/${tisurId}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log("📦 Datos TISUR:", data);
-
-            // Fecha de ingreso
-            if (data.fecha_hora_ingreso) {
-                const fecha = new Date(data.fecha_hora_ingreso);
-                const yyyy = fecha.getFullYear();
-                const mm = String(fecha.getMonth() + 1).padStart(2, '0');
-                const dd = String(fecha.getDate()).padStart(2, '0');
-                document.querySelector('input[name="fecha_hora_ingreso"]').value = `${yyyy}-${mm}-${dd}`;
+    if(tisurSelect){
+        tisurSelect.addEventListener('change', function() {
+            const tisurId = this.value;
+            if(!tisurId){
+                pesoNetoInput.value = '';
+                calcularTotalesExpediente();
+                return;
             }
-
-            // Peso neto
-            pesoNetoInput.value = data.peso_neto ?? '';
-
-            // ✅ LLAMADA AL CÁLCULO DE TOTALES
-            calcularTotalesExpediente();
-        })
-        .catch(error => console.error("❌ Error al cargar datos de Tisur:", error));
-    });
-    
-    // 2. Escuchar si el usuario edita manualmente el Peso Neto (dispara todo el cálculo)
-    if (pesoNetoInput) {
-        pesoNetoInput.addEventListener('input', calcularTotalesExpediente);
+            fetch(`/expediente/tisur/${tisurId}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.querySelector('input[name="fecha_hora_ingreso"]').value = formatDateToInput(data.fecha_hora_ingreso);
+                    pesoNetoInput.value = data.peso_neto ?? '';
+                    calcularTotalesExpediente();
+                })
+                .catch(err => {
+                    console.error("❌ Error al cargar Tisur:", err);
+                    pesoNetoInput.value = '';
+                    calcularTotalesExpediente();
+                });
+        });
     }
-    
-    // 3. Escuchar el cambio en el estado de pago de la detracción (dispara todo el cálculo)
-    if (estadoPagoDetraccionSelect) {
-        estadoPagoDetraccionSelect.addEventListener('change', calcularTotalesExpediente);
-    }
+
+    if(pesoNetoInput) pesoNetoInput.addEventListener('input', calcularTotalesExpediente);
+    if(estadoPagoDetraccionSelect) estadoPagoDetraccionSelect.addEventListener('change', calcularTotalesExpediente);
 });
 </script>

@@ -112,6 +112,7 @@
                     </div>
 
                     <!-- PROVEEDOR -->
+                    <!--
                     <div class="col-md-4">
                         <label class="form-label">Proveedor</label>
                         <select id="edit-proveedor_id" name="proveedor_id" class="form-select" required>
@@ -128,14 +129,17 @@
                             @endforeach
                         </select>
                     </div>
+                    -->
 
                     <!-- UNIDAD -->
+                    <!--
                     <div class="col-md-4">
                         <label class="form-label">Unidad</label>
                         <select id="edit-unidad_id" name="unidad_id" class="form-select" required>
                             <option value="">Seleccione unidad...</option>
                         </select>
                     </div>
+                    -->
 
                     <!-- DATOS PROVEEDOR -->
                     <div class="col-md-4">
@@ -230,7 +234,19 @@ function openEditProgramacionModal(data) {
     document.getElementById("editProgramacionForm").action = "/programacions/" + data.id;
 
     // Campos generales
-    document.getElementById('edit-fecha_programacion').value = data.fecha_programacion.replace(" ", "T");
+    if (data.fecha_programacion) {
+        let fecha = new Date(data.fecha_programacion);
+        let yyyy = fecha.getFullYear();
+        let mm = String(fecha.getMonth() + 1).padStart(2, '0');
+        let dd = String(fecha.getDate()).padStart(2, '0');
+        let hh = String(fecha.getHours()).padStart(2, '0');
+        let min = String(fecha.getMinutes()).padStart(2, '0');
+
+        document.getElementById('edit-fecha_programacion').value = `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+    } else {
+        document.getElementById('edit-fecha_programacion').value = '';
+    }
+
     document.getElementById('edit-detalle_programacion_id').value = data.detalle_programacion_id;
     document.getElementById('edit-guia_remision').value = data.guia_remision ?? "";
 
@@ -250,7 +266,7 @@ function openEditProgramacionModal(data) {
     // ===========================================
     // NUEVO: CAMPOS DE PROVEEDOR
     // ===========================================
-    document.getElementById('edit-proveedor_id').value = data.proveedor_id ?? "";
+    // document.getElementById('edit-proveedor_id').value = data.proveedor_id ?? "";
 
     document.getElementById('edit-tipo_mineral').value = data.tipo_mineral ?? "";
     document.getElementById('edit-guia_transportista').value = data.guia_transportista ?? "";

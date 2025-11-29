@@ -16,11 +16,9 @@ class ProveedorController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate(Proveedor::rules());
-
         Proveedor::create($validated);
 
-        return redirect()
-            ->route('proveedores.index')
+        return redirect()->route('proveedores.index')
             ->with('success', 'Proveedor registrado correctamente.');
     }
 

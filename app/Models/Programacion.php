@@ -37,7 +37,6 @@ class Programacion extends Model
         'telefono_conductor',
 
         // Unidad
-        'unidad_id',
         'placa_tracto',
         'placa_carreta',
         'marca_vehiculo',
@@ -46,7 +45,6 @@ class Programacion extends Model
         'constancia_mtc_carreta',
 
         // Proveedor
-        'proveedor_id',
         'razon_social_transporte',
         'ruc_transporte',
         'banco',
