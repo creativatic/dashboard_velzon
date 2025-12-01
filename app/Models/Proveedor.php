@@ -46,4 +46,10 @@ class Proveedor extends Model
         return $this->hasMany(Unidad::class);
     }
 
+    // Un proveedor tiene muchas programaciones
+    public function tisur()
+    {
+        return $this->hasMany(Tisur::class);
+    }
+
 }

@@ -96,34 +96,36 @@
             </div>
             <hr class="my-4">
 
-            <h5 class="fw-bold text-primary">Información de Adelantos</h5>
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label fw-bold">Monto Adelanto (S/):</label>
-                    <p id="show_monto_adelanto" class="form-control-plaintext border rounded p-2 bg-light">--</p>
-                </div>
+            <div class="modal-body">
+                <h5 class="fw-bold text-primary">Información de Adelantos</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Monto Adelanto (S/):</label>
+                            <p id="show_monto_adelanto" class="form-control-plaintext border rounded p-2 bg-light">--</p>
+                        </div>
 
-                <div class="col-md-4">
-                    <label class="form-label fw-bold">Fecha de Pago:</label>
-                    <p id="show_fecha_pago_adelantos" class="form-control-plaintext border rounded p-2 bg-light">--</p>
-                </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Fecha de Pago:</label>
+                            <p id="show_fecha_pago_adelantos" class="form-control-plaintext border rounded p-2 bg-light">--</p>
+                        </div>
 
-                <div class="col-md-4">
-                    <label class="form-label fw-bold">Banco:</label>
-                    <p id="show_banco" class="form-control-plaintext border rounded p-2 bg-light">--</p>
-                </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Banco:</label>
+                            <p id="show_banco" class="form-control-plaintext border rounded p-2 bg-light">--</p>
+                        </div>
 
-                <div class="col-md-6">
-                    <label class="form-label fw-bold">Glosa Banco:</label>
-                    <p id="show_glosa_banco" class="form-control-plaintext border rounded p-2 bg-light">--</p>
-                </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Glosa Banco:</label>
+                            <p id="show_glosa_banco" class="form-control-plaintext border rounded p-2 bg-light">--</p>
+                        </div>
 
-                <div class="col-md-6">
-                    <label class="form-label fw-bold">Notas:</label>
-                    <p id="show_notas" class="form-control-plaintext border rounded p-2 bg-light">--</p>
-                </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Notas:</label>
+                            <p id="show_notas" class="form-control-plaintext border rounded p-2 bg-light">--</p>
+                        </div>
+                    </div>
+
             </div>
-
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -131,3 +133,57 @@
         </div>
     </div>
 </div>
+
+<script>
+function verProgramacion(id) {
+    fetch(`/programacion/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            const p = data.programacion;
+            const u = data.unidad;      // unidad principal del proveedor
+            const c = data.conductor;   // conductor principal
+
+            // ========= PROGRAMACION =========
+            document.getElementById('show_fecha_programacion').innerText = p.fecha_programacion ?? '--';
+            document.getElementById('show_frente').innerText = p.detalle_programacion?.frente ?? '--';
+            document.getElementById('show_guia_remision').innerText = p.guia_remision ?? '--';
+
+            document.getElementById('show_tipo_mineral').innerText = p.tipo_mineral ?? '--';
+            document.getElementById('show_tipo_operacion').innerText = p.tipo_operacion ?? '--';
+            document.getElementById('show_conformidad_adelanto').innerText = p.conformidad_adelanto ?? '--';
+            document.getElementById('show_guia_transportista').innerText = p.guia_transportista ?? '--';
+            document.getElementById('show_grupo_cargio').innerText = p.grupo_cargio ?? '--';
+
+            // ========= UNIDAD =========
+            document.getElementById('show_placa_tracto').innerText = u?.placa_tracto ?? '--';
+            document.getElementById('show_placa_carreta').innerText = u?.placa_carreta ?? '--';
+            document.getElementById('show_marca_vehiculo').innerText = u?.marca_vehiculo ?? '--';
+            document.getElementById('show_tipo_plataforma').innerText = u?.tipo_plataforma ?? '--';
+            document.getElementById('show_constancia_tracto').innerText = u?.constancia_mtc_tracto ?? '--';
+            document.getElementById('show_constancia_carreta').innerText = u?.constancia_mtc_carreta ?? '--';
+
+            // ========= PROVEEDOR =========
+            document.getElementById('show_razon_social_transporte').innerText = p.proveedor?.razon_social ?? '--';
+            document.getElementById('show_ruc_transporte').innerText = p.proveedor?.ruc_transporte ?? '--';
+
+            // ========= CONDUCTOR =========
+            document.getElementById('show_licencia').innerText = c?.licencia ?? '--';
+            document.getElementById('show_dni').innerText = c?.dni ?? '--';
+            document.getElementById('show_nombres_conductor').innerText = c?.nombres ?? '--';
+            document.getElementById('show_apellidos_conductor').innerText = c?.apellidos ?? '--';
+            document.getElementById('show_telefono_conductor').innerText = c?.telefono ?? '--';
+
+            // ========= ADELANTOS =========
+            document.getElementById('show_monto_adelanto').innerText = p.monto_adelanto ?? '--';
+            document.getElementById('show_fecha_pago_adelantos').innerText = p.fecha_pago_adelantos ?? '--';
+            document.getElementById('show_banco').innerText = p.banco ?? '--';
+            document.getElementById('show_glosa_banco').innerText = p.glosa_banco ?? '--';
+            document.getElementById('show_notas').innerText = p.notas ?? '--';
+
+            // ABRIR EL MODAL
+            let modal = new bootstrap.Modal(document.getElementById('showProgramacionModal'));
+            modal.show();
+        })
+        .catch(error => console.error(error));
+}
+</script>

@@ -35,28 +35,25 @@ class ProgramacionController extends Controller
 
     public function showJson($id)
     {
-        $programacion = Programacion::with(['detalleProgramacion', 'proveedor'])->findOrFail($id);
+        $programacion = Programacion::with([
+            'detalleProgramacion',
+            'proveedor.unidades.conductores'
+        ])->findOrFail($id);
+
+        // Tomar la "unidad principal" del proveedor
+        $unidad = $programacion->proveedor->unidades->first();
+
+        // Tomar un conductor asociado a esa unidad
+        $conductor = $unidad?->conductores?->first();
 
         return response()->json([
-            'id' => $programacion->id,
-            'guia_remision' => $programacion->guia_remision,
-            'placa_tracto' => $programacion->placa_tracto,
-            'tipo_mineral' => $programacion->tipo_mineral,
-            'frente' => $programacion->detalleProgramacion?->frente,
-            'precio_tn' => $programacion->detalleProgramacion?->precio_tn,
-            'precio_frente' => $programacion->detalleProgramacion?->precio_frente,
-            'razon_social_transporte' => $programacion->razon_social_transporte,
-            'ruc_transporte' => $programacion->ruc_transporte,
-            'apellidos_conductor' => $programacion->apellidos_conductor,
-            'telefono_conductor' => $programacion->telefono_conductor,
-            'cuenta_banco' => $programacion->cuenta_banco,
-            'banco' => $programacion->banco,
-            'proveedor' => $programacion->proveedor ? [
-                'id' => $programacion->proveedor->id,
-                'razon_social' => $programacion->proveedor->razon_social,
-            ] : null,
+            'programacion' => $programacion,
+            'unidad' => $unidad,
+            'conductor' => $conductor,
         ]);
     }
+
+
 
     public function create()
     {

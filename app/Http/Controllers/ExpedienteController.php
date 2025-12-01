@@ -69,9 +69,12 @@ class ExpedienteController extends Controller
      */
     public function store(Request $request)
     {
+        
         $validated = $this->validateExpediente($request);
 
-        $expediente = Expediente::create($validated);
+        $expediente = Expediente::create(
+            collect($validated)->except('archivo')->toArray()
+        );
 
         if ($request->hasFile('archivo')) {
             $this->saveArchivo($request->file('archivo'), $expediente);
@@ -200,6 +203,9 @@ class ExpedienteController extends Controller
             'nombres_conductor'     => $conductor?->nombres,
             'apellidos_conductor'   => $conductor?->apellidos,
             'telefono_conductor'    => $conductor?->telefono,
+            'licencia_conductor'    => $conductor?->licencia,
+            'dni_conductor'    => $conductor?->dni,
+            
         ]);
     }
 
@@ -277,17 +283,16 @@ class ExpedienteController extends Controller
     private function validateExpediente(Request $request, $expediente = null)
     {
         return $request->validate([
-            'programacion_id' => 'required|exists:programacions,id',
-            'tisur_id' => 'required|exists:tisurs,id',
-            'fecha_carga' => 'nullable|date',
-            'fecha_pago' => 'nullable|date',
-            'total' => 'nullable|numeric|min:0',
-            'detraccion' => 'nullable|numeric|min:0',
-            'deposito_a_proveer' => 'nullable|numeric|min:0',
-            'numero_factura_exped' => 'nullable|string|max:255',
-            'comentarios' => 'nullable|string',
-            // ❌ Línea eliminada
-            // 'archivo.*' => ...
+        'programacion_id' => 'required|exists:programacions,id',
+        'tisur_id' => 'required|exists:tisurs,id',
+        'fecha_carga' => 'nullable|date', // Nota: En el modal usas 'fecha_hora_ingreso' para tisur.
+        'fecha_pago' => 'nullable|date',
+        'total' => 'nullable|numeric|min:0',
+        'detraccion' => 'nullable|numeric|min:0',
+        'deposito_a_proveer' => 'nullable|numeric|min:0',
+        'numero_factura_exped' => 'nullable|string|max:255',
+        'comentarios' => 'nullable|string',
+        'archivo.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:10240', // Archivos opcionales, máximo 10MB // ✅ LÍNEA AGREGADA/CORREGIDA para permitir múltiples archivos
         ]);
     }
 
@@ -298,14 +303,23 @@ class ExpedienteController extends Controller
     {
         $archivos = [];
 
+        // Recuperar archivos anteriores si existieran
+        if ($expediente->archivo) {
+            $archivos = is_array($expediente->archivo)
+                ? $expediente->archivo
+                : json_decode($expediente->archivo, true);
+        }
+
         foreach ((array)$files as $file) {
             if ($file) {
-                // Este bloque debe ejecutarse UNA sola vez, no dentro del foreach
+                $path = $file->store('expedientes', 'public');
+                $archivos[] = $path;
             }
         }
 
-        // El recomendado (opcional):
-        // Mover la eliminación del archivo fuera del foreach
+        // Guardar como JSON
+        $expediente->archivo = $archivos;
+        $expediente->save();
     }
 
 

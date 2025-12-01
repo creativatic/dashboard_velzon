@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('tisurs', function (Blueprint $table) {
             $table->id();
             $table->string('numero_ticket')->unique();
+            $table->foreignId('proveedor_id')
+                ->nullable()
+                ->constrained('proveedores')
+                ->nullOnDelete();
             $table->dateTime('fecha_hora_ingreso')->nullable();
             $table->string('placa_tracto')->nullable();
             $table->dateTime('fecha_hora_salida')->nullable();

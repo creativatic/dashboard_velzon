@@ -147,30 +147,45 @@ function verExpediente(id) {
             document.getElementById('show_comentarios').textContent = data.comentarios ?? '-';
 
             // --- ARCHIVOS ---
+            // --- ARCHIVOS ---
             const archivosDiv = document.getElementById('show_archivos');
             archivosDiv.innerHTML = '';
 
             let archivos = [];
 
+            // Si viene JSON encodeado como texto ["expedientes/xxx.pdf"]
+            if (typeof data.archivos === 'string') {
+                try {
+                    const parsed = JSON.parse(data.archivos);
+                    if (Array.isArray(parsed)) archivos = parsed;
+                } catch (e) {
+                    if (data.archivos.trim() !== "") archivos = [data.archivos];
+                }
+            }
+
+            // Si ya viene como array
             if (Array.isArray(data.archivos)) {
                 archivos = data.archivos;
-            } 
-            else if (typeof data.archivos === 'string' && data.archivos.trim() !== '') {
-                archivos = [data.archivos];
             }
 
             if (archivos.length > 0) {
                 archivos.forEach(file => {
-                    const a = document.createElement('a');
-                    a.href = `/storage/${file}`;
-                    a.target = "_blank";
-                    a.textContent = file.split('/').pop();
-                    a.classList.add('d-block');
-                    archivosDiv.appendChild(a);
+                    // limpiar comillas si Laravel envía ["archivo.pdf"]
+                    file = file.replace(/[\[\]\"]/g, "");
+
+                    const url = `/storage/${file}`;
+
+                    archivosDiv.innerHTML += `
+                        <a href="${url}" target="_blank"
+                            class="btn btn-outline-primary btn-sm d-block mb-2">
+                            📄 Ver Factura
+                        </a>
+                    `;
                 });
             } else {
-                archivosDiv.textContent = "Sin archivos adjuntos.";
+                archivosDiv.innerHTML = `<span class="text-muted">Sin archivos adjuntos.</span>`;
             }
+
 
             // MOSTRAR MODAL
             const modal = new bootstrap.Modal(document.getElementById('showExpedienteModal'));

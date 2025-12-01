@@ -82,7 +82,7 @@
 
                         {{-- Datos económicos --}}
                         <div class="col-md-3">
-                            <label class="form-label">Precio (S/)</label>
+                            <label class="form-label">Precio ($)</label>
                             <input type="number" step="0.00001" name="precio_tisur" id="precio_tisur" class="form-control">
                         </div>
 
@@ -94,17 +94,17 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Total (S/)</label>
+                            <label class="form-label">Total ($)</label>
                             <input type="number" step="0.00001" name="total_tisur" id="total_tisur" class="form-control" readonly>
                         </div>
 
                         <div class="col-md-2">
-                            <label class="form-label">Retención (S/)</label>
+                            <label class="form-label">Retención ($)</label>
                             <input type="number" step="0.00001" name="retencion_tisur" id="retencion_tisur" class="form-control" readonly>
                         </div>
 
                         <div class="col-md-2">
-                            <label class="form-label">Pago (S/)</label>
+                            <label class="form-label">Pago ($)</label>
                             <input type="number" step="0.00001" name="pago_tisur" id="pago_tisur" class="form-control" readonly>
                         </div>
 
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const precio = parseFloat(precioInput.value) || 0;
         const peso = parseFloat(pesoInput.value) || 0;
 
-        // Si precio está en S/ por tonelada y peso está en kg, convertir:
+        // Si precio está en $ por tonelada y peso está en kg, convertir:
         // const pesoTn = peso / 1000;
         // const total = precio * pesoTn;
         // Pero si ambos están en las mismas unidades que usas en Excel (precio por unidad * peso), usa:

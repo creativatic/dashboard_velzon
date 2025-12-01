@@ -55,4 +55,10 @@ class Tisur extends Model
     {
         return $this->hasMany(Expediente::class);
     }
+
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedor::class);
+    }
+
 }

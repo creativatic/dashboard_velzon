@@ -31,10 +31,10 @@
                     <th>Razón Social</th>
                     <th>Tipo Carga</th>
                     <th>Peso Neto (kg)</th>
-                    <th>Precio (S/)</th>
-                    <th>Total (S/)</th>
-                    <th>Retencion (S/)</th>
-                    <th>Pago (S/)</th>
+                    <th>Precio ($)</th>
+                    <th>Total ($)</th>
+                    <th>Retencion ($)</th>
+                    <th>Pago ($)</th>
                     <th>Estado</th>
                     <th width="120">Acciones</th>
                 </tr>

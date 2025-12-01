@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `cache` (
 
 -- Volcando datos para la tabla ventas_seven.cache: ~0 rows (aproximadamente)
 INSERT IGNORE INTO `cache` (`key`, `value`, `expiration`) VALUES
-	('laravel-cache-spatie.permission.cache', 'a:3:{s:5:"alias";a:4:{s:1:"a";s:2:"id";s:1:"b";s:4:"name";s:1:"c";s:10:"guard_name";s:1:"r";s:5:"roles";}s:11:"permissions";a:16:{i:0;a:4:{s:1:"a";i:1;s:1:"b";s:13:"ver dashboard";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:2;}}i:1;a:4:{s:1:"a";i:2;s:1:"b";s:12:"ver usuarios";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:2;}}i:2;a:4:{s:1:"a";i:3;s:1:"b";s:13:"crear usuario";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:3;a:4:{s:1:"a";i:4;s:1:"b";s:14:"editar usuario";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:4;a:4:{s:1:"a";i:5;s:1:"b";s:16:"eliminar usuario";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:5;a:4:{s:1:"a";i:6;s:1:"b";s:9:"ver roles";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:6;a:4:{s:1:"a";i:7;s:1:"b";s:9:"crear rol";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:7;a:4:{s:1:"a";i:8;s:1:"b";s:10:"editar rol";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:8;a:4:{s:1:"a";i:9;s:1:"b";s:12:"eliminar rol";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:9;a:4:{s:1:"a";i:10;s:1:"b";s:12:"ver permisos";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:10;a:4:{s:1:"a";i:11;s:1:"b";s:13:"crear permiso";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:11;a:4:{s:1:"a";i:12;s:1:"b";s:14:"editar permiso";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:12;a:4:{s:1:"a";i:13;s:1:"b";s:16:"eliminar permiso";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:13;a:4:{s:1:"a";i:14;s:1:"b";s:18:"gestionar usuarios";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:14;a:4:{s:1:"a";i:15;s:1:"b";s:15:"gestionar roles";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:15;a:4:{s:1:"a";i:16;s:1:"b";s:18:"gestionar permisos";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}}s:5:"roles";a:2:{i:0;a:3:{s:1:"a";i:1;s:1:"b";s:13:"Administrador";s:1:"c";s:3:"web";}i:1;a:3:{s:1:"a";i:2;s:1:"b";s:8:"Contador";s:1:"c";s:3:"web";}}}', 1764454102);
+	('laravel-cache-spatie.permission.cache', 'a:3:{s:5:"alias";a:4:{s:1:"a";s:2:"id";s:1:"b";s:4:"name";s:1:"c";s:10:"guard_name";s:1:"r";s:5:"roles";}s:11:"permissions";a:16:{i:0;a:4:{s:1:"a";i:1;s:1:"b";s:13:"ver dashboard";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:2;}}i:1;a:4:{s:1:"a";i:2;s:1:"b";s:12:"ver usuarios";s:1:"c";s:3:"web";s:1:"r";a:2:{i:0;i:1;i:1;i:2;}}i:2;a:4:{s:1:"a";i:3;s:1:"b";s:13:"crear usuario";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:3;a:4:{s:1:"a";i:4;s:1:"b";s:14:"editar usuario";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:4;a:4:{s:1:"a";i:5;s:1:"b";s:16:"eliminar usuario";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:5;a:4:{s:1:"a";i:6;s:1:"b";s:9:"ver roles";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:6;a:4:{s:1:"a";i:7;s:1:"b";s:9:"crear rol";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:7;a:4:{s:1:"a";i:8;s:1:"b";s:10:"editar rol";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:8;a:4:{s:1:"a";i:9;s:1:"b";s:12:"eliminar rol";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:9;a:4:{s:1:"a";i:10;s:1:"b";s:12:"ver permisos";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:10;a:4:{s:1:"a";i:11;s:1:"b";s:13:"crear permiso";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:11;a:4:{s:1:"a";i:12;s:1:"b";s:14:"editar permiso";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:12;a:4:{s:1:"a";i:13;s:1:"b";s:16:"eliminar permiso";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:13;a:4:{s:1:"a";i:14;s:1:"b";s:18:"gestionar usuarios";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:14;a:4:{s:1:"a";i:15;s:1:"b";s:15:"gestionar roles";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}i:15;a:4:{s:1:"a";i:16;s:1:"b";s:18:"gestionar permisos";s:1:"c";s:3:"web";s:1:"r";a:1:{i:0;i:1;}}}s:5:"roles";a:2:{i:0;a:3:{s:1:"a";i:1;s:1:"b";s:13:"Administrador";s:1:"c";s:3:"web";}i:1;a:3:{s:1:"a";i:2;s:1:"b";s:8:"Contador";s:1:"c";s:3:"web";}}}', 1764703235);
 
 -- Volcando estructura para tabla ventas_seven.cache_locks
 CREATE TABLE IF NOT EXISTS `cache_locks` (
@@ -47,15 +47,13 @@ CREATE TABLE IF NOT EXISTS `conductores` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla ventas_seven.conductores: ~3 rows (aproximadamente)
 INSERT IGNORE INTO `conductores` (`id`, `dni`, `licencia`, `nombres`, `apellidos`, `telefono`, `created_at`, `updated_at`) VALUES
-	(1, '16076333', 'AIIIB-644554', 'Juan 1', 'Perez 59', '967506762', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(2, '67057924', 'AIIIB-794389', 'Juan 5', 'Perez 43', '984142541', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(3, '48262921', 'AIIIB-258869', 'Juan 46', 'Perez 36', '997279842', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(4, '61492084', 'H40286831', 'Pedro', 'Yes', '951287857', '2025-11-29 18:21:41', '2025-11-29 18:21:41'),
-	(5, '21492084', 'H40286833', 'Dos Pepe', 'Lepiu', '922887852', '2025-11-29 18:22:10', '2025-11-29 18:22:10');
+	(1, '61420602', 'AIIIB-578094', 'Oscar 16', 'Perez 58', '967338042', '2025-12-01 23:02:31', '2025-12-01 23:02:31'),
+	(2, '86185016', 'AIIIB-852622', 'Pedro 21', 'Perez 56', '926624771', '2025-12-01 23:02:31', '2025-12-01 23:02:31'),
+	(3, '49727512', 'AIIIB-541199', 'Juan 41', 'Perez 72', '921680185', '2025-12-01 23:02:31', '2025-12-01 23:02:31');
 
 -- Volcando estructura para tabla ventas_seven.conductor_unidad
 CREATE TABLE IF NOT EXISTS `conductor_unidad` (
@@ -69,15 +67,13 @@ CREATE TABLE IF NOT EXISTS `conductor_unidad` (
   KEY `conductor_unidad_unidad_id_foreign` (`unidad_id`),
   CONSTRAINT `conductor_unidad_conductor_id_foreign` FOREIGN KEY (`conductor_id`) REFERENCES `conductores` (`id`) ON DELETE CASCADE,
   CONSTRAINT `conductor_unidad_unidad_id_foreign` FOREIGN KEY (`unidad_id`) REFERENCES `unidades` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla ventas_seven.conductor_unidad: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla ventas_seven.conductor_unidad: ~5 rows (aproximadamente)
 INSERT IGNORE INTO `conductor_unidad` (`id`, `conductor_id`, `unidad_id`, `created_at`, `updated_at`) VALUES
-	(1, 1, 1, '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(2, 2, 2, '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(3, 3, 3, '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(4, 4, 4, '2025-11-29 18:21:41', '2025-11-29 18:21:41'),
-	(5, 5, 5, '2025-11-29 18:22:10', '2025-11-29 18:22:10');
+	(1, 1, 1, '2025-12-01 23:02:31', '2025-12-01 23:02:31'),
+	(2, 2, 2, '2025-12-01 23:02:31', '2025-12-01 23:02:31'),
+	(3, 3, 3, '2025-12-01 23:02:31', '2025-12-01 23:02:31');
 
 -- Volcando estructura para tabla ventas_seven.detalle_programacions
 CREATE TABLE IF NOT EXISTS `detalle_programacions` (
@@ -94,9 +90,9 @@ CREATE TABLE IF NOT EXISTS `detalle_programacions` (
 
 -- Volcando datos para la tabla ventas_seven.detalle_programacions: ~3 rows (aproximadamente)
 INSERT IGNORE INTO `detalle_programacions` (`id`, `frente`, `precio_frente`, `precio_tn`, `activo`, `descripcion`, `created_at`, `updated_at`) VALUES
-	(1, 'Huanaco', 4500.00, 0.1240, 1, 'Frente Huanaco: zona con mayor carga y mejor acceso, precio estándar establecido según contrato 2025.', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(2, 'Intikal', 3500.00, 0.1220, 1, 'Frente Intikal: área de menor tonelaje, precio ajustado para rutas de menor productividad.', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(3, 'Intikal 0.095', 3500.00, 0.0950, 1, 'Frente Intikal: área de menor tonelaje, precio ajustado para rutas de menor productividad.', '2025-11-29 03:08:13', '2025-11-29 03:08:13');
+	(1, 'Huanaco', 4500.00, 0.1240, 1, 'Frente Huanaco: zona con mayor carga y mejor acceso, precio estándar establecido según contrato 2025.', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(2, 'Intikal', 3500.00, 0.1220, 1, 'Frente Intikal: área de menor tonelaje, precio ajustado para rutas de menor productividad.', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(3, 'Intikal 0.095', 3500.00, 0.0950, 1, 'Frente Intikal: área de menor tonelaje, precio ajustado para rutas de menor productividad.', '2025-12-01 23:02:30', '2025-12-01 23:02:30');
 
 -- Volcando estructura para tabla ventas_seven.expedientes
 CREATE TABLE IF NOT EXISTS `expedientes` (
@@ -123,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `expedientes` (
   CONSTRAINT `expedientes_tisur_id_foreign` FOREIGN KEY (`tisur_id`) REFERENCES `tisurs` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla ventas_seven.expedientes: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla ventas_seven.expedientes: ~2 rows (aproximadamente)
 INSERT IGNORE INTO `expedientes` (`id`, `tisur_id`, `programacion_id`, `numero_factura_exped`, `total`, `detraccion`, `estado_pago_detraccion`, `total_con_detraccion`, `deposito_a_proveer`, `fecha_pago`, `fecha_carga`, `conformidad_exped`, `archivo`, `comentarios`, `created_at`, `updated_at`) VALUES
 	(1, 2, 1, 'E001-181', 4526.23, 123.23, NULL, NULL, NULL, '2025-10-17', '2025-10-16', NULL, NULL, 'test test test', '2025-10-17 02:05:16', '2025-10-17 02:05:16');
 
@@ -248,22 +244,22 @@ CREATE TABLE IF NOT EXISTS `permissions` (
 
 -- Volcando datos para la tabla ventas_seven.permissions: ~2 rows (aproximadamente)
 INSERT IGNORE INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-	(1, 'ver dashboard', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(2, 'ver usuarios', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(3, 'crear usuario', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(4, 'editar usuario', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(5, 'eliminar usuario', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(6, 'ver roles', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(7, 'crear rol', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(8, 'editar rol', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(9, 'eliminar rol', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(10, 'ver permisos', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(11, 'crear permiso', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(12, 'editar permiso', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(13, 'eliminar permiso', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(14, 'gestionar usuarios', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(15, 'gestionar roles', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(16, 'gestionar permisos', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13');
+	(1, 'ver dashboard', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(2, 'ver usuarios', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(3, 'crear usuario', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(4, 'editar usuario', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(5, 'eliminar usuario', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(6, 'ver roles', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(7, 'crear rol', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(8, 'editar rol', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(9, 'eliminar rol', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(10, 'ver permisos', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(11, 'crear permiso', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(12, 'editar permiso', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(13, 'eliminar permiso', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(14, 'gestionar usuarios', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(15, 'gestionar roles', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(16, 'gestionar permisos', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30');
 
 -- Volcando estructura para tabla ventas_seven.programacions
 CREATE TABLE IF NOT EXISTS `programacions` (
@@ -288,13 +284,12 @@ CREATE TABLE IF NOT EXISTS `programacions` (
   KEY `programacions_proveedor_id_foreign` (`proveedor_id`),
   CONSTRAINT `programacions_detalle_programacion_id_foreign` FOREIGN KEY (`detalle_programacion_id`) REFERENCES `detalle_programacions` (`id`) ON DELETE SET NULL,
   CONSTRAINT `programacions_proveedor_id_foreign` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedores` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla ventas_seven.programacions: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla ventas_seven.programacions: ~2 rows (aproximadamente)
 INSERT IGNORE INTO `programacions` (`id`, `fecha_programacion`, `guia_remision`, `tipo_mineral`, `tipo_operacion`, `conformidad_adelanto`, `guia_transportista`, `grupo_cargio`, `monto_adelanto`, `fecha_pago_adelantos`, `glosa_banco`, `notas`, `detalle_programacion_id`, `proveedor_id`, `created_at`, `updated_at`) VALUES
-	(1, '2025-11-28 22:08:00', 'EG07 - 00003332', 'HIERRO GRANULADO', 'nacional', 'Ok', 'EG03 - 00000170', 'Carguio 13,09', 1200.50, '2025-11-28', 'Transferencia registrada', 'Adelanto procesado correctamente', 1, 2, '2025-11-29 03:08:13', '2025-11-29 19:03:15'),
-	(2, '2025-11-28 22:08:13', 'FG09 - 00006662', 'HIERRO GRANULADO', 'nacional', 'Pendiente', 'EG03 - 00000170', 'Carguio 13,09', 0.00, NULL, 'Pendiente', 'Pendiente de transferencia bancaria', 1, 2, '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(3, '2025-11-29 08:07:00', 'EG07 - 00008888', 'HIERRO GRANULADO', 'nacional', 'Ok', 'EG03 - 0000888', 'Carguio 29,11', 0.00, NULL, NULL, NULL, 3, 4, '2025-11-29 18:07:37', '2025-11-29 19:32:44');
+	(1, '2025-12-01 18:02:00', 'EG07 - 00003332', 'HIERRO GRANULADO', 'nacional', 'Pendiente', 'EG03 - 00000170', 'Carguio 01,12', 1200.50, '2025-12-01', 'Transferencia registrada', 'Adelanto procesado correctamente', 1, 1, '2025-12-01 23:02:30', '2025-12-02 00:21:56'),
+	(2, '2025-12-01 18:02:00', 'FG09 - 00006662', 'HIERRO GRANULADO', 'nacional', 'Ok', 'EG03 - 00000170', 'Carguio 13,09', 0.00, NULL, 'Pendiente', 'Pendiente de transferencia bancaria', 1, 2, '2025-12-01 23:02:30', '2025-12-02 00:24:49');
 
 -- Volcando estructura para tabla ventas_seven.proveedores
 CREATE TABLE IF NOT EXISTS `proveedores` (
@@ -307,15 +302,13 @@ CREATE TABLE IF NOT EXISTS `proveedores` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla ventas_seven.proveedores: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla ventas_seven.proveedores: ~5 rows (aproximadamente)
 INSERT IGNORE INTO `proveedores` (`id`, `razon_social`, `ruc_transporte`, `cuenta_banco`, `cci_banco`, `banco`, `created_at`, `updated_at`) VALUES
-	(1, 'TRANSPORTES EL AGUILA S.A.C.', '20601234567', '123-45678901', '00212345678901234567', 'BCP', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(2, 'LOGISTICA MINERA PERU S.R.L.', '20599876543', '456-98765432', '00298765432109876543', 'Interbank', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(3, 'TRANSPORTES VIRGEN DEL CARMEN E.I.R.L.', '20456789321', '789-12345678', '00245678912345678901', 'BBVA', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(4, 'SEGUNDO PERU MINERAL S.A.C.', '10709234567', '000-4291629', '00941900000429162936', 'BCP', '2025-11-29 18:18:39', '2025-11-29 18:18:39'),
-	(6, 'PRIMERO PERU MINERAL S.A.C.', '20901234567', '000-4291629', '00941900000429162936', 'BCP', '2025-11-29 18:22:59', '2025-11-29 18:22:59');
+	(1, 'TRANSPORTES EL AGUILA S.A.C.', '20601234567', '123-45678901', '00212345678901234567', 'BCP', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(2, 'LOGISTICA MINERA PERU S.R.L.', '20599876543', '456-98765432', '00298765432109876543', 'Interbank', '2025-12-01 23:02:31', '2025-12-01 23:02:31'),
+	(3, 'TRANSPORTES VIRGEN DEL CARMEN E.I.R.L.', '20456789321', '789-12345678', '00245678912345678901', 'BBVA', '2025-12-01 23:02:31', '2025-12-01 23:02:31');
 
 -- Volcando estructura para tabla ventas_seven.roles
 CREATE TABLE IF NOT EXISTS `roles` (
@@ -330,8 +323,8 @@ CREATE TABLE IF NOT EXISTS `roles` (
 
 -- Volcando datos para la tabla ventas_seven.roles: ~2 rows (aproximadamente)
 INSERT IGNORE INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-	(1, 'Administrador', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(2, 'Contador', 'web', '2025-11-29 03:08:13', '2025-11-29 03:08:13');
+	(1, 'Administrador', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(2, 'Contador', 'web', '2025-12-01 23:02:30', '2025-12-01 23:02:30');
 
 -- Volcando estructura para tabla ventas_seven.role_has_permissions
 CREATE TABLE IF NOT EXISTS `role_has_permissions` (
@@ -392,18 +385,15 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   KEY `sessions_last_activity_index` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla ventas_seven.sessions: ~4 rows (aproximadamente)
+-- Volcando datos para la tabla ventas_seven.sessions: ~3 rows (aproximadamente)
 INSERT IGNORE INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-	('j7vuHNrgPo0MBe9n02GsJzmluhEeGaCuhbAGkkNb', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiZ293ajBHTHh2dnI0SzlnOG1pUW1lT28zaGYzbzQ3RXZjdXRXeDgzbSI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozNToiaHR0cDovLzEyNy4wLjAuMTo4MDAwL3Byb2dyYW1hY2lvbnMiO31zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czoyMToiaHR0cDovLzEyNy4wLjAuMTo4MDAwIjtzOjU6InJvdXRlIjtzOjU6ImxvZ2luIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1764421714),
-	('KEinUuyrAeUlmyL5NYIsRl2YogGEIhkX4eFVtIZr', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoibWlWVFFQVWFhc0VLTWtsT3lxMFNrRnpvTWV2SlgyWDJnb0duY2hjQSI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wcm9ncmFtYWNpb24vMyI7czo1OiJyb3V0ZSI7Tjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1764429832),
-	('Snxftxk0gbVLbhIYzeXcrLYFfiG4afzP5uAqhFRR', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoicU9SN1plWTRWUXlkcWVla3hHSVFncmZPeVE3MmdkYlE0Q3BOWmpRUSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjM1OiJodHRwOi8vbG9jYWxob3N0OjgwMDAvcHJvZ3JhbWFjaW9ucyI7czo1OiJyb3V0ZSI7czoxOToicHJvZ3JhbWFjaW9ucy5pbmRleCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1764429910),
-	('Yu1LyeP7VK8mqo0Wyf3khXLJZ16XPaQvSgeaYXOJ', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoicUxXRWFOdXVNRVVZWW53cHVHVG1SemZvbjNwUlJOWFRvMjRQYWJMQSI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MzU6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wcm9ncmFtYWNpb25zIjtzOjU6InJvdXRlIjtzOjE5OiJwcm9ncmFtYWNpb25zLmluZGV4Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1764429700),
-	('ZZO8CN6dCMXLHD7Bi1KzKB6vDUCUB8BXrGDftBA7', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoicWRqMlVhcmdZUE5mcWxVWHZ3Q2ZhY1FpZGVmeEk1YkV4M04yaXZzcyI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czozNToiaHR0cDovLzEyNy4wLjAuMTo4MDAwL3Byb2dyYW1hY2lvbnMiO31zOjk6Il9wcmV2aW91cyI7YToyOntzOjM6InVybCI7czozNToiaHR0cDovLzEyNy4wLjAuMTo4MDAwL3Byb2dyYW1hY2lvbnMiO3M6NToicm91dGUiO3M6MTk6InByb2dyYW1hY2lvbnMuaW5kZXgiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1764421713);
+	('HQtslVkJmCgDdUvCWJOTweyI7NbkKmvU0WyuyOVg', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiWkdzZ2xyMW1JZWgxc3hXYmtzZ0VZUHdGeGliUUUyMXlnZmZLWWdIdSI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjI6e3M6MzoidXJsIjtzOjM1OiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvcHJvZ3JhbWFjaW9ucyI7czo1OiJyb3V0ZSI7czoxOToicHJvZ3JhbWFjaW9ucy5pbmRleCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1764617127);
 
 -- Volcando estructura para tabla ventas_seven.tisurs
 CREATE TABLE IF NOT EXISTS `tisurs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `numero_ticket` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `proveedor_id` bigint unsigned DEFAULT NULL,
   `fecha_hora_ingreso` datetime DEFAULT NULL,
   `placa_tracto` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `fecha_hora_salida` datetime DEFAULT NULL,
@@ -427,13 +417,15 @@ CREATE TABLE IF NOT EXISTS `tisurs` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `tisurs_numero_ticket_unique` (`numero_ticket`)
+  UNIQUE KEY `tisurs_numero_ticket_unique` (`numero_ticket`),
+  KEY `tisurs_proveedor_id_foreign` (`proveedor_id`),
+  CONSTRAINT `tisurs_proveedor_id_foreign` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedores` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla ventas_seven.tisurs: ~2 rows (aproximadamente)
-INSERT IGNORE INTO `tisurs` (`id`, `numero_ticket`, `fecha_hora_ingreso`, `placa_tracto`, `fecha_hora_salida`, `primer_peso`, `segundo_peso`, `razon_social`, `transportista`, `tipo_carga_tisur`, `numero_bultos`, `peso_neto`, `tipo_plataforma`, `documento_origen`, `precio_tisur`, `total_tisur`, `retencion_tisur`, `pago_tisur`, `factura_tisur`, `estado`, `fecha_pago`, `orden_tisur`, `created_at`, `updated_at`) VALUES
-	(1, 'MB01883333', '2025-10-16 16:36:00', 'V9C-705', '2025-10-17 16:36:00', 40380.00000, 40380.00000, 'SEVEN SEAS PERU MINERAL S.A.C.', 'TRANS. JULICES C & H R.R.L.', 'MINERAL DE HIERRO', 40380.00, 40380.00000, 'METALERO', 'SSPM 05.25 - B&H', 0.07195, 2501.54000, 125.08000, 2376.46000, 'E001-835', 'Pendiente', '2025-10-30', 'P0015-006', NULL, NULL),
-	(2, 'MB00002222', '2025-10-16 16:36:00', 'BVN-781', '2025-10-16 08:14:00', 46310.00000, 46310.00000, 'SEVEN SEAS PERU MINERAL S.A.C.', 'TRANS. JULICES C & H R.R.L.', 'MINERAL DE HIERRO', 40380.00, 46310.00000, 'AUTODESCARGABLE', 'SSPM 05.25 - B&H', 0.06195, 2501.54000, 125.08000, 2376.46000, '-', 'Pendiente', '2025-10-30', 'P0015-006', NULL, NULL);
+-- Volcando datos para la tabla ventas_seven.tisurs: ~4 rows (aproximadamente)
+INSERT IGNORE INTO `tisurs` (`id`, `numero_ticket`, `proveedor_id`, `fecha_hora_ingreso`, `placa_tracto`, `fecha_hora_salida`, `primer_peso`, `segundo_peso`, `razon_social`, `transportista`, `tipo_carga_tisur`, `numero_bultos`, `peso_neto`, `tipo_plataforma`, `documento_origen`, `precio_tisur`, `total_tisur`, `retencion_tisur`, `pago_tisur`, `factura_tisur`, `estado`, `fecha_pago`, `orden_tisur`, `created_at`, `updated_at`) VALUES
+	(1, 'MB01883333', NULL, '2025-10-16 16:36:00', 'V9C-705', '2025-10-17 16:36:00', 40380.00000, 40380.00000, 'SEVEN SEAS PERU MINERAL S.A.C.', 'TRANS. JULICES C & H R.R.L.', 'MINERAL DE HIERRO', 40380.00, 40380.00000, 'METALERO', 'SSPM 05.25 - B&H', 0.07195, 2501.54000, 125.08000, 2376.46000, 'E001-835', 'Pendiente', '2025-10-30', 'P0015-006', NULL, NULL),
+	(2, 'MB00002222', NULL, '2025-10-16 16:36:00', 'BVN-781', '2025-10-16 08:14:00', 46310.00000, 46310.00000, 'SEVEN SEAS PERU MINERAL S.A.C.', 'TRANS. JULICES C & H R.R.L.', 'MINERAL DE HIERRO', 40380.00, 46310.00000, 'AUTODESCARGABLE', 'SSPM 05.25 - B&H', 0.06195, 2501.54000, 125.08000, 2376.46000, '-', 'Pendiente', '2025-10-30', 'P0015-006', NULL, NULL);
 
 -- Volcando estructura para tabla ventas_seven.unidades
 CREATE TABLE IF NOT EXISTS `unidades` (
@@ -451,15 +443,13 @@ CREATE TABLE IF NOT EXISTS `unidades` (
   PRIMARY KEY (`id`),
   KEY `unidades_proveedor_id_foreign` (`proveedor_id`),
   CONSTRAINT `unidades_proveedor_id_foreign` FOREIGN KEY (`proveedor_id`) REFERENCES `proveedores` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla ventas_seven.unidades: ~3 rows (aproximadamente)
 INSERT IGNORE INTO `unidades` (`id`, `placa_tracto`, `placa_carreta`, `marca_vehiculo`, `tipo_plataforma`, `constancia_mtc_tracto`, `constancia_mtc_carreta`, `deleted_at`, `proveedor_id`, `created_at`, `updated_at`) VALUES
-	(1, 'ABC-789', 'XYZ-943', 'Volvo', 'FURGÓN', 'MTC-31811', 'MTC-51282', NULL, 1, '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(2, 'ABC-217', 'XYZ-867', 'Volvo', 'FURGÓN', 'MTC-44885', 'MTC-83341', NULL, 2, '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(3, 'ABC-582', 'XYZ-824', 'Volvo', 'FURGÓN', 'MTC-15212', 'MTC-47102', NULL, 3, '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(4, 'ACJ-111', 'BBI-111', 'PRIMERO', 'FURGÓN', 'MTC-91792', 'MTC-96713', NULL, 4, '2025-11-29 18:20:04', '2025-11-29 18:21:05'),
-	(5, 'V9C-222', 'XYZ-222', 'SEGUNDO', 'METALER', '04M24001058E', '94M24001058E', NULL, 4, '2025-11-29 18:20:25', '2025-11-29 18:21:18');
+	(1, 'ABC-532', 'XYZ-579', 'Volvo', 'FURGÓN', 'MTC-74446', 'MTC-28603', NULL, 1, '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(2, 'ABC-941', 'XYZ-282', 'Volvo', 'FURGÓN', 'MTC-26039', 'MTC-27744', NULL, 2, '2025-12-01 23:02:31', '2025-12-01 23:02:31'),
+	(3, 'ABC-392', 'XYZ-757', 'Volvo', 'FURGÓN', 'MTC-58655', 'MTC-44977', NULL, 3, '2025-12-01 23:02:31', '2025-12-01 23:02:31');
 
 -- Volcando estructura para tabla ventas_seven.users
 CREATE TABLE IF NOT EXISTS `users` (
@@ -477,8 +467,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Volcando datos para la tabla ventas_seven.users: ~2 rows (aproximadamente)
 INSERT IGNORE INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, 'Administrador General', 'admin@gmail.com', NULL, '$2y$12$SWnKMq0IL1gbWReXyoIFEuL0xkB4G.IZ2qq/oS4Eh.em4UJOVd7Q2', NULL, '2025-11-29 03:08:13', '2025-11-29 03:08:13'),
-	(2, 'Usuario Contador', 'contador@gmail.com', NULL, '$2y$12$9lmsNtDusooBnbAE1fz9keOl6togXzmwEc0ZulDwfeIJpBqWWrwyy', NULL, '2025-11-29 03:08:13', '2025-11-29 03:08:13');
+	(1, 'Administrador General', 'admin@gmail.com', NULL, '$2y$12$QzHsUuFWJ9Ao48MMqQl3.e27tKC1/gSwmLsFxcx9mzl8Cau9maEf2', NULL, '2025-12-01 23:02:30', '2025-12-01 23:02:30'),
+	(2, 'Usuario Contador', 'contador@gmail.com', NULL, '$2y$12$oqmFXEI5XXLGwAIAqKEB.OX2aWzizrSTle5OHq99oEhPfCJu9gUFG', NULL, '2025-12-01 23:02:30', '2025-12-01 23:02:30');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

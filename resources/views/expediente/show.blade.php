@@ -92,10 +92,14 @@
                         <p id="show_comentarios" class="form-control-plaintext"></p>
                     </div>
 
-                    <div class="col-12">
-                        <label class="form-label fw-bold">Archivos Adjuntos:</label>
-                        <div id="show_archivos" class="border rounded p-2 bg-light small"></div>
+                    {{-- Aquí se insertarán los PDF --}}
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Archivos adjuntos:</label>
+                        <div id="show_archivos"></div>
                     </div>
+
+
+
                 </div>
             </div>
 
