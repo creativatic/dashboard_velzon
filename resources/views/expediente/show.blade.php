@@ -94,12 +94,9 @@
 
                     {{-- Aquí se insertarán los PDF --}}
                     <div class="col-md-12">
-                        <label class="form-label fw-bold">Archivos adjuntos:</label>
+                        <label class="form-label fw-bold">Archivos adjuntos PDF:</label>
                         <div id="show_archivos"></div>
                     </div>
-
-
-
                 </div>
             </div>
 

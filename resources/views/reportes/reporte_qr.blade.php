@@ -1,7 +1,5 @@
 @extends('layouts.plantilla')
-
 @section('title','Reporte QR')
-
 @section('content')
 
 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
@@ -71,51 +69,58 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($programaciones as $programacion)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        
-                        {{-- 1. placa_tracto --}}
-                        <td>{{ $programacion->placa_tracto ?? '-' }}</td>
-                        
-                        {{-- 2. licencia --}}
-                        <td>{{ $programacion->licencia ?? '-' }}</td>
-                        
-                        {{-- 3. dni --}}
-                        <td>{{ $programacion->dni ?? '-' }}</td>
-                        
-                        {{-- 4. nombres_conductor --}}
-                        <td>{{ $programacion->nombres_conductor ?? '-' }}</td>
-                        
-                        {{-- 5. apellidos_conductor --}}
-                        <td>{{ $programacion->apellidos_conductor ?? '-' }}</td>
-                        
-                        {{-- 6. ruc_transporte --}}
-                        <td>{{ $programacion->ruc_transporte ?? '-' }}</td>
-                        
-                        {{-- 7. razon_social_transporte --}}
-                        <td class="text-start">{{ $programacion->razon_social_transporte ?? '-' }}</td>
-                        
-                        {{-- 8. tipo_operacion --}}
-                        <td>{{ ucfirst($programacion->tipo_operacion ?? 'N/A') }}</td>
-                        
-                        {{-- 9. placa_carreta --}}
-                        <td>{{ $programacion->placa_carreta ?? '-' }}</td>
-                        
-                        {{-- 10. guia_remision --}}
-                        <td>{{ $programacion->guia_remision ?? '-' }}</td>
-                        
-                        {{-- 11. grupo_cargio --}}
-                        <td>{{ $programacion->grupo_cargio ?? '-' }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        {{-- El colspan debe ser 1 (para #) + 11 (columnas de datos) = 12 --}}
-                        <td colspan="12" class="text-center text-muted">No hay programaciones registradas</td>
-                    </tr>
-                @endforelse
+            @forelse($programaciones as $programacion)
+
+                @php
+                    $unidad = optional($programacion->proveedor->unidades->first());
+                    $conductor = optional($unidad->conductores->first());
+                @endphp
+
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+
+                    {{-- 1. Placa Tracto --}}
+                    <td>{{ $unidad->placa_tracto ?? '-' }}</td>
+
+                    {{-- 2. Licencia --}}
+                    <td>{{ $conductor->licencia ?? '-' }}</td>
+
+                    {{-- 3. DNI --}}
+                    <td>{{ $conductor->dni ?? '-' }}</td>
+
+                    {{-- 4. Nombres --}}
+                    <td>{{ $conductor->nombres ?? '-' }}</td>
+
+                    {{-- 5. Apellidos --}}
+                    <td>{{ $conductor->apellidos ?? '-' }}</td>
+
+                    {{-- 6. RUC Transporte --}}
+                    <td>{{ $programacion->proveedor->ruc_transporte ?? '-' }}</td>
+
+                    {{-- 7. Razón Social --}}
+                    <td class="text-start">{{ $programacion->proveedor->razon_social ?? '-' }}</td>
+
+                    {{-- 8. Tipo Operación --}}
+                    <td>{{ ucfirst($programacion->tipo_operacion ?? 'N/A') }}</td>
+
+                    {{-- 9. Placa Carreta --}}
+                    <td>{{ $unidad->placa_carreta ?? '-' }}</td>
+
+                    {{-- 10. Guía Remisión --}}
+                    <td>{{ $programacion->guia_remision ?? '-' }}</td>
+
+                    {{-- 11. Grupo Carguío --}}
+                    <td>{{ $programacion->grupo_cargio ?? '-' }}</td>
+                </tr>
+
+            @empty
+                <tr>
+                    <td colspan="12" class="text-center text-muted">No hay programaciones registradas</td>
+                </tr>
+            @endforelse
             </tbody>
-        </table>    
+
+        </table>
     </div>
 </div>
 @endsection

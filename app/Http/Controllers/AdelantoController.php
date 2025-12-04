@@ -13,9 +13,14 @@ class AdelantoController extends Controller
      */
     public function index()
     {
-        $programaciones = Programacion::whereNotNull('monto_adelanto')
-            ->orderByDesc('id')
-            ->paginate(10);
+        $programaciones = Programacion::with([
+            'detalleProgramacion',
+            'expedientes',     // ← correcto, así lo tienes en el modelo
+            'proveedor.unidades.conductores'
+        ])
+        ->whereNotNull('monto_adelanto')
+        ->latest()
+        ->paginate(10);
 
         return view('adelantos.index', compact('programaciones'));
     }

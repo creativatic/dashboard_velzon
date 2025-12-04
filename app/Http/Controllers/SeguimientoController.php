@@ -15,10 +15,14 @@ class SeguimientoController extends Controller
             'seguimiento',
             'detalleProgramacion',
             'expedientes.tisur',
-        ])->latest()->paginate(10);
+            'proveedor.unidades.conductores'   // ← AGREGA ESTO
+        ])
+        ->latest()
+        ->paginate(10);
 
         return view('seguimientos.index', compact('programaciones'));
     }
+
 
     public function store(Request $request)
     {

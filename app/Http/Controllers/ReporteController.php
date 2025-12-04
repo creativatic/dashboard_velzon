@@ -11,12 +11,20 @@ class ReporteController extends Controller
 {
     public function reporteQr()
     {
-        $programaciones = Programacion::where('conformidad_adelanto', 'Ok')
-            ->orderBy('fecha_programacion', 'desc')
-            ->get();
+        $programaciones = Programacion::with([
+            'proveedor',
+            'proveedor.unidades',
+            'proveedor.unidades.conductores',
+            'detalleProgramacion',
+            'expedientes.tisur'
+        ])
+        ->where('conformidad_adelanto', 'Ok')
+        ->orderBy('fecha_programacion', 'desc')
+        ->get();
 
         return view('reportes.reporte_qr', compact('programaciones'));
     }
+
 
     /**
      * Exporta el reporte de programaciones QR filtrado a Excel.

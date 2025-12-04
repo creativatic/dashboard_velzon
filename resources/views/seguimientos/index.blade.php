@@ -55,9 +55,20 @@
                                 {{ $detalle && $detalle->activo ? 'Activo' : 'Inactivo' }}
                             </span>
                         </td>
-                        <td>{{ $programacion->placa_tracto ?? '-' }}</td>
-                        <td>{{ $programacion->nombres_conductor ?? '-' }}</td>
-                        <td>{{ $programacion->telefono_conductor ?? '-' }}</td>
+                        <td>
+                            {{ optional($programacion->proveedor->unidades->first())->placa_tracto ?? '-' }}
+                        </td>
+                        <td>
+                            @php
+                                $unidad = $programacion->proveedor->unidades->first();
+                                $conductor = optional($unidad)->conductores->first();
+                            @endphp
+
+                            {{ $conductor ? $conductor->nombres . ' ' . $conductor->apellidos : '-' }}
+                        </td>
+                        <td>
+                            {{ optional($conductor)->telefono ?? '-' }}
+                        </td>
                         <td>{{ $numero_ticket }}</td>
                         <td>{{ $seguimiento->notas ?? 'Sin notas' }}</td>
                     </tr>
