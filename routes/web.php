@@ -21,6 +21,7 @@ use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\UnidadController;
 use App\Http\Controllers\ConductorController;
+use App\Http\Controllers\VolqueteController;
 
 
 Route::middleware(['auth'])->group(function () {
@@ -83,6 +84,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('proveedores', ProveedorController::class)->except(['show']);
         // UNIDADES
         Route::resource('unidades', UnidadController::class);
+        Route::resource('volquetes', VolqueteController::class);
         // ⚠️ ESTA RUTA DEBE IR ANTES DEL RESOURCE
         Route::get('/conductores/search', [ConductorController::class, 'search'])
             ->name('conductores.search');

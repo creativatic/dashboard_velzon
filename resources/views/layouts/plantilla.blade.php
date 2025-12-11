@@ -429,7 +429,7 @@
                         <li class="nav-item">
                             <a class="nav-link menu-link {{ request()->is('proveedores*') ? 'active' : '' }}" 
                             href="{{ route('proveedores.index') }}">
-                                <i class="ri-truck-line"></i>
+                                <i class="ri-contacts-line"></i>
                                 <span data-key="t-proveedores">Proveedores</span>
                             </a>
                         </li>
@@ -438,7 +438,7 @@
                         <li class="nav-item">
                             <a class="nav-link menu-link {{ request()->is('unidades*') ? 'active' : '' }}" 
                             href="{{ route('unidades.index') }}">
-                                <i class="ri-roadster-line"></i>
+                                <i class="ri-truck-line"></i>
                                 <span data-key="t-unidades">Unidades</span>
                             </a>
                         </li>
@@ -449,6 +449,15 @@
                             href="{{ route('conductores.index') }}">
                                 <i class="ri-user-2-line"></i>
                                 <span data-key="t-conductores">Conductores</span>
+                            </a>
+                        </li>
+
+                        {{-- Volquetes --}}
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->is('volquetes*') ? 'active' : '' }}" 
+                            href="{{ route('volquetes.index') }}">
+                                <i class="ri-bus-2-line"></i>
+                                <span data-key="t-volquetes">Volquetes</span>
                             </a>
                         </li>
 
