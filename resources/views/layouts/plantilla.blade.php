@@ -10,7 +10,7 @@
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- jsvectormap css -->
     <link href="libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
 
@@ -31,6 +31,7 @@
      <link href="css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="css/app.min.css" rel="stylesheet" type="text/css" />
      <link href="css/custom.min.css" rel="stylesheet" type="text/css" />
+     
     -->
    
 
@@ -1126,7 +1127,8 @@
 
     <!-- Dashboard init -->
     <script src="js/pages/dashboard-ecommerce.init.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- App js 
 
      <script src="libs/bootstrap/js/bootstrap.bundle.min.js"></script>

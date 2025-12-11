@@ -273,4 +273,6 @@ class ProgramacionController extends Controller
             'banco' => $unidad->proveedor->banco ?? '',
         ]);
     }
+
+    
 }

@@ -29,6 +29,7 @@
                     <th>Fecha Ingreso</th>
                     <th>Placa Tracto</th>
                     <th>Razón Social</th>
+                    <th>Transportista</th>
                     <th>Tipo Carga</th>
                     <th>Peso Neto (kg)</th>
                     <th>Precio ($)</th>
@@ -46,6 +47,7 @@
                     <td>{{ \Carbon\Carbon::parse($t->fecha_hora_ingreso)->format('d/m/Y H:i') }}</td>
                     <td>{{ $t->placa_tracto }}</td>
                     <td>{{ $t->razon_social }}</td>
+                    <td>{{ $t->transportista }}</td>
                     <td>{{ $t->tipo_carga_tisur }}</td>
                     <td class="text-end">{{ number_format($t->peso_neto, 2) }}</td>
                     <td class="text-end">{{ number_format($t->precio_tisur, 2) }}</td>

@@ -29,6 +29,7 @@
                     <th>Conductor</th>
                     <th>Teléfono</th>
                     <th>N° Ticket</th>
+                    <th>Fecha de Programación</th>
                     <th>Notas</th>
                 </tr>
             </thead>
@@ -70,6 +71,7 @@
                             {{ optional($conductor)->telefono ?? '-' }}
                         </td>
                         <td>{{ $numero_ticket }}</td>
+                        <td>{{ $programacion->fecha_programacion }}</td>
                         <td>{{ $seguimiento->notas ?? 'Sin notas' }}</td>
                     </tr>
                 @empty
