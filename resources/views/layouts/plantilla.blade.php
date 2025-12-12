@@ -418,7 +418,7 @@
 
                         {{-- Gestionar Frente --}}
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->is('detalleprogramacion*') ? 'active' : '' }}" 
+                            <a class="nav-link menu-link {{ request()->is('detalleprogramacion*') ? 'active' : '' }}" 
                             data-key="t-precios" 
                             href="{{ route('detalleprogramacion.index') }}">
                                 <i class="ri-coins-line"></i> <span>Gestionar Frente</span>

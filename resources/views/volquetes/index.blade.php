@@ -1,10 +1,9 @@
 @extends('layouts.plantilla')
-
 @section('title','Volquetes')
-
 @section('content')
-
 @include('volquetes.create') {{-- Modal Crear Volquete --}}
+
+
 
 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
     <h4 class="mb-sm-0">Gestión de Volquetes</h4>
@@ -56,6 +55,11 @@
                     <td>{{ number_format($v->total, 2) }}</td>
 
                     <td>
+
+                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalShowVolquete{{ $v->id }}">
+                            <i class="ri-eye-line"></i>
+                        </button>
+
                         <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditVolquete{{ $v->id }}">
                             <i class="ri-edit-line"></i>
                         </button>
@@ -75,6 +79,10 @@
                     'volquete' => $v,
                     'proveedores' => $proveedores,
                     'frentes' => $frentes
+                ])
+
+                @include('volquetes.show', [
+                    'volquete' => $v
                 ])
 
                 @empty

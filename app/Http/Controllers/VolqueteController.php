@@ -36,11 +36,30 @@ class VolqueteController extends Controller
     {
         $volquete = Volquete::findOrFail($id);
 
+        // Validación correcta según los campos del formulario
         $request->validate([
-            'placa' => 'required|unique:volquetes,placa,' . $volquete->id,
-            'proveedor_id' => 'required|exists:proveedores,id'
+            'fecha' => 'required|date',
+            'proveedor_id' => 'required|exists:proveedores,id',
+            'detalle_programacion_id' => 'nullable|exists:detalle_programacions,id',
+            'factura' => 'nullable|string',
+            'conformidad' => 'nullable|string',
+            'observaciones' => 'nullable|string',
+            'hora_vuelta_1' => 'nullable',
+            'hora_vuelta_2' => 'nullable',
+            'lampadas_vuelta_1' => 'nullable|numeric',
+            'lampadas_vuelta_2' => 'nullable|numeric',
+            'peso_vuelta_1' => 'nullable|numeric',
+            'peso_vuelta_2' => 'nullable|numeric',
+            'pasadas' => 'nullable|numeric',
+            'total' => 'nullable|numeric',
+            'detraccion' => 'nullable|numeric',
+            'retencion' => 'nullable|numeric',
+            'deposito_a_proveer' => 'nullable|numeric',
+            'deposito_total' => 'nullable|numeric',
+            'fecha_pago' => 'nullable|date',
         ]);
 
+        // Guardar los cambios
         $volquete->update($request->all());
 
         return back()->with('success', 'Volquete actualizado correctamente');

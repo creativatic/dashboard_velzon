@@ -85,6 +85,7 @@ Route::middleware(['auth'])->group(function () {
         // UNIDADES
         Route::resource('unidades', UnidadController::class);
         Route::resource('volquetes', VolqueteController::class);
+        
         // ⚠️ ESTA RUTA DEBE IR ANTES DEL RESOURCE
         Route::get('/conductores/search', [ConductorController::class, 'search'])
             ->name('conductores.search');
