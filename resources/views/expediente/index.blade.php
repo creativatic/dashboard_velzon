@@ -43,7 +43,7 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $programacion->guia_remision ?? '-' }}</td>
-                            <td>{{ $programacion->proveedor->unidades->first()->placa_tracto ?? '-' }}</td>
+                            <td>{{ $programacion->proveedor?->unidades?->first()?->placa_tracto ?? '-' }}</td>
                             <td>{{ $programacion->tipo_mineral ?? '-' }}</td>
                             <td>{{ $programacion->detalleProgramacion->frente ?? '-' }}</td>
                             <td>{{ $programacion->proveedor->razon_social ?? '-' }}</td>

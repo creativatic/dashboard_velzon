@@ -41,23 +41,12 @@
                     </div>
 
                     <!-- CONDUCTOR -->
+                    <!-- CONDUCTOR -->
                     <div class="col-md-4">
                         <label class="form-label">Licencia Conductor</label>
-                            <select name="licencia" id="edit-licencia" class="form-select" required>
-                                <option value="">Seleccione un conductor...</option>
-                                @foreach($conductores as $c)
-                                    <option value="{{ $c->licencia }}"
-                                        data-dni="{{ $c->dni }}"
-                                        data-nombres="{{ $c->nombres }}"
-                                        data-apellidos="{{ $c->apellidos }}"
-                                        data-telefono="{{ $c->telefono }}"
-                                        data-unidad="{{ $c->unidad->id ?? '' }}"
-                                        data-proveedor="{{ $c->unidad->proveedor->id ?? '' }}">
-                                        {{ $c->licencia }} — {{ $c->nombres }} {{ $c->apellidos }}
-                                    </option>
-                                @endforeach
-                            </select>
+                        <input type="text" id="edit-licencia" class="form-control" readonly>
                     </div>
+
 
                     <!-- DATOS DEL CONDUCTOR -->
                     <div class="col-md-4">
@@ -224,137 +213,65 @@
 </div>
 
 <script>
+const el = id => document.getElementById(id);
 
-// ============================================================
-// FUNCIÓN PRINCIPAL PARA ABRIR EL MODAL DE EDICIÓN
-// ============================================================
+function formatDatetimeLocal(value) {
+    if (!value) return '';
+    const d = new Date(value);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
 function openEditProgramacionModal(data) {
 
-    // Ruta del PUT
-    document.getElementById("editProgramacionForm").action = "/programacions/" + data.id;
+    el('editProgramacionForm').action = `/programacions/${data.id}`;
 
-    // Campos generales
-    if (data.fecha_programacion) {
-        let fecha = new Date(data.fecha_programacion);
-        let yyyy = fecha.getFullYear();
-        let mm = String(fecha.getMonth() + 1).padStart(2, '0');
-        let dd = String(fecha.getDate()).padStart(2, '0');
-        let hh = String(fecha.getHours()).padStart(2, '0');
-        let min = String(fecha.getMinutes()).padStart(2, '0');
+    /* =====================
+       PROGRAMACIÓN
+    ===================== */
+    el('edit-fecha_programacion').value = formatDatetimeLocal(data.fecha_programacion);
+    el('edit-detalle_programacion_id').value = data.detalle_programacion_id ?? '';
+    el('edit-guia_remision').value = data.guia_remision ?? '';
+    el('edit-tipo_operacion').value = data.tipo_operacion ?? '';
+    el('edit-conformidad_adelanto').value = data.conformidad_adelanto ?? '';
+    el('edit-monto_adelanto').value = data.monto_adelanto ?? '';
+    el('edit-guia_transportista').value = data.guia_transportista ?? '';
+    el('edit-grupo_cargio').value = data.grupo_cargio ?? '';
+    el('edit-tipo_mineral').value = data.tipo_mineral ?? '';
 
-        document.getElementById('edit-fecha_programacion').value = `${yyyy}-${mm}-${dd}T${hh}:${min}`;
-    } else {
-        document.getElementById('edit-fecha_programacion').value = '';
-    }
+    /* =====================
+       RELACIONES REALES
+    ===================== */
+    const proveedor = data.proveedor ?? null;
+    const unidad    = data.unidad ?? null;
+    const conductor = data.conductor ?? null;
 
-    document.getElementById('edit-detalle_programacion_id').value = data.detalle_programacion_id;
-    document.getElementById('edit-guia_remision').value = data.guia_remision ?? "";
+    /* =====================
+       CONDUCTOR
+    ===================== */
+    el('edit-licencia').value = conductor?.licencia ?? '';
+    el('edit-dni').value = conductor?.dni ?? '';
+    el('edit-nombres_conductor').value = conductor?.nombres ?? '';
+    el('edit-apellidos_conductor').value = conductor?.apellidos ?? '';
+    el('edit-telefono_conductor').value = conductor?.telefono ?? '';
 
-    // Conductor
-    document.getElementById('edit-licencia').value = data.conductor?.licencia ?? "";
+    /* =====================
+       VEHÍCULO
+    ===================== */
+    el('edit-placa_tracto').value = unidad?.placa_tracto ?? '';
+    el('edit-placa_carreta').value = unidad?.placa_carreta ?? '';
+    el('edit-marca_vehiculo').value = unidad?.marca ?? '';
+    el('edit-tipo_plataforma').value = unidad?.tipo_plataforma ?? '';
+    el('edit-constancia_mtc_tracto').value = unidad?.mtc_tracto ?? '';
+    el('edit-constancia_mtc_carreta').value = unidad?.mtc_carreta ?? '';
 
-    // ===========================================
-    // NUEVO: MOSTRAR CONFORMIDAD ADELANTO
-    // ===========================================
-    document.getElementById('edit-conformidad_adelanto').value = data.conformidad_adelanto ?? "";
+    /* =====================
+       PROVEEDOR
+    ===================== */
+    el('edit-razon_social_transporte').value = proveedor?.razon_social ?? '';
+    el('edit-cuenta_banco').value = proveedor?.cuenta_banco ?? '';
+    el('edit-cci_banco').value = proveedor?.cci_banco ?? '';
+    el('edit-banco').value = proveedor?.banco ?? '';
 
-    // ===========================================
-    // NUEVO: TIPO OPERACION
-    // ===========================================
-    document.getElementById('edit-tipo_operacion').value = data.tipo_operacion ?? "";
-
-    // ===========================================
-    // NUEVO: CAMPOS DE PROVEEDOR
-    // ===========================================
-    // document.getElementById('edit-proveedor_id').value = data.proveedor_id ?? "";
-
-    document.getElementById('edit-tipo_mineral').value = data.tipo_mineral ?? "";
-    document.getElementById('edit-guia_transportista').value = data.guia_transportista ?? "";
-    document.getElementById('edit-grupo_cargio').value = data.grupo_cargio ?? "";
-    document.getElementById('edit-monto_adelanto').value = data.monto_adelanto ?? "";
-
-    // Cargar unidades del proveedor
-    if (data.proveedor_id) {
-        loadUnidadesForProveedor(data.proveedor_id, data.unidad_id);
-    }
-
-    // ===========================================
-    // Cargar datos del conductor si ya existía
-    // ===========================================
-    if (data.conductor?.licencia) {
-        document.getElementById('edit-licencia').value = data.conductor.licencia;
-
-        fetch(`/conductores/licencia/${data.conductor.licencia}`)
-            .then(res => res.json())
-            .then(c => fillConductorFields(c));
-    }
-    // Mostrar modal
-    let modal = new bootstrap.Modal(document.getElementById('editProgramacionModal'));
-    modal.show();
+    new bootstrap.Modal(el('editProgramacionModal')).show();
 }
-
-
-// ============================================================
-// FUNCIÓN PARA LLENAR LOS CAMPOS DEL CONDUCTOR
-// ============================================================
-function fillConductorFields(c) {
-
-    document.getElementById('edit-dni').value = c.dni ?? '';
-    document.getElementById('edit-nombres_conductor').value = c.nombres ?? '';
-    document.getElementById('edit-apellidos_conductor').value = c.apellidos ?? '';
-    document.getElementById('edit-telefono_conductor').value = c.telefono ?? '';
-
-    document.getElementById('edit-placa_tracto').value = c.placa_tracto ?? '';
-    document.getElementById('edit-placa_carreta').value = c.placa_carreta ?? '';
-    document.getElementById('edit-marca_vehiculo').value = c.marca_vehiculo ?? '';
-    document.getElementById('edit-tipo_plataforma').value = c.tipo_plataforma ?? '';
-
-    document.getElementById('edit-constancia_mtc_tracto').value = c.constancia_mtc_tracto ?? '';
-    document.getElementById('edit-constancia_mtc_carreta').value = c.constancia_mtc_carreta ?? '';
-
-    document.getElementById('edit-razon_social_transporte').value = c.razon_social_transporte ?? '';
-    document.getElementById('edit-cuenta_banco').value = c.cuenta_banco ?? '';
-    document.getElementById('edit-cci_banco').value = c.cci_banco ?? '';
-    document.getElementById('edit-banco').value = c.banco ?? '';
-
-    document.getElementById('edit-tipo_mineral').value = c.tipo_mineral ?? '';
-}
-
-
-// ============================================================
-// CUANDO CAMBIA EL SELECT DE CONDUCTOR
-// ============================================================
-document.getElementById('edit-licencia').addEventListener('change', function () {
-    let licencia = this.value;
-    if (!licencia) return;
-
-    fetch(`/conductores/licencia/${licencia}`)
-        .then(res => res.json())
-        .then(c => fillConductorFields(c));
-});
-
-
-// ============================================================
-// CARGAR UNIDADES DEL PROVEEDOR PARA EL EDIT
-// ============================================================
-function loadUnidadesForProveedor(proveedorId, selectedUnidadId) {
-
-    fetch(`/proveedores/${proveedorId}/unidades`)
-        .then(res => res.json())
-        .then(unidades => {
-
-            let unidadSelect = document.getElementById("edit-unidad_id");
-            unidadSelect.innerHTML = `<option value="">Seleccione unidad...</option>`;
-
-            unidades.forEach(u => {
-                let selected = u.id == selectedUnidadId ? "selected" : "";
-                unidadSelect.innerHTML += `
-                    <option value="${u.id}" ${selected}>
-                        ${u.placa_tracto} / ${u.placa_carreta}
-                    </option>
-                `;
-            });
-        });
-}
-
 </script>

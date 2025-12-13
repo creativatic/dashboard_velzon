@@ -33,6 +33,34 @@ class ProgramacionController extends Controller
         ));
     }
 
+    public function show($id)
+    {
+        $programacion = Programacion::with([
+            'detalleProgramacion',
+            'proveedor.unidades.conductores'
+        ])->findOrFail($id);
+
+        $proveedor = $programacion->proveedor;
+
+        $unidad = null;
+        $conductor = null;
+
+        if ($proveedor && $proveedor->unidades->count() > 0) {
+            $unidad = $proveedor->unidades->first();
+
+            if ($unidad->conductores->count() > 0) {
+                $conductor = $unidad->conductores->first();
+            }
+        }
+
+        return response()->json([
+            'programacion' => $programacion,
+            'proveedor'    => $proveedor,
+            'unidad'       => $unidad,
+            'conductor'    => $conductor,
+        ]);
+    }
+
     public function showJson($id)
     {
         $programacion = Programacion::with([
@@ -40,18 +68,29 @@ class ProgramacionController extends Controller
             'proveedor.unidades.conductores'
         ])->findOrFail($id);
 
-        // Tomar la "unidad principal" del proveedor
-        $unidad = $programacion->proveedor->unidades->first();
+        // ✅ PROVEEDOR SEGURO
+        $proveedor = $programacion->proveedor;
 
-        // Tomar un conductor asociado a esa unidad
-        $conductor = $unidad?->conductores?->first();
+        // ✅ UNIDAD SEGURA
+        $unidad = null;
+        $conductor = null;
+
+        if ($proveedor && $proveedor->unidades->count() > 0) {
+            $unidad = $proveedor->unidades->first();
+
+            if ($unidad->conductores->count() > 0) {
+                $conductor = $unidad->conductores->first();
+            }
+        }
 
         return response()->json([
             'programacion' => $programacion,
-            'unidad' => $unidad,
-            'conductor' => $conductor,
+            'proveedor'    => $proveedor,
+            'unidad'       => $unidad,
+            'conductor'    => $conductor,
         ]);
     }
+
 
 
 

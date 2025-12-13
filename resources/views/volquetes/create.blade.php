@@ -184,18 +184,20 @@
 
 {{-- FILTRO AUTOMÁTICO DE UNIDADES SEGÚN PROVEEDOR --}}
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
 
+        const modal = document.getElementById('modalCreateVolquete');
+        if (!modal) return;
 
-document.addEventListener('DOMContentLoaded', () => {
+        /* ===============================
+        FILTRO UNIDADES POR PROVEEDOR
+        =============================== */
+        const proveedorSelect = modal.querySelector('#selectProveedor');
+        const unidadSelect = modal.querySelector('#selectUnidad');
+        const unidades = @json($unidades ?? []);
 
-    // --- filtro unidades por proveedor ---
-    const proveedorSelect = document.getElementById('selectProveedor');
-    const unidadSelect = document.getElementById('selectUnidad');
-    const unidades = @json($unidades ?? []);
-
-    if (proveedorSelect && unidadSelect) {
-        proveedorSelect.addEventListener('change', function () {
-            let proveedorId = parseInt(this.value);
+        proveedorSelect?.addEventListener('change', () => {
+            const proveedorId = parseInt(proveedorSelect.value);
             unidadSelect.innerHTML = '<option value="">Seleccione...</option>';
 
             if (!proveedorId) {
@@ -203,9 +205,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            let filtradas = unidades.filter(u => u.proveedor_id == proveedorId);
+            const filtradas = unidades.filter(u => u.proveedor_id == proveedorId);
 
-            if (filtradas.length === 0) {
+            if (!filtradas.length) {
                 unidadSelect.innerHTML = '<option value="">No hay unidades para este proveedor</option>';
                 return;
             }
@@ -214,127 +216,76 @@ document.addEventListener('DOMContentLoaded', () => {
                 unidadSelect.innerHTML += `<option value="${u.id}">${u.placa_tracto}</option>`;
             });
         });
-    }
 
-    // --- actualizar precio por tonelada al cambiar el frente ---
-    const selectFrente = document.getElementById('selectFrente');
-    const precioTonelada = document.getElementById('precioTonelada');
+        /* ===============================
+        FECHA Y HORA AUTOMÁTICA
+        =============================== */
+        modal.addEventListener('shown.bs.modal', () => {
 
-    if (selectFrente && precioTonelada) {
-        // Si quieres precargar el precio cuando hay un valor por defecto:
-        if (selectFrente.value) {
-            const opt = selectFrente.options[selectFrente.selectedIndex];
-            precioTonelada.value = opt ? (opt.getAttribute('data-precio') || '') : '';
-        }
+            const fecha = modal.querySelector('input[name="fecha"]');
+            const horaV1 = modal.querySelector('input[name="hora_vuelta_1"]');
 
-        selectFrente.addEventListener('change', function () {
-            const option = this.options[this.selectedIndex];
-            const precio = option ? option.getAttribute('data-precio') : '';
-            precioTonelada.value = precio ?? '';
+            if (fecha && !fecha.value) {
+                fecha.value = new Date().toISOString().split('T')[0];
+            }
+
+            if (horaV1 && !horaV1.value) {
+                horaV1.value = new Date().toTimeString().slice(0, 5);
+            }
         });
-    }
 
-});
+        /* ===============================
+        ELEMENTOS DE CÁLCULO
+        =============================== */
+        const lamp1 = modal.querySelector('[name="lampadas_vuelta_1"]');
+        const lamp2 = modal.querySelector('[name="lampadas_vuelta_2"]');
+        const peso1 = modal.querySelector('[name="peso_vuelta_1"]');
+        const peso2 = modal.querySelector('[name="peso_vuelta_2"]');
 
-document.addEventListener('DOMContentLoaded', () => {
+        const totalLamp = modal.querySelector('[name="total_lampadas_dia"]');
+        const totalPeso = modal.querySelector('[name="total_peso_dia"]');
 
-    const modalCreate = document.getElementById('modalCreateVolquete');
+        const precioTon = modal.querySelector('#precioTonelada');
+        const totalS = modal.querySelector('[name="total"]');
+        const detraccion = modal.querySelector('[name="detraccion"]');
+        const retencion = modal.querySelector('[name="retencion"]');
+        const deposito = modal.querySelector('[name="deposito_a_proveer"]');
 
-    if (!modalCreate) return;
+        const selectFrente = modal.querySelector('#selectFrente');
 
-    modalCreate.addEventListener('shown.bs.modal', () => {
+        /* ===============================
+        FUNCIONES
+        =============================== */
+        const num = v => parseFloat(v) || 0;
 
-        // ===== FECHA ACTUAL =====
-        const fechaInput = modalCreate.querySelector('input[name="fecha"]');
-        if (fechaInput && !fechaInput.value) {
-            const today = new Date().toISOString().split('T')[0];
-            fechaInput.value = today;
+        function calcularFinanzas() {
+            const total = num(totalPeso.value) * num(precioTon.value);
+
+            totalS.value = total.toFixed(2);
+            detraccion.value = (total * 0.04).toFixed(2);
+            retencion.value = (total * 0.10).toFixed(2);
+            deposito.value = (total * 0.86).toFixed(2);
         }
 
-        // ===== HORA ACTUAL =====
-        const now = new Date();
-        const horaActual = now.toTimeString().slice(0, 5); // HH:mm
-
-        const horaV1 = modalCreate.querySelector('input[name="hora_vuelta_1"]');
-        if (horaV1 && !horaV1.value) {
-            horaV1.value = horaActual;
+        function calcularTotales() {
+            totalLamp.value = num(lamp1.value) + num(lamp2.value);
+            totalPeso.value = (num(peso1.value) + num(peso2.value)).toFixed(2);
+            calcularFinanzas();
         }
 
+        /* ===============================
+        EVENTOS
+        =============================== */
+        [lamp1, lamp2, peso1, peso2].forEach(el =>
+            el?.addEventListener('input', calcularTotales)
+        );
+
+        selectFrente?.addEventListener('change', function () {
+            const opt = this.options[this.selectedIndex];
+            precioTon.value = opt?.dataset.precio || '';
+            calcularFinanzas();
+        });
+
     });
-
-});
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
-
-    const modal = document.getElementById('modalCreateVolquete');
-    if (!modal) return;
-
-    /* ===============================
-       ELEMENTOS
-    =============================== */
-    const lamp1 = modal.querySelector('input[name="lampadas_vuelta_1"]');
-    const lamp2 = modal.querySelector('input[name="lampadas_vuelta_2"]');
-    const peso1 = modal.querySelector('input[name="peso_vuelta_1"]');
-    const peso2 = modal.querySelector('input[name="peso_vuelta_2"]');
-
-    const totalLamp = modal.querySelector('input[name="total_lampadas_dia"]');
-    const totalPeso = modal.querySelector('input[name="total_peso_dia"]');
-
-    const precioTonelada = modal.querySelector('#precioTonelada');
-    const totalSoles = modal.querySelector('input[name="total"]');
-    const detraccion = modal.querySelector('input[name="detraccion"]');
-    const retencion = modal.querySelector('input[name="retencion"]');
-    const depositoProveer = modal.querySelector('input[name="deposito_a_proveer"]');
-
-    const selectFrente = modal.querySelector('#selectFrente');
-
-    /* ===============================
-       FUNCIONES
-    =============================== */
-    function calcularFinanzas() {
-        const peso = parseFloat(totalPeso.value) || 0;
-        const precio = parseFloat(precioTonelada.value) || 0;
-
-        const total = peso * precio;
-        totalSoles.value = total.toFixed(2);
-
-        const det = total * 0.04;
-        detraccion.value = det.toFixed(2);
-
-        const ret = total * 0.10;
-        retencion.value = ret.toFixed(2);
-
-        depositoProveer.value = (total - det - ret).toFixed(2);
-    }
-
-    function calcularTotales() {
-        const l1 = parseFloat(lamp1.value) || 0;
-        const l2 = parseFloat(lamp2.value) || 0;
-        totalLamp.value = l1 + l2;
-
-        const p1 = parseFloat(peso1.value) || 0;
-        const p2 = parseFloat(peso2.value) || 0;
-        totalPeso.value = (p1 + p2).toFixed(2);
-
-        calcularFinanzas(); // ✅ ahora SÍ existe
-    }
-
-    /* ===============================
-       EVENTOS
-    =============================== */
-    lamp1.addEventListener('input', calcularTotales);
-    lamp2.addEventListener('input', calcularTotales);
-    peso1.addEventListener('input', calcularTotales);
-    peso2.addEventListener('input', calcularTotales);
-
-    selectFrente.addEventListener('change', function () {
-        const opt = this.options[this.selectedIndex];
-        precioTonelada.value = opt ? opt.dataset.precio || '' : '';
-        calcularFinanzas();
-    });
-
-});
 
 </script>

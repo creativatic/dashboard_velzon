@@ -41,14 +41,18 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('users', UserController::class)->except(['show']);
         Route::resource('roles', RoleController::class)->except(['show']);
         Route::resource('permissions', PermissionController::class)->except(['show']);
-        Route::resource('programacions', ProgramacionController::class);
-
+        
         // Buscadores
         Route::get('/programaciones/search', [ExpedienteController::class, 'buscarProgramacion'])->name('programaciones.search');
-        Route::get('/programacion/{id}', [ProgramacionController::class, 'showJson']);
+        // Route::get('/programacion/{id}', [ProgramacionController::class, 'showJson']);
+        Route::get('/programacions/{id}/json', [ProgramacionController::class, 'showJson']);
+
         Route::get('/programacions/conductor/{licencia}', [ProgramacionController::class, 'getConductorByLicencia']);
         Route::get('/programacions/{programacion}/data', [ProgramacionController::class, 'getData']);
         Route::get('/unidades/{id}/data', [ProgramacionController::class, 'unidadData']);
+        Route::resource('programacions', ProgramacionController::class);
+
+        
         Route::get('/conductores/licencia/{licencia}', [ConductorController::class, 'getByLicencia']);
         
         //Route::get('/tisurs/search', [ExpedienteController::class, 'buscarTisur'])->name('tisurs.search');
