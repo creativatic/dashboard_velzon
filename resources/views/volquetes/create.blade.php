@@ -1,6 +1,6 @@
 <div class="modal fade" id="modalCreateVolquete" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
-        <form method="POST" action="{{ route('volquetes.store') }}">
+        <form method="POST" action="{{ route('volquetes.store') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="modal-content">
@@ -159,15 +159,26 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label>Factura</label>
-                            <input type="text" name="factura" class="form-control">
+                            <label>Factura (PDF)</label>
+                            <input type="file"
+                                name="factura"
+                                class="form-control"
+                                accept="application/pdf">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Comprobante de Pago (PDF)</label>
+                            <input type="file"
+                                name="comprobante_pago"
+                                class="form-control"
+                                accept="application/pdf">
                         </div>
 
                         <div class="col-md-12">
                             <label>Observaciones</label>
                             <textarea name="observaciones" rows="3" class="form-control"></textarea>
                         </div>
-
+                        
                     </div>
 
                 </div>

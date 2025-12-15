@@ -136,12 +136,17 @@
 
 <script>
 function verProgramacion(id) {
-    fetch(`/programacion/${id}`)
-        .then(response => response.json())
+    fetch(`/programacions/${id}/json`)
+        .then(response => {
+            if (!response.ok) throw new Error('Error en la petición');
+            return response.json();
+        })
         .then(data => {
+
             const p = data.programacion;
-            const u = data.unidad;      // unidad principal del proveedor
-            const c = data.conductor;   // conductor principal
+            const u = data.unidad;
+            const c = data.conductor;
+            const prov = data.proveedor;
 
             // ========= PROGRAMACION =========
             document.getElementById('show_fecha_programacion').innerText = p.fecha_programacion ?? '--';
@@ -163,8 +168,9 @@ function verProgramacion(id) {
             document.getElementById('show_constancia_carreta').innerText = u?.constancia_mtc_carreta ?? '--';
 
             // ========= PROVEEDOR =========
-            document.getElementById('show_razon_social_transporte').innerText = p.proveedor?.razon_social ?? '--';
-            document.getElementById('show_ruc_transporte').innerText = p.proveedor?.ruc_transporte ?? '--';
+            document.getElementById('show_razon_social_transporte').innerText = prov?.razon_social ?? '--';
+            document.getElementById('show_ruc_transporte').innerText = prov?.ruc_transporte ?? '--';
+            document.getElementById('show_banco').innerText = prov?.banco ?? '--';
 
             // ========= CONDUCTOR =========
             document.getElementById('show_licencia').innerText = c?.licencia ?? '--';
@@ -176,14 +182,17 @@ function verProgramacion(id) {
             // ========= ADELANTOS =========
             document.getElementById('show_monto_adelanto').innerText = p.monto_adelanto ?? '--';
             document.getElementById('show_fecha_pago_adelantos').innerText = p.fecha_pago_adelantos ?? '--';
-            document.getElementById('show_banco').innerText = p.banco ?? '--';
             document.getElementById('show_glosa_banco').innerText = p.glosa_banco ?? '--';
             document.getElementById('show_notas').innerText = p.notas ?? '--';
 
-            // ABRIR EL MODAL
-            let modal = new bootstrap.Modal(document.getElementById('showProgramacionModal'));
-            modal.show();
+            // ✅ ABRIR MODAL
+            new bootstrap.Modal(
+                document.getElementById('showProgramacionModal')
+            ).show();
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+            console.error(error);
+            alert('Error al cargar la programación');
+        });
 }
 </script>

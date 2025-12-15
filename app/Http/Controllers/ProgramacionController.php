@@ -36,14 +36,17 @@ class ProgramacionController extends Controller
     public function show($id)
     {
         $programacion = Programacion::with([
+            'proveedor',
             'detalleProgramacion',
             'proveedor.unidades.conductores'
         ])->findOrFail($id);
 
         $proveedor = $programacion->proveedor;
 
-        $unidad = null;
-        $conductor = null;
+        // unidad principal del proveedor
+        $unidad = $programacion->proveedor?->unidades?->first();
+        // conductor principal
+        $conductor = $unidad?->conductores?->first();
 
         if ($proveedor && $proveedor->unidades->count() > 0) {
             $unidad = $proveedor->unidades->first();

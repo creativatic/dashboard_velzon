@@ -28,6 +28,7 @@ class Volquete extends Model
         'fecha_pago',
         'factura',
         'observaciones',
+        'comprobante_pago',
     ];
 
     public function proveedor()

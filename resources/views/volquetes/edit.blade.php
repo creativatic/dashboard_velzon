@@ -1,6 +1,8 @@
 <div class="modal fade" id="modalEditVolquete{{ $volquete->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
-        <form method="POST" action="{{ route('volquetes.update', $volquete->id) }}">
+        <form method="POST"
+              action="{{ route('volquetes.update', $volquete->id) }}"
+              enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -37,36 +39,67 @@
 
                         <div class="col-md-4">
                             <label class="form-label">Frente</label>
-                            <select name="detalle_programacion_id" 
-                                    id="selectFrenteEdit{{ $volquete->id }}" 
+                            <select name="detalle_programacion_id"
+                                    id="selectFrenteEdit{{ $volquete->id }}"
                                     class="form-select">
                                 <option value="">Seleccione...</option>
                                 @foreach($frentes as $f)
                                     <option value="{{ $f->id }}"
                                             data-precio="{{ $f->precio_tn }}"
-                                            {{ ($volquete->detalle_programacion_id ?? null) == $f->id ? 'selected' : '' }}>
+                                            {{ $volquete->detalle_programacion_id == $f->id ? 'selected' : '' }}>
                                         {{ $f->frente }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <!-- campo readonly precio dentro del edit modal -->
                         <div class="col-md-4">
                             <label class="form-label">Precio por Tonelada</label>
-                            <input type="text" id="precioToneladaEdit{{ $volquete->id }}" class="form-control" value="{{ $volquete->detalleProgramacion->precio_tn ?? '' }}" readonly>
+                            <input type="text"
+                                   id="precioToneladaEdit{{ $volquete->id }}"
+                                   class="form-control"
+                                   value="{{ $volquete->detalleProgramacion->precio_tn ?? '' }}"
+                                   readonly>
                         </div>
 
-
-
+                        {{-- FACTURA --}}
                         <div class="col-md-4">
-                            <label class="form-label">Factura</label>
-                            <input type="text" name="factura" class="form-control" value="{{ $volquete->factura }}">
+                            <label class="form-label">Factura (PDF)</label>
+
+                            @if($volquete->factura)
+                                <div class="mb-1">
+                                    <a href="{{ asset('storage/'.$volquete->factura) }}"
+                                       target="_blank"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Ver PDF
+                                    </a>
+                                </div>
+                            @endif
+
+                            <input type="file"
+                                   name="factura"
+                                   class="form-control"
+                                   accept="application/pdf">
                         </div>
 
+                        {{-- COMPROBANTE --}}
                         <div class="col-md-4">
-                            <label class="form-label">Conformidad</label>
-                            <input type="text" name="conformidad" class="form-control" value="{{ $volquete->conformidad }}">
+                            <label class="form-label">Comprobante de Pago (PDF)</label>
+
+                            @if($volquete->comprobante_pago)
+                                <div class="mb-1">
+                                    <a href="{{ asset('storage/'.$volquete->comprobante_pago) }}"
+                                       target="_blank"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Ver PDF
+                                    </a>
+                                </div>
+                            @endif
+
+                            <input type="file"
+                                   name="comprobante_pago"
+                                   class="form-control"
+                                   accept="application/pdf">
                         </div>
 
                         <div class="col-md-12">
@@ -76,49 +109,26 @@
 
                     </div>
 
-                    {{-- DETALLE DE VUELTAS --}}
+                    {{-- DETALLES DE VUELTAS --}}
                     <h5 class="fw-bold mt-4">Detalles de Vueltas</h5>
                     <hr>
 
                     <div class="row g-3">
-
                         <div class="col-md-4">
-                            <label class="form-label">Hora Vuelta 1</label>
+                            <label>Hora Vuelta 1</label>
                             <input type="time" name="hora_vuelta_1" class="form-control" value="{{ $volquete->hora_vuelta_1 }}">
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label">Lámparas 1</label>
+                            <label>Lámparas 1</label>
                             <input type="number" name="lampadas_vuelta_1" class="form-control" value="{{ $volquete->lampadas_vuelta_1 }}">
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label">Peso 1</label>
+                            <label>Peso 1</label>
                             <input type="number" step="0.01" name="peso_vuelta_1" class="form-control" value="{{ $volquete->peso_vuelta_1 }}">
                         </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label">Hora Vuelta 2</label>
-                            <input type="time" name="hora_vuelta_2" class="form-control" value="{{ $volquete->hora_vuelta_2 }}">
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label">Lámparas 2</label>
-                            <input type="number" name="lampadas_vuelta_2" class="form-control" value="{{ $volquete->lampadas_vuelta_2 }}">
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label">Peso 2</label>
-                            <input type="number" step="0.01" name="peso_vuelta_2" class="form-control" value="{{ $volquete->peso_vuelta_2 }}">
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label">Pasadas</label>
-                            <input type="number" name="pasadas" class="form-control" value="{{ $volquete->pasadas }}">
-                        </div>
-
                     </div>
-
 
                     {{-- MONTOS --}}
                     <h5 class="fw-bold mt-4">Montos</h5>
@@ -126,35 +136,24 @@
 
                     <div class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label">Total S/</label>
+                            <label>Total S/</label>
                             <input type="number" step="0.01" name="total" class="form-control" value="{{ $volquete->total }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Detracción</label>
+                            <label>Detracción</label>
                             <input type="number" step="0.01" name="detraccion" class="form-control" value="{{ $volquete->detraccion }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Retención</label>
+                            <label>Retención</label>
                             <input type="number" step="0.01" name="retencion" class="form-control" value="{{ $volquete->retencion }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Depósito a Proveer</label>
-                            <input type="number" step="0.01" name="deposito_a_proveer" class="form-control" value="{{ $volquete->deposito_a_proveer }}">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label">Depósito Total</label>
+                            <label>Depósito Total</label>
                             <input type="number" step="0.01" name="deposito_total" class="form-control" value="{{ $volquete->deposito_total }}">
                         </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label">Fecha Pago</label>
-                            <input type="date" name="fecha_pago" class="form-control" value="{{ $volquete->fecha_pago }}">
-                        </div>
-
                     </div>
 
                 </div>
@@ -165,10 +164,10 @@
                 </div>
 
             </div>
-
         </form>
     </div>
 </div>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {

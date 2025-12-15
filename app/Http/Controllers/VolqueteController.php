@@ -20,13 +20,33 @@ class VolqueteController extends Controller
         return view('volquetes.index', compact('volquetes', 'proveedores', 'frentes', 'unidades'));
     }
 
-    public function store(Request $request)
+  public function store(Request $request)
     {
         $request->validate([
-            'proveedor_id' => 'required|exists:proveedores,id'
+            'proveedor_id' => 'required|exists:proveedores,id',
+            'factura' => 'nullable|file|mimes:pdf|max:2048',
+            'comprobante_pago' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
-        Volquete::create($request->all());
+        $data = $request->all();
+
+        // ==========================
+        // GUARDAR FACTURA
+        // ==========================
+        if ($request->hasFile('factura')) {
+            $data['factura'] = $request->file('factura')
+                ->store('volquetes/facturas', 'public');
+        }
+
+        // ==========================
+        // GUARDAR COMPROBANTE
+        // ==========================
+        if ($request->hasFile('comprobante_pago')) {
+            $data['comprobante_pago'] = $request->file('comprobante_pago')
+                ->store('volquetes/comprobantes', 'public');
+        }
+
+        Volquete::create($data);
 
         return back()->with('success', 'Volquete registrado correctamente');
     }
@@ -36,20 +56,24 @@ class VolqueteController extends Controller
     {
         $volquete = Volquete::findOrFail($id);
 
-        // Validación correcta según los campos del formulario
         $request->validate([
             'fecha' => 'required|date',
             'proveedor_id' => 'required|exists:proveedores,id',
             'detalle_programacion_id' => 'nullable|exists:detalle_programacions,id',
-            'factura' => 'nullable|string',
+
+            'factura' => 'nullable|file|mimes:pdf|max:2048',
+            'comprobante_pago' => 'nullable|file|mimes:pdf|max:2048',
+
             'conformidad' => 'nullable|string',
             'observaciones' => 'nullable|string',
+
             'hora_vuelta_1' => 'nullable',
             'hora_vuelta_2' => 'nullable',
             'lampadas_vuelta_1' => 'nullable|numeric',
             'lampadas_vuelta_2' => 'nullable|numeric',
             'peso_vuelta_1' => 'nullable|numeric',
             'peso_vuelta_2' => 'nullable|numeric',
+
             'pasadas' => 'nullable|numeric',
             'total' => 'nullable|numeric',
             'detraccion' => 'nullable|numeric',
@@ -59,11 +83,29 @@ class VolqueteController extends Controller
             'fecha_pago' => 'nullable|date',
         ]);
 
-        // Guardar los cambios
-        $volquete->update($request->all());
+        $data = $request->all();
+
+        /* ==========================
+        ACTUALIZAR FACTURA
+        ========================== */
+        if ($request->hasFile('factura')) {
+            $data['factura'] = $request->file('factura')
+                ->store('volquetes/facturas', 'public');
+        }
+
+        /* ==========================
+        ACTUALIZAR COMPROBANTE
+        ========================== */
+        if ($request->hasFile('comprobante_pago')) {
+            $data['comprobante_pago'] = $request->file('comprobante_pago')
+                ->store('volquetes/comprobantes', 'public');
+        }
+
+        $volquete->update($data);
 
         return back()->with('success', 'Volquete actualizado correctamente');
     }
+
 
     public function destroy($id)
     {

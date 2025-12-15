@@ -55,6 +55,8 @@ return new class extends Migration
             // Pago
             $table->date('fecha_pago')->nullable();
             $table->string('factura')->nullable();
+            
+            $table->string('comprobante_pago')->nullable();
 
             // Observaciones
             $table->text('observaciones')->nullable();

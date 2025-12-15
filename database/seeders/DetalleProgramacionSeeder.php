@@ -34,6 +34,13 @@ class DetalleProgramacionSeeder extends Seeder
                 'activo' => true,
                 'descripcion' => 'Frente Intikal: área de menor tonelaje, precio ajustado para rutas de menor productividad.'
             ],
+            [
+                'frente' => 'Huanaco 22',
+                'precio_frente' => 00,
+                'precio_tn' => 22.00,
+                'activo' => true,
+                'descripcion' => 'Frente Huanaco: área de menor tonelaje, precio ajustado para rutas de menor productividad.'
+            ],
         ];
 
         foreach ($detalles as $detalle) {
