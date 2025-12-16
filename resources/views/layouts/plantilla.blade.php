@@ -324,7 +324,7 @@
                         @endcan
 
                         <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Ventas Seven</span></li>
-                        @role('Administrador')
+                        @hasanyrole('Administrador|Supervisor')
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarUsuarios" data-bs-toggle="collapse" role="button" 
                                 aria-expanded="false" aria-controls="sidebarUsuarios">
@@ -461,7 +461,7 @@
                             </a>
                         </li>
 
-                        @endrole
+                        @endhasanyrole
                         
                     </ul>
                 </div>

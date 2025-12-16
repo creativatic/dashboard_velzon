@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Solo administrador
-    Route::middleware('role:Administrador')->group(function () {
+    Route::middleware('role:Administrador|Supervisor')->group(function () {
         Route::resource('users', UserController::class)->except(['show']);
         Route::resource('roles', RoleController::class)->except(['show']);
         Route::resource('permissions', PermissionController::class)->except(['show']);
@@ -50,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/programacions/conductor/{licencia}', [ProgramacionController::class, 'getConductorByLicencia']);
         Route::get('/programacions/{programacion}/data', [ProgramacionController::class, 'getData']);
         Route::get('/unidades/{id}/data', [ProgramacionController::class, 'unidadData']);
+        Route::patch('/programacions/{id}/conformidad', [ProgramacionController::class, 'conformidad'])->name('programacions.conformidad');
         Route::resource('programacions', ProgramacionController::class);
 
         

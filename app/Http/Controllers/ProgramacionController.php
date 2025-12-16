@@ -316,5 +316,18 @@ class ProgramacionController extends Controller
         ]);
     }
 
-    
+    public function conformidad(Request $request, $id)
+    {
+        $programacion = Programacion::findOrFail($id);
+
+        $programacion->conformidad_adelanto = $request->has('conformidad_adelanto')
+            ? 'Ok'
+            : 'Pendiente';
+
+        $programacion->save();
+
+        return back();
+    }
+
+
 }

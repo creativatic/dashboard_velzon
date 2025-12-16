@@ -41,69 +41,100 @@
                         <th>Frente</th>
 
                         <!-- Adelantos -->
-                        <th>Conformidad</th>
+                        
                         <th>Monto Adelanto</th>
 
                         <th>Guía Transportista</th>
+
+                        <th>Conformidad</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($programaciones as $programacion)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ \Carbon\Carbon::parse($programacion->fecha_programacion)->format('d/m/Y') }}</td>
-                            <td>{{ $programacion->guia_remision ?? '-' }}</td>
+                        @forelse($programaciones as $programacion)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ \Carbon\Carbon::parse($programacion->fecha_programacion)->format('d/m/Y') }}</td>
+                                <td>{{ $programacion->guia_remision ?? '-' }}</td>
 
-                            @php
-                                $unidad = $programacion->proveedor?->unidades?->first();
-                                $conductor = $unidad?->conductores?->first();
-                            @endphp
+                                @php
+                                    $unidad = $programacion->proveedor?->unidades?->first();
+                                    $conductor = $unidad?->conductores?->first();
+                                @endphp
 
-                            <td>{{ $conductor->nombres ?? '-' }}</td>
-                            <td>{{ $conductor->apellidos ?? '-' }}</td>
-                            <td>{{ $conductor->telefono ?? '-' }}</td>
+                                <td>{{ $conductor->nombres ?? '-' }}</td>
+                                <td>{{ $conductor->apellidos ?? '-' }}</td>
+                                <td>{{ $conductor->telefono ?? '-' }}</td>
 
-                            <td>{{ $programacion->tipo_mineral ?? '-' }}</td>
-                            <td>{{ $programacion->tipo_operacion ?? '-' }}</td>
-                            <td>{{ $programacion->detalleProgramacion?->frente ?? '—' }}</td>
+                                <td>{{ $programacion->tipo_mineral ?? '-' }}</td>
+                                <td>{{ $programacion->tipo_operacion ?? '-' }}</td>
+                                <td>{{ $programacion->detalleProgramacion?->frente ?? '—' }}</td>
 
-                            <td>
-                                @if($programacion->conformidad_adelanto === 'Ok')
-                                    <span class="btn btn-success btn-sm w-100">OK</span>
-                                @elseif($programacion->conformidad_adelanto === 'Pendiente')
-                                    <span class="btn btn-danger btn-sm w-100">Pendiente</span>
-                                @else
-                                    <span class="badge bg-secondary">--</span>
-                                @endif
-                            </td>
+                                
 
-                            <td>{{ $programacion->monto_adelanto ? 'S/ '.number_format($programacion->monto_adelanto,2) : '-' }}</td>
-                            <td>{{ $programacion->guia_transportista ?? '-' }}</td>
+                                <td>{{ $programacion->monto_adelanto ? 'S/ '.number_format($programacion->monto_adelanto,2) : '-' }}</td>
+                                <td>{{ $programacion->guia_transportista ?? '-' }}</td>
 
-                            <td>
-                                {{-- Botones de acciones --}}
+                                <td class="text-center">
+                                    @role('Administrador')
+                                        <form action="{{ route('programacions.conformidad', $programacion->id) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
 
-                                <button type="button" class="btn btn-info btn-sm"
-                                    onclick="verProgramacion({{ $programacion->id }})">
-                                    <i class="fas fa-eye"></i> Ver
-                                </button>
+                                            <div class="form-check form-switch d-flex justify-content-center">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    role="switch"
+                                                    name="conformidad_adelanto"
+                                                    value="Ok"
+                                                    {{ $programacion->conformidad_adelanto === 'Ok' ? 'checked' : '' }}
+                                                    onchange="this.form.submit()"
+                                                >
+                                            </div>
+                                        </form>
 
-                                <button type="button" class="btn btn-warning btn-sm"
-                                    onclick='openEditProgramacionModal(@json($programacion))'>
-                                    <i class="ri-edit-2-line"></i>
-                                </button>
+                                        {{-- TEXTO DE ESTADO --}}
+                                        <small class="fw-bold d-block mt-1
+                                            {{ $programacion->conformidad_adelanto === 'Ok' ? 'text-success' : 'text-danger' }}">
+                                            {{ $programacion->conformidad_adelanto === 'Ok' ? 'OK' : 'Pendiente' }}
+                                        </small>
 
-                                <form action="{{ route('programacions.destroy', $programacion) }}" 
-                                    method="POST" style="display:inline-block;">
-                                    @csrf @method('DELETE')
-                                    <button class="btn btn-danger btn-sm">
-                                        <i class="ri-delete-bin-line"></i>
+                                    @else
+                                        {{-- Supervisor y otros roles: solo lectura --}}
+                                        <span class="badge 
+                                            {{ $programacion->conformidad_adelanto === 'Ok' ? 'bg-success' : 'bg-danger' }}">
+                                            {{ $programacion->conformidad_adelanto === 'Ok' ? 'OK' : 'Pendiente' }}
+                                        </span>
+                                    @endrole
+                                </td>
+
+                                <td>
+                                    {{-- Botones de acciones --}}
+
+                                    <button type="button" class="btn btn-info btn-sm"
+                                        onclick="verProgramacion({{ $programacion->id }})">
+                                        <i class="fas fa-eye"></i> Ver
                                     </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
+
+                                    {{-- COMENTAR BOTON
+                                    <button type="button" class="btn btn-warning btn-sm"
+                                        onclick='openEditProgramacionModal(@json($programacion))'>
+                                        <i class="ri-edit-2-line"></i>
+                                    </button>
+                                    --}}
+
+                                    
+                                    <form action="{{ route('programacions.destroy', $programacion) }}" 
+                                        method="POST" style="display:inline-block;">
+                                        @csrf @method('DELETE')
+                                        <button class="btn btn-danger btn-sm">
+                                            <i class="ri-delete-bin-line"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
                         <tr>
                             <td colspan="20" class="text-muted">No hay registros.</td>
                         </tr>
@@ -115,3 +146,4 @@
 </div>
 
 @endsection
+
