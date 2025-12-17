@@ -12,7 +12,7 @@ class RolesAndPermissionsSeeder extends Seeder
 {
     public function run(): void
     {
-        // Limpieza previa
+        // Limpieza previa de caché
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // 🔹 Crear permisos
@@ -38,7 +38,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'editar permiso',
             'eliminar permiso',
             
-            // Otras funcionalidades (puedes ampliar según necesites)
+            // Gestión general
             'gestionar usuarios',
             'gestionar roles',
             'gestionar permisos',
@@ -62,33 +62,56 @@ class RolesAndPermissionsSeeder extends Seeder
             ['guard_name' => 'web']
         );
 
-        // 🔹 Asignar permisos a cada rol
+        $supervisor = Role::firstOrCreate(
+            ['name' => 'Supervisor'],
+            ['guard_name' => 'web']
+        );
+
+        // 🔹 Asignar permisos a roles
         // Administrador: todos los permisos
         $admin->syncPermissions(Permission::all());
 
-        // Contador: solo permisos específicos
+        // Contador: permisos básicos
         $contador->syncPermissions([
             'ver dashboard',
             'ver usuarios',
         ]);
 
-        // 🔹 Asignar roles a usuarios existentes
-        $userAdmin = User::firstOrCreate([
-            'email' => 'admin@gmail.com',
-        ], [
-            'name' => 'Administrador General',
-            'password' => bcrypt('12345678'),
+        // Supervisor: permisos intermedios
+        $supervisor->syncPermissions([
+            'ver dashboard',
+            'ver usuarios',
+            'editar usuario',
         ]);
-        
+
+        // 🔹 Usuario Administrador
+        $userAdmin = User::firstOrCreate(
+            ['email' => 'admin@gmail.com'],
+            [
+                'name' => 'Administrador General',
+                'password' => bcrypt('12345678'),
+            ]
+        );
         $userAdmin->syncRoles(['Administrador']);
 
-        $userContador = User::firstOrCreate([
-            'email' => 'contador@gmail.com',
-        ], [
-            'name' => 'Usuario Contador',
-            'password' => bcrypt('12345678'),
-        ]);
-        
+        // 🔹 Usuario Contador
+        $userContador = User::firstOrCreate(
+            ['email' => 'contador@gmail.com'],
+            [
+                'name' => 'Usuario Contador',
+                'password' => bcrypt('12345678'),
+            ]
+        );
         $userContador->syncRoles(['Contador']);
+
+        // 🔹 Usuario Supervisor
+        $userSupervisor = User::firstOrCreate(
+            ['email' => 'supervisor@gmail.com'],
+            [
+                'name' => 'Usuario Supervisor',
+                'password' => bcrypt('12345678'),
+            ]
+        );
+        $userSupervisor->syncRoles(['Supervisor']);
     }
 }

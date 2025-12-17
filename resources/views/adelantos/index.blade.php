@@ -36,17 +36,21 @@
             </thead>
 
             <tbody class="text-center">
+                
                 @forelse ($programaciones as $programacion)
                     <tr>
+                        @php
+                            $unidad = $programacion->proveedor?->unidades?->first();
+                            $conductor = $unidad?->conductores?->first();
+                        @endphp
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $programacion->guia_remision ?? '-' }}</td>
-                        <td>{{ $programacion->proveedor->unidades->first()->placa_tracto ?? '-' }}</td>
+                        <td>{{ $unidad?->placa_tracto ?? '-' }}</td>
                         <td>{{ optional($programacion->proveedor)->razon_social ?? '-' }}</td>
                         <td>
-                            {{ optional($programacion->proveedor->unidades->first()->conductores->first())->nombres 
-                                . ' ' .
-                                optional($programacion->proveedor->unidades->first()->conductores->first())->apellidos
-                                ?? '-' }}
+                            {{ $conductor
+                                ? trim($conductor->nombres . ' ' . $conductor->apellidos)
+                                : '-' }}
                         </td>
 
                         <td>
