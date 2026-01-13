@@ -9,7 +9,7 @@
 
 <div class="container">
 
-    <h1>Entrega de EPPs</h1>
+    <h1>Entrega de Producto</h1>
     <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createEntregaModal">
         <i class="ri-add-circle-line"></i> Nueva entrega
     </button>
@@ -88,31 +88,31 @@
         <nav aria-label="Navegación de páginas">
             <ul class="pagination justify-content-center">
 
-                {{-- Botón "Anterior" --}}
+                {{-- Botón "Anterior" (Correcto) --}}
                 @if ($entregas->onFirstPage())
-                    <li class="page-item disabled">
-                        <span class="page-link">Anterior</span>
-                    </li>
+                    <li class="page-item disabled"><span class="page-link">Anterior</span></li>
                 @else
                     <li class="page-item">
-                        {{-- 🔑 CLAVE: Añadir los query parameters a la paginación --}}
+                        {{-- Usamos appends para que mantenga los filtros --}}
                         <a class="page-link" href="{{ $entregas->appends(request()->query())->previousPageUrl() }}" rel="prev">Anterior</a>
                     </li>
                 @endif
 
-                {{-- 🔹 Mostrar solo 7 páginas alrededor de la actual --}}
+                {{-- 🔹 Lógica para los números de página --}}
                 @php
                     $current = $entregas->currentPage();
                     $last = $entregas->lastPage();
                     $start = max($current - 3, 1);
                     $end = min($current + 3, $last);
-                    $query = request()->query(); // Obtener todos los filtros
+                    // 💡 CLAVE: Excluir 'page' de los query parameters antes de adjuntarlos
+                    $query = request()->except('page'); 
                 @endphp
 
                 {{-- Mostrar "..." si hay páginas anteriores ocultas --}}
                 @if ($start > 1)
+                    {{-- 💡 CLAVE CORREGIDA para la página 1: usamos appends y url() --}}
                     <li class="page-item">
-                        <a class="page-link" href="{{ $entregas->url(1) }}&{{ http_build_query($query) }}">1</a>
+                        <a class="page-link" href="{{ $entregas->appends($query)->url(1) }}">1</a>
                     </li>
                     @if ($start > 2)
                         <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -121,8 +121,9 @@
 
                 {{-- Números visibles --}}
                 @for ($page = $start; $page <= $end; $page++)
+                    {{-- 💡 CLAVE CORREGIDA: Usamos appends para agregar los filtros a la URL de la página --}}
                     @php
-                        $url = $entregas->url($page) . '&' . http_build_query($query);
+                        $url = $entregas->appends($query)->url($page);
                     @endphp
                     @if ($page == $entregas->currentPage())
                         <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
@@ -136,21 +137,20 @@
                     @if ($end < $last - 1)
                         <li class="page-item disabled"><span class="page-link">...</span></li>
                     @endif
+                    {{-- 💡 CLAVE CORREGIDA para la última página: usamos appends y url() --}}
                     <li class="page-item">
-                        <a class="page-link" href="{{ $entregas->url($last) }}&{{ http_build_query($query) }}">{{ $last }}</a>
+                        <a class="page-link" href="{{ $entregas->appends($query)->url($last) }}">{{ $last }}</a>
                     </li>
                 @endif
 
-                {{-- Botón "Siguiente" --}}
+                {{-- Botón "Siguiente" (Correcto) --}}
                 @if ($entregas->hasMorePages())
                     <li class="page-item">
-                        {{-- 🔑 CLAVE: Añadir los query parameters a la paginación --}}
+                        {{-- Usamos appends para que mantenga los filtros --}}
                         <a class="page-link" href="{{ $entregas->appends(request()->query())->nextPageUrl() }}" rel="next">Siguiente</a>
                     </li>
                 @else
-                    <li class="page-item disabled">
-                        <span class="page-link">Siguiente</span>
-                    </li>
+                    <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
                 @endif
 
             </ul>

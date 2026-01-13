@@ -356,7 +356,7 @@
                             <a class="nav-link menu-link {{ request()->is('epps*') ? 'active' : '' }}"
                                 href="{{ route('epps.index') }}">
                                 <i class="ri-shield-check-line"></i>
-                                <span data-key="t-epps">EPPs</span>
+                                <span data-key="t-epps">Productos</span>
                             </a>
                         </li>
 
@@ -364,7 +364,7 @@
                             <a class="nav-link menu-link {{ request()->is('entregas*') ? 'active' : '' }}" 
                                 href="{{ route('entregas.index') }}">
                                 <i class="ri-hand-coin-line"></i>
-                                <span data-key="t-entregas">Entrega de EPPs</span>
+                                <span data-key="t-entregas">Entrega de Productos</span>
                             </a>
                         </li>
                         @endcan
@@ -1012,16 +1012,6 @@
                 </div>
             </div>
 
-        </div>
-        <div class="offcanvas-footer border-top p-3 text-center">
-            <div class="row">
-                <div class="col-6">
-                    <button type="button" class="btn btn-light w-100" id="reset-layout">Reset</button>
-                </div>
-                <div class="col-6">
-                    <a href="https://1.envato.market/velzon-admin" target="_blank" class="btn btn-primary w-100">Buy Now</a>
-                </div>
-            </div>
         </div>
     </div>
 

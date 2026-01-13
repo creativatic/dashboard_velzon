@@ -38,7 +38,7 @@ class DashboardController extends Controller
         return view('dashboard.analytics', compact('pageTitle'));
     }
 
-    public function buscarPorDni($dni)
+   public function buscarPorDni($dni)
     {
         $persona = Persona::where('dni', $dni)->first();
 
@@ -46,24 +46,24 @@ class DashboardController extends Controller
             return response()->json(['error' => 'No se encontró ninguna persona con ese DNI.'], 404);
         }
 
-        // 🔹 Consulta para obtener entregas agrupadas por EPP
+        // 🔹 Consulta con PAGINACIÓN (12 por página)
         $entregas = DB::table('epp_persona')
             ->join('epps', 'epp_persona.epp_id', '=', 'epps.id')
             ->select(
-                'epps.nombre as epp',
                 'epps.id as epp_id',
-                'epps.unidades_medidas', // ✅ NUEVO CAMPO
+                'epps.nombre as epp',
+                'epps.unidades_medidas',
                 DB::raw('SUM(epp_persona.cantidad) as total_entregado'),
                 DB::raw('SUM(CASE WHEN epp_persona.fecha_devolucion IS NOT NULL THEN epp_persona.cantidad ELSE 0 END) as total_devuelto_epp'),
                 DB::raw('MAX(epp_persona.fecha_entrega) as ultima_entrega'),
                 DB::raw('MAX(epp_persona.fecha_devolucion) as ultima_devolucion')
             )
             ->where('persona_id', $persona->id)
-            ->groupBy('epps.nombre', 'epps.id', 'epps.unidades_medidas') // ✅ Agregamos unidades_medidas al groupBy
+            ->groupBy('epps.id', 'epps.nombre', 'epps.unidades_medidas')
             ->orderBy('epps.nombre')
-            ->get();
+            ->paginate(5); // <<<<<<<<<<<<<<<<<< PAGINACIÓN ACTIVADA
 
-        // 💡 Totales globales
+        // 🔹 Totales globales
         $totalDevueltoGlobal = DB::table('epp_persona')
             ->where('persona_id', $persona->id)
             ->whereNotNull('fecha_devolucion')
@@ -75,7 +75,15 @@ class DashboardController extends Controller
 
         return response()->json([
             'persona' => $persona,
-            'entregas' => $entregas,
+            'entregas' => $entregas->items(),
+
+            'links' => [
+                'current_page' => $entregas->currentPage(),
+                'last_page' => $entregas->lastPage(),
+                'next' => $entregas->nextPageUrl(),
+                'prev' => $entregas->previousPageUrl(),
+            ],
+
             'total_devuelto_global' => $totalDevueltoGlobal,
             'total_entregado_global' => $totalEntregadoGlobal
         ]);
@@ -104,7 +112,22 @@ class DashboardController extends Controller
             ->orderByDesc('epp_persona.fecha_entrega')
             ->paginate(10);
 
-        return response()->json($detalles);
+            return response()->json([
+                'persona' => $persona,
+                'entregas' => $entregas->items(),
+
+                // 👇 Paginación completa
+                'pagination' => [
+                    'current_page' => $entregas->currentPage(),
+                    'last_page' => $entregas->lastPage(),
+                    'next' => $entregas->nextPageUrl(),
+                    'prev' => $entregas->previousPageUrl(),
+                    'total' => $entregas->total(),
+                ],
+
+                'total_devuelto_global' => $totalDevueltoGlobal,
+                'total_entregado_global' => $totalEntregadoGlobal
+            ]);
     }
 
     // DashboardController.php
@@ -147,7 +170,5 @@ class DashboardController extends Controller
 
         return response()->json($sugerencias);
     }
-
-
 
 }

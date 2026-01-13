@@ -31,3 +31,11 @@
         </div>
     </div>
 </div>
+
+<script>
+document.querySelector('#importEntregaModal form').addEventListener('submit', function () {
+    let btn = this.querySelector('button.btn-primary');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Cargando...';
+});
+</script>

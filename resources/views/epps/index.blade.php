@@ -8,11 +8,38 @@
 
 <div class="container">
 
-        <h1>Listado de EPPs</h1>
-        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createEppModal">
-            <i class="ri-add-circle-line"></i> Agregar EPP
-        </button>
+    <h1>Listado de EPPs</h1>
 
+        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createEppModal">
+            <i class="ri-add-circle-line"></i> Agregar Producto
+        </button>
+        
+        <form action="{{ route('epps.index') }}" method="GET" class="mb-3" style="max-width: 500px;">
+            <div class="input-group">
+
+                <input type="text"
+                    name="q"
+                    id="buscar_epp"
+                    class="form-control"
+                    placeholder="Buscar producto por nombre o código"
+                    value="{{ request('q') }}"
+                    autocomplete="off">
+
+                <!-- BOTÓN BUSCAR -->
+                <button type="submit" class="btn btn-primary">
+                    <i class="ri-search-line"></i> Buscar
+                </button>
+
+                <!-- ESPACIO -->
+                <span style="width: 8px;"></span>
+
+                <!-- BOTÓN REFRESCAR -->
+                <a href="{{ route('epps.index') }}" class="btn btn-secondary">
+                    <i class="ri-refresh-line"></i> Refrescar
+                </a>
+
+            </div>
+        </form>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -151,6 +178,62 @@
 
         const form = document.getElementById('editEppForm');
         form.action = `/epps/${button.getAttribute('data-id')}`;
+    });
+
+    /* ============================================================
+   🔍 AUTOCOMPLETADO DE EPPs — JS PURO (sin jQuery)
+   ============================================================ */
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const input = document.getElementById("buscar_epp");
+        const results = document.getElementById("autocomplete_epp");
+
+        input.addEventListener("keyup", function () {
+            const term = this.value.trim();
+
+            if (term.length < 2) {
+                results.style.display = "none";
+                return;
+            }
+
+            fetch(`/epps/autocomplete?term=${term}`)
+                .then(res => res.json())
+                .then(data => {
+                    results.innerHTML = "";
+
+                    if (data.length === 0) {
+                        results.style.display = "none";
+                        return;
+                    }
+
+                    data.forEach(item => {
+                        const option = document.createElement("button");
+                        option.type = "button";
+                        option.classList.add("list-group-item", "list-group-item-action");
+                        option.textContent = `${item.label} (${item.codigo})`;
+
+                        option.addEventListener("click", () => {
+                            input.value = item.label;
+                            results.style.display = "none";
+
+                            // Ejemplo: filtrar EPPs por ID
+                            window.location.href = `/epps?filtro=${item.id}`;
+                        });
+
+                        results.appendChild(option);
+                    });
+
+                    results.style.display = "block";
+                })
+                .catch(() => results.style.display = "none");
+        });
+
+        // Ocultar lista si se hace clic fuera
+        document.addEventListener("click", (e) => {
+            if (!input.contains(e.target) && !results.contains(e.target)) {
+                results.style.display = "none";
+            }
+        });
     });
 </script>
 @endsection

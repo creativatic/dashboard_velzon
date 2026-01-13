@@ -7,9 +7,21 @@ use Illuminate\Http\Request;
 
 class EppController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $epps = Epp::orderBy('nombre')->paginate(10);
+        $query = Epp::query();
+
+        // Si hay búsqueda por nombre o código
+        if ($request->filled('q')) {
+            $q = $request->q;
+            $query->where(function($qBuilder) use ($q) {
+                $qBuilder->where('nombre', 'LIKE', "%{$q}%")
+                        ->orWhere('codigo', 'LIKE', "%{$q}%");
+            });
+        }
+
+        $epps = $query->orderBy('nombre')->paginate(10)->withQueryString();
+
         return view('epps.index', compact('epps'));
     }
 
@@ -64,6 +76,25 @@ class EppController extends Controller
         );
     }
 
+    public function autocomplete(Request $request)
+    {
+        $term = $request->input('term');
+
+        $resultados = Epp::where('nombre', 'LIKE', "%{$term}%")
+            ->orWhere('codigo', 'LIKE', "%{$term}%")
+            ->limit(10)
+            ->get();
+
+        return response()->json(
+            $resultados->map(function ($epp) {
+                return [
+                    'id' => $epp->id,
+                    'label' => $epp->nombre,
+                    'codigo' => $epp->codigo,
+                ];
+            })
+        );
+    }
 
 
 }

@@ -10,7 +10,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\ProgramacionController;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\EppController;
 use App\Http\Controllers\EntregaEppController;
@@ -43,7 +42,6 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('permissions', PermissionController::class)->except(['show']);
     });
 
-    Route::resource('programacions', ProgramacionController::class)->except(['show']);
     Route::resource('personas', PersonaController::class);  
     Route::get('/personas/buscar/{dni}', [PersonaController::class, 'buscar']);
 
@@ -62,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/epps/buscar/{term}', [EppController::class, 'buscar']);
+    Route::get('/epps/autocomplete', [EppController::class, 'autocomplete'])->name('epps.autocomplete');
 
 });
 
@@ -71,7 +70,7 @@ Route::post('/register', [RegisteredUserController::class, 'store']);
 
 // Login
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::get('/login', [AuthenticatedSessionController::class, 'create']);
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.store');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
