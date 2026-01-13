@@ -20,7 +20,13 @@ class EppController extends Controller
             });
         }
 
-        $epps = $query->orderBy('nombre')->paginate(10)->withQueryString();
+        // --- CAMBIO AQUÍ ---
+        // Primero ordenamos por estado (1 primero, 0 al final) 
+        // y luego por nombre para mantener el orden alfabético interno
+        $epps = $query->orderBy('estado', 'desc')
+                    ->orderBy('nombre', 'asc')
+                    ->paginate(10)
+                    ->withQueryString();
 
         return view('epps.index', compact('epps'));
     }

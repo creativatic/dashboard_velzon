@@ -232,6 +232,29 @@ class EntregaEppController extends Controller
         }
     }
 
+    public function destroy($id)
+    {
+        $entrega = DB::table('epp_persona')->where('id', $id)->first();
+
+        if (!$entrega) {
+            return response()->json(['message' => 'Registro no encontrado'], 404);
+        }
+
+        // 🛑 seguridad: no permitir eliminar si ya fue devuelto
+        if ($entrega->fecha_devolucion) {
+            return response()->json([
+                'message' => 'No se puede eliminar una entrega ya devuelta'
+            ], 422);
+        }
+
+        DB::table('epp_persona')->where('id', $id)->delete();
+
+        return response()->json([
+            'message' => 'Entrega eliminada correctamente',
+            'persona_id' => $entrega->persona_id
+        ]);
+    }
+
 
 }
 

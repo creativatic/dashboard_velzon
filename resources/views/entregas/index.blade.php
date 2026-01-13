@@ -236,13 +236,22 @@
                                                 <td class="text-center">
                                                     ${
                                                         !r.fecha_devolucion
-                                                            ? `<button class="btn btn-warning btn-sm" 
-                                                                    data-bs-toggle="modal" 
-                                                                    data-bs-target="#editEntregaModal" 
-                                                                    onclick="editarEntrega(${r.id})">
-                                                                <i class='ri-edit-line'></i>
-                                                            </button>`
-                                                            : `<span class='text-muted'>—</span>`
+                                                            ? `
+                                                            <button class="btn btn-warning btn-sm me-1"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#editEntregaModal"
+                                                                    onclick="editarEntrega(${r.id})"
+                                                                    title="Editar">
+                                                                <i class="ri-edit-line"></i>
+                                                            </button>
+
+                                                            <button class="btn btn-danger btn-sm"
+                                                                    onclick="eliminarEntrega(${r.id})"
+                                                                    title="Eliminar">
+                                                                <i class="ri-delete-bin-line"></i>
+                                                            </button>
+                                                            `
+                                                            : `<span class="text-muted">—</span>`
                                                     }
                                                 </td>
                                             </tr>
@@ -261,6 +270,38 @@
                 contenedor.innerHTML = `<div class="text-center text-danger">Error al cargar las entregas.</div>`;
             });
     }
+
+    function eliminarEntrega(id) {
+        if (!confirm('¿Está seguro de eliminar esta entrega? Esta acción no se puede deshacer.')) {
+            return;
+        }
+
+        fetch(`/entregas/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute('content'),
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('Error al eliminar');
+            return res.json();
+        })
+        .then(data => {
+            alert(data.message);
+
+            // 🔄 recargar el modal sin cerrarlo
+            const nombre = document.getElementById('persona_nombre').textContent;
+            verEntregasPersona(data.persona_id, nombre);
+        })
+        .catch(err => {
+            console.error(err);
+            alert('No se pudo eliminar la entrega');
+        });
+    }
+
 
 </script>
 @endsection

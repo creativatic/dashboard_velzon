@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('entregas/{id}/devolver', [EntregaEppController::class, 'devolver'])->name('entregas.devolver');
     Route::put('entregas/{id}', [EntregaEppController::class, 'update'])->name('entregas.update');
     Route::get('entregas/{id}', [EntregaEppController::class, 'show'])->name('entregas.show');
+    Route::delete('/entregas/{id}', [EntregaEppController::class, 'destroy']);
     Route::get('/entregas/persona/{id}', [EntregaEppController::class, 'entregasPorPersona']);
     Route::get('/entregas/persona/{id}', [EntregaEppController::class, 'entregasPorPersona'])->name('entregas.persona');
     Route::post('/entregas/import', [EntregaEppController::class, 'import'])->name('entregas.import');
