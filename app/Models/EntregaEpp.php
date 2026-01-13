@@ -9,7 +9,9 @@ class EntregaEpp extends Model
 {
     use HasFactory;
 
-    protected $table = 'entrega_epp';
+    protected $table = 'epp_persona';
+
+    //epp_persona
 
     protected $fillable = [
         'persona_id',

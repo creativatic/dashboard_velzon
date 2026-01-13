@@ -13,6 +13,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\EppController;
 use App\Http\Controllers\EntregaEppController;
+use App\Http\Controllers\ReporteController;
+
 
 Route::middleware(['auth'])->group(function () {
 
@@ -62,6 +64,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/epps/buscar/{term}', [EppController::class, 'buscar']);
     Route::get('/epps/autocomplete', [EppController::class, 'autocomplete'])->name('epps.autocomplete');
+
+    Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
 
 });
 

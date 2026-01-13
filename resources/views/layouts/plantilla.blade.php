@@ -369,6 +369,15 @@
                                 <span data-key="t-entregas">Entrega de Productos</span>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link {{ request()->is('reportes*') ? 'active' : '' }}"
+                                href="{{ route('reportes.index') }}">
+                                <i class="ri-file-search-line"></i>
+                                <span data-key="t-reportes">Reportes por OT</span>
+                            </a>
+                        </li>
+
                         @endcan
                     </ul>
                 </div>
