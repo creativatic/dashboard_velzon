@@ -42,9 +42,11 @@
                         <tbody id="eppItems">
                             <tr>
                                 <td style="position: relative;">
-                                    <input type="text" class="form-control buscar-epp" placeholder="Buscar EPP..." autocomplete="off">
+                                   
+                                    <input type="text" class="form-control buscar-epp epp-nombre" placeholder="Buscar EPP..." autocomplete="off" title="">
                                     <input type="hidden" name="epps[0][epp_id]" class="epp_id">
                                     <div class="resultados-epp list-group" style="position:absolute; z-index:1000; width:100%; display:none;"></div>
+
                                 </td>
                                 
                                 <td><input type="number" name="epps[0][cantidad]" class="form-control" min="1" required></td>
@@ -196,6 +198,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         item.textContent = `${epp.nombre} (Stock: ${epp.stock})`;
                         item.addEventListener('click', () => {
                             input.value = epp.nombre;
+                            input.title = epp.nombre; // ✅ tooltip
                             eppIdInput.value = epp.id;
 
                             // ✅ Mostrar unidad de medida (columna readonly)
