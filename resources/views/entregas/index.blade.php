@@ -161,147 +161,167 @@
 /**
  * Carga los datos de la entrega en el modal de edición
  */
-    function editarEntrega(id) {
-        fetch(`/entregas/${id}`)
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('edit_id').value = data.id;
-                document.getElementById('edit_persona_id').value = data.persona_id;
-                document.getElementById('edit_persona').value = data.persona;
-                document.getElementById('edit_epp').value = data.epp;
-                document.getElementById('edit_unidad_medida').value = data.unidades_medidas ?? '';
-                document.getElementById('edit_numero_vale').value = data.numero_vale ?? '';
-                document.getElementById('edit_orden_trabajo').value = data.orden_trabajo ?? '';
-                document.getElementById('edit_cantidad').value = data.cantidad;
-                document.getElementById('edit_fecha_entrega').value = data.fecha_entrega;
-                document.getElementById('edit_fecha_devolucion').value = data.fecha_devolucion ?? '';
-                document.getElementById('edit_observacion').value = data.observacion ?? '';
-            });
-    }
+function editarEntrega(id) {
+    fetch(`/entregas/${id}`)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('edit_id').value = data.id;
+            document.getElementById('edit_persona_id').value = data.persona_id;
+            document.getElementById('edit_persona').value = data.persona;
+            document.getElementById('edit_epp').value = data.epp;
+            document.getElementById('edit_unidad_medida').value = data.unidades_medidas ?? '';
+            document.getElementById('edit_numero_vale').value = data.numero_vale ?? '';
+            document.getElementById('edit_orden_trabajo').value = data.orden_trabajo ?? '';
+            document.getElementById('edit_cantidad').value = data.cantidad;
+            document.getElementById('edit_fecha_entrega').value = data.fecha_entrega;
+            document.getElementById('edit_fecha_devolucion').value = data.fecha_devolucion ?? '';
+            document.getElementById('edit_observacion').value = data.observacion ?? '';
+        });
+}
 
-    /**
-     * Carga las entregas de una persona (para el modal "Ver Entregas")
-     */
-    function verEntregasPersona(persona_id, nombre) {
-        document.getElementById('persona_nombre').textContent = nombre;
-        const contenedor = document.getElementById('contenedorEntregasPersona');
-        contenedor.innerHTML = `<div class="text-center text-muted">Cargando...</div>`;
+/**
+ * Carga las entregas de una persona (modal Ver Entregas)
+ */
+function verEntregasPersona(persona_id, nombre) {
+    document.getElementById('persona_nombre').textContent = nombre;
+    const contenedor = document.getElementById('contenedorEntregasPersona');
+    contenedor.innerHTML = `<div class="text-center text-muted">Cargando...</div>`;
 
-        fetch(`/entregas/persona/${persona_id}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.length === 0) {
-                    contenedor.innerHTML = `<div class="text-center text-muted">No hay entregas registradas.</div>`;
-                    return;
-                }
+    fetch(`/entregas/persona/${persona_id}`)
+        .then(res => res.json())
+        .then(data => {
+            if (!data || data.length === 0) {
+                contenedor.innerHTML = `<div class="text-center text-muted">No hay entregas registradas.</div>`;
+                return;
+            }
 
-                contenedor.innerHTML = data.map(item => `
-                    <div class="card mb-4 shadow-sm w-100">
-                        <div class="card-header bg-light fw-bold fs-5">
-                            ${item.epp} 
-                            ${ item.registros && item.registros.length 
-                                ? `<small class="text-muted"> — ${item.registros[0].unidades_medidas ?? ''}</small>` 
-                                : '' }
-                        </div>
-                        <div class="card-body p-0">
-                            <!-- ✅ Contenedor responsivo -->
-                            <div class="table-responsive">
-                                <table class="table table-hover table-bordered align-middle table-lg mb-0">
-                                    <thead class="table-secondary text-center">
-                                        <tr>
-                                            <th>Cantidad</th>
-                                            <th>Unidad Medida</th>
-                                            <th>N° Vale</th>
-                                            <th>Orden Trabajo</th>
-                                            <th>Fecha Entrega</th>
-                                            <th>Fecha Devolución</th>
-                                            <th>Observación</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${item.registros.map(r => `
-                                            <tr>
-                                                <td>${r.cantidad}</td>
-                                                <td>${r.unidades_medidas ?? '-'}</td>
-                                                <td>${r.numero_vale ?? '-'}</td>
-                                                <td>${r.orden_trabajo ?? '-'}</td>
-                                                <td>${r.fecha_entrega}</td>
-                                                <td>
-                                                    ${r.fecha_devolucion 
-                                                        ? `<span class="badge bg-success">${r.fecha_devolucion}</span>`
-                                                        : `<span class="badge bg-warning text-dark">Pendiente</span>`}
-                                                </td>
-                                                <td>${r.observacion ?? '-'}</td>
-                                                <td class="text-center">
-                                                    ${
-                                                        !r.fecha_devolucion
-                                                            ? `
-                                                            <button class="btn btn-warning btn-sm me-1"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#editEntregaModal"
-                                                                    onclick="editarEntrega(${r.id})"
-                                                                    title="Editar">
-                                                                <i class="ri-edit-line"></i>
-                                                            </button>
+            contenedor.innerHTML = data.map(item => {
 
-                                                            <button class="btn btn-danger btn-sm"
-                                                                    onclick="eliminarEntrega(${r.id})"
-                                                                    title="Eliminar">
-                                                                <i class="ri-delete-bin-line"></i>
-                                                            </button>
-                                                            `
-                                                            : `<span class="text-muted">—</span>`
-                                                    }
-                                                </td>
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                // 🔐 FORZAR registros como ARRAY REAL
+                const registros = Array.isArray(item.registros)
+                    ? item.registros
+                    : Object.values(item.registros || {});
+
+                const totalRegistros = registros.length;
+
+                // 🔐 clase única por EPP
+                const eppClass = `epp-${item.epp_id}`;
+
+                return `
+                <div class="card mb-4 shadow-sm w-100">
+                    <div class="card-header bg-light fw-bold fs-5 d-flex align-items-center">
+                        <span>
+                            ${item.epp}
+                            ${
+                                totalRegistros
+                                    ? `<small class="text-muted"> — ${registros[0].unidades_medidas ?? ''}</small>`
+                                    : ''
+                            }
+                        </span>
+
+                        ${
+                            totalRegistros > 2
+                                ? `
+                                <button
+                                    type="button"
+                                    class="btn btn-link btn-sm ms-3"
+                                    onclick="toggleEpp('${eppClass}', this)">
+                                    Ver más
+                                </button>
+                                `
+                                : `
+                                <small class="text-muted ms-3 fst-italic">
+                                    No se tiene más registros
+                                </small>
+                                `
+                        }
+
                     </div>
 
-                `).join('');
-
-            })
-            .catch(err => {
-                console.error(err);
-                contenedor.innerHTML = `<div class="text-center text-danger">Error al cargar las entregas.</div>`;
-            });
-    }
-
-    function eliminarEntrega(id) {
-        if (!confirm('¿Está seguro de eliminar esta entrega? Esta acción no se puede deshacer.')) {
-            return;
-        }
-
-        fetch(`/entregas/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': document
-                    .querySelector('meta[name="csrf-token"]')
-                    .getAttribute('content'),
-                'Accept': 'application/json'
-            }
-        })
-        .then(res => {
-            if (!res.ok) throw new Error('Error al eliminar');
-            return res.json();
-        })
-        .then(data => {
-            alert(data.message);
-
-            // 🔄 recargar el modal sin cerrarlo
-            const nombre = document.getElementById('persona_nombre').textContent;
-            verEntregasPersona(data.persona_id, nombre);
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered align-middle table-lg mb-0">
+                                <thead class="table-secondary text-center">
+                                    <tr>
+                                        <th>Cantidad</th>
+                                        <th>Unidad Medida</th>
+                                        <th>N° Vale</th>
+                                        <th>Orden Trabajo</th>
+                                        <th>Fecha Entrega</th>
+                                        <th>Fecha Devolución</th>
+                                        <th>Observación</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${registros.map((r, index) => `
+                                        <tr class="${eppClass}" style="${index >= 2 ? 'display:none' : ''}">
+                                            <td>${r.cantidad}</td>
+                                            <td>${r.unidades_medidas ?? '-'}</td>
+                                            <td>${r.numero_vale ?? '-'}</td>
+                                            <td>${r.orden_trabajo ?? '-'}</td>
+                                            <td>${r.fecha_entrega}</td>
+                                            <td>
+                                                ${
+                                                    r.fecha_devolucion
+                                                        ? `<span class="badge bg-success">${r.fecha_devolucion}</span>`
+                                                        : `<span class="badge bg-warning text-dark">Pendiente</span>`
+                                                }
+                                            </td>
+                                            <td>${r.observacion ?? '-'}</td>
+                                            <td class="text-center">
+                                                ${
+                                                    !r.fecha_devolucion
+                                                        ? `
+                                                        <button class="btn btn-warning btn-sm me-1"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#editEntregaModal"
+                                                                onclick="editarEntrega(${r.id})">
+                                                            <i class="ri-edit-line"></i>
+                                                        </button>
+                                                        <button class="btn btn-danger btn-sm"
+                                                                onclick="eliminarEntrega(${r.id})">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </button>
+                                                        `
+                                                        : `<span class="text-muted">—</span>`
+                                                }
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
         })
         .catch(err => {
             console.error(err);
-            alert('No se pudo eliminar la entrega');
+            contenedor.innerHTML = `<div class="text-center text-danger">Error al cargar las entregas.</div>`;
         });
+}
+
+/**
+ * Ver más / Ver menos por EPP
+ */
+    function toggleEpp(clase, boton) {
+        const filas = document.querySelectorAll(`.${clase}`);
+        const ocultas = [...filas].some(
+            (fila, index) => index >= 2 && fila.style.display === 'none'
+        );
+
+        filas.forEach((fila, index) => {
+            if (index >= 2) {
+                fila.style.display = ocultas ? 'table-row' : 'none';
+            }
+        });
+
+        boton.textContent = ocultas ? 'Ver menos' : 'Ver más';
     }
 
 
 </script>
+
 @endsection

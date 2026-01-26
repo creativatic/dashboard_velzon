@@ -200,7 +200,6 @@ class EntregaEppController extends Controller
                 ->where('epp_persona.persona_id', $persona_id)
                 ->where('epp_persona.epp_id', $epp->epp_id)
                 ->orderByDesc('epp_persona.fecha_entrega')
-                ->limit(2)
                 ->get();
 
             // Agrego la unidad de medida a cada registro (la tomamos del epp agrupado)
@@ -209,9 +208,11 @@ class EntregaEppController extends Controller
             });
 
             $resultado[] = [
-                'epp' => $epp->epp,
-                'registros' => $registrosConUnidad
+                'epp_id'   => $epp->epp_id,
+                'epp'      => $epp->epp,
+                'registros'=> $registrosConUnidad
             ];
+            
         }
 
         return response()->json($resultado);
