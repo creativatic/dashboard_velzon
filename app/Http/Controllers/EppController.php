@@ -75,7 +75,8 @@ class EppController extends Controller
     public function buscar($term)
     {
         return response()->json(
-            Epp::where('nombre', 'LIKE', "%{$term}%")
+            Epp::where('estado', 1) // ✅ SOLO EPP ACTIVOS
+                ->where('nombre', 'LIKE', "%{$term}%")
                 ->select('id', 'nombre', 'stock', 'unidades_medidas')
                 ->limit(10)
                 ->get()
