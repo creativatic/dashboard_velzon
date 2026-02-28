@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/personas/buscar/{dni}', [PersonaController::class, 'buscar']);
 
     Route::get('/epps/kardex/export', [EppController::class, 'exportKardex'])->name('epps.kardex.export');
+    Route::get('/epps/inventario/export', [EppController::class, 'exportInventario'])->name('epps.inventario.export');
     Route::resource('epps', EppController::class);
         //Route::get('entregas', [EntregaEppController::class, 'index'])->name('entregas.index');
         //Route::post('entregas/{persona}/asignar', [EntregaEppController::class, 'asignarEpp'])->name('entregas.asignar');

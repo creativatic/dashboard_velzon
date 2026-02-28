@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\KardexExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\InventarioExport;
 
 use App\Models\Epp;
 use Illuminate\Http\Request;
@@ -108,7 +109,12 @@ class EppController extends Controller
 
     public function exportKardex()
     {
-        return Excel::download(new KardexExport, 'kardex_epp.xlsx');
+        return Excel::download(new KardexExport, 'total_entregas_epp.xlsx');
+    }
+
+    public function exportInventario()
+    {
+        return Excel::download(new InventarioExport, 'inventario_epp.xlsx');
     }
 
 }

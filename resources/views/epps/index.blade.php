@@ -15,7 +15,11 @@
         </button>
 
         <a href="{{ route('epps.kardex.export') }}" class="btn btn-outline-success mb-3 ms-2">
-            <i class="ri-file-excel-2-line"></i> Exportar Kardex Excel
+            <i class="ri-file-excel-2-line"></i> Exportar Entregas Excel
+        </a>
+
+        <a href="{{ route('epps.inventario.export') }}" class="btn btn-outline-primary mb-3 ms-2">
+            <i class="ri-file-excel-2-line"></i> Exportar Inventario Excel
         </a>
                 
         <form action="{{ route('epps.index') }}" method="GET" class="mb-3" style="max-width: 500px;">
