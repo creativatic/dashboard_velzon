@@ -47,6 +47,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('personas', PersonaController::class);  
     Route::get('/personas/buscar/{dni}', [PersonaController::class, 'buscar']);
 
+    Route::get('/epps/kardex/export', [EppController::class, 'exportKardex'])->name('epps.kardex.export');
     Route::resource('epps', EppController::class);
         //Route::get('entregas', [EntregaEppController::class, 'index'])->name('entregas.index');
         //Route::post('entregas/{persona}/asignar', [EntregaEppController::class, 'asignarEpp'])->name('entregas.asignar');
@@ -66,7 +67,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/epps/autocomplete', [EppController::class, 'autocomplete'])->name('epps.autocomplete');
 
     Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
-
 });
 
 // Registro

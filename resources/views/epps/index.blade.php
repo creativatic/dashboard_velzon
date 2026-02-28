@@ -13,7 +13,11 @@
         <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createEppModal">
             <i class="ri-add-circle-line"></i> Agregar Producto
         </button>
-        
+
+        <a href="{{ route('epps.kardex.export') }}" class="btn btn-outline-success mb-3 ms-2">
+            <i class="ri-file-excel-2-line"></i> Exportar Kardex Excel
+        </a>
+                
         <form action="{{ route('epps.index') }}" method="GET" class="mb-3" style="max-width: 500px;">
             <div class="input-group">
 

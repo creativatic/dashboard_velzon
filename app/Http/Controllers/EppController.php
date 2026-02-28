@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\KardexExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 use App\Models\Epp;
 use Illuminate\Http\Request;
 
@@ -103,5 +106,9 @@ class EppController extends Controller
         );
     }
 
+    public function exportKardex()
+    {
+        return Excel::download(new KardexExport, 'kardex_epp.xlsx');
+    }
 
 }
